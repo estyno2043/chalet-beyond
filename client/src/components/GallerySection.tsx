@@ -1,7 +1,8 @@
 /*
  * CHALET BEYOND — Gallery / Priestory Section
- * Asymmetric image grid, fade-up reveal animations
- * Each image has a label overlay, hover reveals description
+ * Mobile-first: full-width tall images stacked vertically on mobile
+ * Desktop: asymmetric grid
+ * Fade-up reveal animations, hover overlay
  */
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
@@ -60,19 +61,20 @@ function GalleryImage({
         alt={label}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         style={{ display: "block" }}
+        loading="lazy"
       />
       {/* Overlay */}
       <div
-        className="absolute inset-0 flex flex-col justify-end p-5"
+        className="absolute inset-0 flex flex-col justify-end p-4 md:p-5"
         style={{
           background:
-            "linear-gradient(to top, oklch(0.08 0.010 55 / 0.88) 0%, oklch(0.08 0.010 55 / 0) 55%)",
+            "linear-gradient(to top, oklch(0.08 0.010 55 / 0.92) 0%, oklch(0.08 0.010 55 / 0) 55%)",
         }}
       >
         <p
           style={{
             fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "1.15rem",
+            fontSize: "clamp(1rem, 3vw, 1.15rem)",
             letterSpacing: "0.05em",
             color: "oklch(0.92 0.008 75)",
             marginBottom: "0.2rem",
@@ -98,19 +100,19 @@ function GalleryImage({
 
 export function GallerySection() {
   return (
-    <section id="priestory" className="py-24 md:py-32" style={{ background: "oklch(0.08 0.010 55)" }}>
+    <section id="priestory" className="py-16 md:py-32" style={{ background: "oklch(0.08 0.010 55)" }}>
       <div className="container">
-        <FadeUp className="mb-16">
-          <div className="amber-rule mb-12" />
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <FadeUp className="mb-10 md:mb-16">
+          <div className="amber-rule mb-8 md:mb-12" />
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 md:gap-4">
             <div>
               <p
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.7rem",
+                  fontSize: "0.65rem",
                   letterSpacing: "0.15em",
                   color: "oklch(0.72 0.12 65)",
-                  marginBottom: "0.75rem",
+                  marginBottom: "0.6rem",
                   textTransform: "uppercase",
                 }}
               >
@@ -119,7 +121,7 @@ export function GallerySection() {
               <h2
                 style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+                  fontSize: "clamp(2.4rem, 8vw, 4.5rem)",
                   letterSpacing: "-0.01em",
                   lineHeight: 1.0,
                   color: "oklch(0.92 0.008 75)",
@@ -131,7 +133,7 @@ export function GallerySection() {
             <p
               style={{
                 fontFamily: "'Karla', sans-serif",
-                fontSize: "1rem",
+                fontSize: "0.9rem",
                 fontWeight: 300,
                 color: "oklch(0.58 0.020 65)",
                 maxWidth: "38ch",
@@ -194,24 +196,69 @@ export function GallerySection() {
           </div>
         </div>
 
-        {/* Mobile: vertical stack */}
-        <StaggerContainer className="md:hidden flex flex-col gap-3" staggerDelay={0.08}>
-          {images.map((img) => (
+        {/* Mobile: 2-column grid for compact luxury feel */}
+        <div className="md:hidden">
+          {/* Hero image full width */}
+          <StaggerContainer className="flex flex-col gap-2" staggerDelay={0.07}>
             <motion.div
-              key={img.src}
               variants={{
-                hidden: { opacity: 0, y: 24 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.65, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] },
-                },
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
               }}
             >
-              <GalleryImage {...img} height="240px" />
+              <GalleryImage
+                src="/manus-storage/chalet-living_c24d113a.png"
+                label="Obývacia izba"
+                desc="Kožená sedačka, kozub, drevenný strop."
+                height="280px"
+              />
             </motion.div>
-          ))}
-        </StaggerContainer>
+            {/* 2-col row */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { src: "/manus-storage/chalet-mountain-view_91debae8.png", label: "Výhľad na Lomničák", desc: "Panoráma Tatier." },
+                { src: "/manus-storage/chalet-sauna_22931760.png", label: "Fínska sauna", desc: "Harvia kachle." },
+              ].map((img, i) => (
+                <motion.div
+                  key={img.src}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
+                  }}
+                >
+                  <GalleryImage {...img} height="180px" />
+                </motion.div>
+              ))}
+            </div>
+            {/* Another full-width */}
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
+              }}
+            >
+              <GalleryImage
+                src="/manus-storage/chalet-interior-dining_31d1b175.png"
+                label="Jedáleň & kuchyňa"
+                desc="Projektor, kozub, plne vybavená kuchyňa."
+                height="220px"
+              />
+            </motion.div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
+              }}
+            >
+              <GalleryImage
+                src="/manus-storage/chalet-bedroom_f7acdc90.png"
+                label="Spálňa"
+                desc="3 spálne, každá s vlastnou kúpeľňou."
+                height="200px"
+              />
+            </motion.div>
+          </StaggerContainer>
+        </div>
       </div>
     </section>
   );

@@ -56,7 +56,9 @@ function TextGradientScroll({
   const { scrollYProgress } = useScroll({
     target: ref,
     // Use a wider offset so the full text has time to reveal before leaving viewport
-    offset: ["start 0.85", "end 0.2"],
+    // Start reveal when top of element hits 90% of viewport, finish when bottom hits 60%
+    // This gives plenty of time for all letters to reveal before scrolling away
+    offset: ["start 0.9", "end 0.55"],
   });
 
   const words = text.split(" ");

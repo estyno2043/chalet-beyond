@@ -37,10 +37,10 @@ const specs = [
 
 export function AmenitiesSection() {
   return (
-    <section className="py-24 md:py-32" style={{ background: "oklch(0.10 0.012 55)" }}>
+    <section className="py-16 md:py-32" style={{ background: "oklch(0.10 0.012 55)" }}>
       <div className="container">
-        <FadeUp className="mb-16">
-          <div className="amber-rule mb-12" />
+        <FadeUp className="mb-10 md:mb-16">
+          <div className="amber-rule mb-8 md:mb-12" />
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
               <p
@@ -71,6 +71,45 @@ export function AmenitiesSection() {
           </div>
         </FadeUp>
 
+        {/* Specs — shown inline on mobile, sidebar on desktop */}
+        <FadeUp delay={0.1} className="block lg:hidden mb-8">
+          <div className="grid grid-cols-3 gap-px">
+            {specs.map((spec) => (
+              <div
+                key={spec.label}
+                className="p-4 text-center"
+                style={{
+                  background: "oklch(0.14 0.012 55)",
+                  borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "1.6rem",
+                    color: "oklch(0.72 0.12 65)",
+                    lineHeight: 1,
+                    marginBottom: "0.3rem",
+                  }}
+                >
+                  {spec.value}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "0.58rem",
+                    letterSpacing: "0.1em",
+                    color: "oklch(0.58 0.020 65)",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {spec.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </FadeUp>
+
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-20">
           {/* Amenities grid */}
           <StaggerContainer
@@ -83,7 +122,7 @@ export function AmenitiesSection() {
                 <motion.div
                   key={item.label}
                   variants={staggerItem}
-                  className="glow-hover flex items-center gap-3 p-5 group"
+                  className="glow-hover flex items-center gap-3 p-4 md:p-5 group"
                   style={{
                     background: "oklch(0.14 0.012 55)",
                     borderTop: "1px solid oklch(0.72 0.12 65 / 0.12)",
@@ -113,8 +152,8 @@ export function AmenitiesSection() {
 
           {/* Specs table */}
           <FadeUp delay={0.2}>
-            <div
-              className="lg:w-64 p-8"
+          <div
+            className="hidden lg:block lg:w-64 p-8"
               style={{
                 background: "oklch(0.14 0.012 55)",
                 border: "1px solid oklch(0.72 0.12 65 / 0.18)",

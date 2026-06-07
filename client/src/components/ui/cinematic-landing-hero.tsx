@@ -205,14 +205,14 @@ export function ChaletCinematicHero({
         .to(".cb-text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
         .to(".cb-text-reveal", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1.0");
 
-      // Scroll timeline — reduced to 5000px, scrub 1.5 for smoothness
+      // Scroll timeline — 3200px total, scrub 0.8 for snappy feel
       const scrollTl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=5000",
+          end: "+=3200",
           pin: true,
-          scrub: 1.5,
+          scrub: 0.8,
           anticipatePin: 1,
         },
       });

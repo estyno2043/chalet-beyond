@@ -40,10 +40,10 @@ export function BookingSection() {
   };
 
   return (
-    <section id="rezervacia" className="py-24 md:py-36" style={{ background: "oklch(0.08 0.010 55)" }}>
+    <section id="rezervacia" className="py-16 md:py-36" style={{ background: "oklch(0.08 0.010 55)" }}>
       <div className="container">
-        <FadeUp className="mb-16">
-          <div className="amber-rule mb-12" />
+        <FadeUp className="mb-10 md:mb-16">
+          <div className="amber-rule mb-8 md:mb-12" />
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
               <p
@@ -85,11 +85,11 @@ export function BookingSection() {
           </div>
         </FadeUp>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 md:gap-8 lg:gap-12">
           {/* Calendar */}
           <FadeUp delay={0.1}>
             <div
-              className="p-6 md:p-8"
+              className="p-4 md:p-8"
               style={{
                 background: "oklch(0.12 0.012 55)",
                 border: "1px solid oklch(0.72 0.12 65 / 0.18)",
@@ -111,12 +111,12 @@ export function BookingSection() {
                 </span>
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center overflow-x-auto">
                 <Calendar
                   mode="range"
                   selected={dateRange}
                   onSelect={setDateRange}
-                  numberOfMonths={2}
+                  numberOfMonths={1}
                   disabled={{ before: new Date() }}
                   className="rounded-none"
                   style={{
@@ -210,13 +210,13 @@ export function BookingSection() {
           {/* Booking summary sidebar */}
           <FadeUp delay={0.2}>
             <div
-              className="p-6 md:p-8 flex flex-col gap-6"
+              className="p-4 md:p-8 flex flex-col gap-6"
               style={{
                 background: "oklch(0.14 0.012 55)",
                 border: "1px solid oklch(0.72 0.12 65 / 0.25)",
                 borderRadius: "2px",
                 position: "sticky",
-                top: "6rem",
+                    top: "auto",
               }}
             >
               <div>

@@ -84,6 +84,8 @@
 
   html {
     scroll-behavior: smooth;
+    /* Smooth scroll on all browsers */
+    overflow-x: hidden;
   }
 
   body {
@@ -93,6 +95,17 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent horizontal scroll */
+    overflow-x: hidden;
+    max-width: 100vw;
+    /* Smooth momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent any element from causing horizontal overflow */
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   h1, h2, h3, h4, h5, h6 {

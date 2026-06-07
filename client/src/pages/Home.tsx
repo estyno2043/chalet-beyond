@@ -14,6 +14,7 @@
  * 7. BookingSection — date range calendar + booking summary
  * 8. Footer
  */
+import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { ChaletCinematicHero } from "@/components/ui/cinematic-landing-hero";
@@ -27,6 +28,8 @@ import { BookingSection } from "@/components/BookingSection";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
+  useSmoothScroll();
+
   return (
     <div
       className="min-h-screen"
@@ -39,7 +42,7 @@ export default function Home() {
       <ChaletCinematicHero
         heroImageUrl="/manus-storage/chalet-hero_d3d596c7.png"
         interiorImageUrl="/manus-storage/chalet-living_c24d113a.png"
-        mountainImageUrl="/manus-storage/chalet-mountain-view_91debae8.png"
+        mountainImageUrl="/manus-storage/chalet-mountain-correct_289ff24f.png"
       />
       {/* Rest of the landing page below the cinematic hero */}
       <ChaletIntroSection />

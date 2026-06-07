@@ -1,25 +1,42 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+/*
+ * CHALET BEYOND — Home Page
+ * Design: Nordic Brutalism / Dark Timber
+ * Physical scene: Arriving at dusk, amber chalet glow against dark pine forest and Lomnický štít silhouette
+ *
+ * Sections:
+ * 1. HeroSection — full-bleed night photo, parallax, clip-path reveal
+ * 2. ChaletIntroSection — brand statement, asymmetric layout
+ * 3. GallerySection — 6 photos, asymmetric grid, clip-path reveals
+ * 4. AmenitiesSection — amenities grid + specs table
+ * 5. LocationSection — golf, skiing, AquaCity — mountain photo bg
+ * 6. BookingSection — date range calendar + booking summary
+ * 7. Footer
  */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+import { Navigation } from "@/components/Navigation";
+import { HeroSection } from "@/components/HeroSection";
+import { ChaletIntroSection } from "@/components/ChaletIntroSection";
+import { GallerySection } from "@/components/GallerySection";
+import { AmenitiesSection } from "@/components/AmenitiesSection";
+import { QuoteSection } from "@/components/QuoteSection";
+import { LocationSection } from "@/components/LocationSection";
+import { BookingSection } from "@/components/BookingSection";
+import { Footer } from "@/components/Footer";
 
+export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div
+      className="min-h-screen"
+      style={{ background: "oklch(0.10 0.012 55)", color: "oklch(0.92 0.008 75)" }}
+    >
+      <Navigation />
+      <HeroSection />
+      <ChaletIntroSection />
+      <GallerySection />
+      <QuoteSection />
+      <AmenitiesSection />
+      <LocationSection />
+      <BookingSection />
+      <Footer />
     </div>
   );
 }

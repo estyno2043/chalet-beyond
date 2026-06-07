@@ -15,6 +15,7 @@
  * 8. Footer
  */
 import { Navigation } from "@/components/Navigation";
+import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { ChaletCinematicHero } from "@/components/ui/cinematic-landing-hero";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
@@ -31,6 +32,7 @@ export default function Home() {
       className="min-h-screen"
       style={{ background: "oklch(0.06 0.008 55)", color: "oklch(0.92 0.008 75)" }}
     >
+      <ScrollProgressBar />
       <Navigation />
       {/* Cinematic GSAP hero — pins for ~7000px of scroll */}
       <div id="hero" />

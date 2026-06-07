@@ -5,9 +5,9 @@
  *
  * Sections:
  * 0. ChaletCinematicHero — GSAP cinematic scroll sequence (full-screen pin)
- * 1. HeroSection — full-bleed night photo, parallax, clip-path reveal
- * 2. ChaletIntroSection — brand statement, asymmetric layout
- * 3. GallerySection — 6 photos, asymmetric grid, clip-path reveals
+ * 1. ChaletIntroSection — brand statement, asymmetric layout
+ * 2. TextRevealSection — scroll-driven word-by-word text reveal (Framer Motion)
+ * 3. GallerySection — 5 photos, asymmetric grid
  * 4. QuoteSection — atmospheric brand quote
  * 5. AmenitiesSection — amenities grid + specs table
  * 6. LocationSection — golf, skiing, AquaCity — mountain photo bg
@@ -17,6 +17,7 @@
 import { Navigation } from "@/components/Navigation";
 import { ChaletCinematicHero } from "@/components/ui/cinematic-landing-hero";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
+import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
 import { AmenitiesSection } from "@/components/AmenitiesSection";
 import { QuoteSection } from "@/components/QuoteSection";
@@ -40,6 +41,8 @@ export default function Home() {
       />
       {/* Rest of the landing page below the cinematic hero */}
       <ChaletIntroSection />
+      {/* Scroll-driven word-by-word text reveal */}
+      <TextRevealSection />
       <GallerySection />
       <QuoteSection />
       <AmenitiesSection />

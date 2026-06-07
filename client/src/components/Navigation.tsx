@@ -35,8 +35,8 @@ export function Navigation() {
   return (
     <>
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50"
-        style={{ willChange: "background" }}
+        className="fixed top-0 left-0 right-0"
+        style={{ zIndex: 100, willChange: "background" }}
       >
         <motion.div
           className="absolute inset-0"
@@ -110,8 +110,8 @@ export function Navigation() {
 
       {/* Mobile menu */}
       <motion.div
-        className="fixed inset-0 z-40 md:hidden flex flex-col pt-20 px-6 pb-8"
-        style={{ background: "oklch(0.10 0.012 55)" }}
+        className="fixed inset-0 md:hidden flex flex-col pt-20 px-6 pb-8"
+        style={{ zIndex: 99, background: "oklch(0.10 0.012 55)" }}
         initial={{ opacity: 0, x: "100%" }}
         animate={menuOpen ? { opacity: 1, x: 0 } : { opacity: 0, x: "100%" }}
         transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}

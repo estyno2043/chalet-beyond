@@ -261,6 +261,41 @@
   }
 }
 
+/* GSAP hero integration — ensure sections below hero are visible */
+.gsap-section-below {
+  position: relative;
+  z-index: 1;
+}
+
+/* Improved glow hover with scale micro-interaction (ui-ux-pro-max: state-clarity) */
+.glow-hover {
+  transition: box-shadow 0.3s var(--ease-out-expo), transform 0.2s var(--ease-out-expo);
+}
+.glow-hover:hover {
+  box-shadow: 0 0 24px oklch(0.72 0.12 65 / 0.25), 0 0 48px oklch(0.72 0.12 65 / 0.10);
+}
+
+/* Amber underline link animation (ui-ux-pro-max: state-transition) */
+.link-amber {
+  position: relative;
+  color: oklch(0.72 0.12 65);
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out-expo);
+}
+.link-amber::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: oklch(0.72 0.12 65);
+  transition: width 0.3s var(--ease-out-expo);
+}
+.link-amber:hover::after {
+  width: 100%;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

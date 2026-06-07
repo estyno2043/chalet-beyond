@@ -117,11 +117,13 @@ export function ChaletIntroSection() {
               <motion.div
                 key={item.title}
                 variants={staggerItem}
-                className="glow-hover p-8 md:p-10"
+                className="glow-hover p-8 md:p-10 group"
                 style={{
                   background: "oklch(0.14 0.012 55)",
                   borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",
+                  cursor: "default",
                 }}
+                whileHover={{ backgroundColor: "oklch(0.16 0.015 55)" }}
               >
                 <div
                   className="mb-5 inline-flex items-center justify-center w-10 h-10"

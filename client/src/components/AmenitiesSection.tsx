@@ -83,11 +83,13 @@ export function AmenitiesSection() {
                 <motion.div
                   key={item.label}
                   variants={staggerItem}
-                  className="glow-hover flex items-center gap-3 p-4"
+                  className="glow-hover flex items-center gap-3 p-5 group"
                   style={{
                     background: "oklch(0.14 0.012 55)",
                     borderTop: "1px solid oklch(0.72 0.12 65 / 0.12)",
+                    transition: "background 0.25s cubic-bezier(0.23, 1, 0.32, 1)",
                   }}
+                  whileHover={{ backgroundColor: "oklch(0.17 0.015 55)" }}
                 >
                   <Icon
                     size={16}

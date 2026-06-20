@@ -1,27 +1,31 @@
 /*
- * CHALET BEYOND — Intro Section
- * Mobile-first redesign: stacked layout, larger typography, full-width cards
- * Amber rule dividers, fade-up animations
+ * CHALET BEYOND — "Zážitok" Section
+ * What Chalet Beyond is (not a hotel, not an Airbnb) + 4 feature tiles.
+ * Mobile-first: stacked layout, amber rule dividers, fade-up animations.
  */
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
-import { Flame, Eye, Coffee } from "lucide-react";
 
-const highlights = [
+const features = [
   {
-    icon: Flame,
-    title: "Kozub & vírivka",
-    desc: "Ticho zimných večerov pri kozube, v horúcej vírivke pod hviezdami.",
+    emoji: "⛳",
+    title: "GOLF",
+    desc: "Golfový rezort Black Stork – jediné golfové ihrisko PGA na Slovensku. 27 jamiek certifikovaných podľa štandardov kvality PGA od roku 2011. Dve minúty od vchodových dverí.",
   },
   {
-    icon: Eye,
-    title: "Výhľad na Lomničák",
-    desc: "Ranná káva s panorámou, ktorá berie dych — priamo z vášho súkromného útočiska.",
+    emoji: "🌲",
+    title: "SÚKROMIE",
+    desc: "Celý pozemok je výhradne váš. Príďte, zmiznite, resetujte sa.",
   },
   {
-    icon: Coffee,
-    title: "Architektúra & príroda",
-    desc: "Čisté línie, veľkorysé presklené plochy a dokonalé prepojenie interiéru s krajinou.",
+    emoji: "🧖",
+    title: "WELLNESS",
+    desc: "Súkromná sauna a vonkajšia vírivka. Otvorené celoročne, vyhrievané a pripravené.",
+  },
+  {
+    emoji: "🏔",
+    title: "TATRY",
+    desc: "Lomnický štít na obzore. Lyžiarske vleky 10 minút odtiaľto. Zjazdovky od záhradnej bránky.",
   },
 ];
 
@@ -34,9 +38,8 @@ export function ChaletIntroSection() {
           <div className="amber-rule mb-10 md:mb-16" />
         </FadeUp>
 
-        {/* Asymmetric layout — stacked on mobile, side-by-side on desktop */}
+        {/* Asymmetric: heading left, body right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-20 items-start mb-12 md:mb-20">
-          {/* Left: large heading */}
           <FadeUp delay={0.05}>
             <div>
               <p
@@ -49,112 +52,88 @@ export function ChaletIntroSection() {
                   textTransform: "uppercase",
                 }}
               >
-                O chalete
+                Čo je Chalet Beyond?
               </p>
               <h2
                 style={{
                   fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(3.2rem, 10vw, 5.5rem)",
+                  fontSize: "clamp(2.8rem, 9vw, 5.5rem)",
                   letterSpacing: "-0.01em",
                   lineHeight: 1.0,
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                BEYOND<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>YOUR</span><br />
-                EXPECTATIONS
+                NIE JE TO HOTEL.<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>NIE JE TO AIRBNB.</span>
               </h2>
             </div>
           </FadeUp>
 
-          {/* Right: body text */}
           <FadeUp delay={0.15}>
             <div style={{ paddingTop: "0.5rem" }}>
               <p
                 style={{
                   fontFamily: "'Karla', sans-serif",
-                  fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
+                  fontSize: "clamp(1.05rem, 2.5vw, 1.25rem)",
                   fontWeight: 300,
                   lineHeight: 1.75,
                   color: "oklch(0.78 0.015 75)",
-                  marginBottom: "1.25rem",
                 }}
               >
-                Prebúdzajte sa s ikonickým výhľadom na Lomničák, priamo z pohodlia vášho súkromného útočiska na golfovom ihrisku. Každý detail Chalet Beyond je navrhnutý tak, aby prekonal očakávania.
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Karla', sans-serif",
-                  fontSize: "clamp(1rem, 2.5vw, 1.125rem)",
-                  fontWeight: 300,
-                  lineHeight: 1.75,
-                  color: "oklch(0.78 0.015 75)",
-                  marginBottom: "1.75rem",
-                }}
-              >
-                Čisté línie, veľkorysé presklené plochy a dokonalé prepojenie interiéru s okolitou krajinou. Tu nejde len o bývanie. Ide o zážitok.
-              </p>
-              <p
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(1.2rem, 3vw, 1.4rem)",
-                  letterSpacing: "0.04em",
-                  color: "oklch(0.72 0.12 65)",
-                }}
-              >
-                Chalet Beyond, beyond your expectations.
+                Súkromný horský rezort určený pre tých, ktorí chcú mať Tatry úplne pre seba. Pár krokov od ihriska Black Stork fairway. Priamy výhľad na Lomnický štít. Žiadna recepcia, žiadne spoločné priestory – len chata a hory.
               </p>
             </div>
           </FadeUp>
         </div>
 
-        {/* Three highlights — full width on mobile, 3-col on desktop */}
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-px" staggerDelay={0.1}>
-          {highlights.map((item) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.title}
-                variants={staggerItem}
-                className="glow-hover p-7 md:p-10 group"
-                style={{
-                  background: "oklch(0.14 0.012 55)",
-                  borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",
-                  cursor: "default",
-                }}
-                whileHover={{ backgroundColor: "oklch(0.16 0.015 55)" }}
+        {/* Four feature tiles */}
+        <StaggerContainer
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
+          staggerDelay={0.1}
+        >
+          {features.map((item) => (
+            <motion.div
+              key={item.title}
+              variants={staggerItem}
+              className="glow-hover p-7 md:p-9 group"
+              style={{
+                background: "oklch(0.14 0.012 55)",
+                borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",
+                cursor: "default",
+              }}
+              whileHover={{ backgroundColor: "oklch(0.16 0.015 55)" }}
+            >
+              <div
+                className="mb-4"
+                style={{ fontSize: "1.9rem", lineHeight: 1 }}
+                aria-hidden="true"
               >
-                <div
-                  className="mb-4 inline-flex items-center justify-center w-10 h-10"
-                  style={{ color: "oklch(0.72 0.12 65)" }}
-                >
-                  <Icon size={22} strokeWidth={1.5} />
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "clamp(1.3rem, 4vw, 1.5rem)",
-                    letterSpacing: "0.03em",
-                    color: "oklch(0.92 0.008 75)",
-                    marginBottom: "0.6rem",
-                  }}
-                >
-                  {item.title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "'Karla', sans-serif",
-                    fontSize: "0.95rem",
-                    fontWeight: 300,
-                    lineHeight: 1.65,
-                    color: "oklch(0.58 0.020 65)",
-                  }}
-                >
-                  {item.desc}
-                </p>
-              </motion.div>
-            );
-          })}
+                {item.emoji}
+              </div>
+              <h3
+                style={{
+                  fontFamily: "'Bebas Neue', sans-serif",
+                  fontSize: "clamp(1.3rem, 4vw, 1.6rem)",
+                  letterSpacing: "0.06em",
+                  color: "oklch(0.92 0.008 75)",
+                  marginBottom: "0.6rem",
+                }}
+              >
+                {item.title}
+              </h3>
+              <p
+                style={{
+                  fontFamily: "'Karla', sans-serif",
+                  fontSize: "0.95rem",
+                  fontWeight: 300,
+                  lineHeight: 1.65,
+                  color: "oklch(0.62 0.020 65)",
+                }}
+              >
+                {item.desc}
+              </p>
+            </motion.div>
+          ))}
         </StaggerContainer>
       </div>
     </section>

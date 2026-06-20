@@ -4,7 +4,7 @@
  * Address, contact, social links
  */
 import { FadeUp } from "@/components/FadeUp";
-import { MapPin, ExternalLink } from "lucide-react";
+import { MapPin, Mail } from "lucide-react";
 
 export function Footer() {
   return (
@@ -100,7 +100,7 @@ export function Footer() {
                   color: "oklch(0.45 0.015 65)",
                 }}
               >
-                49°11'N 20°17'E · 820 m n.m.
+                49°08'N 20°20'E · 820 m n.m.
               </p>
             </div>
 
@@ -119,9 +119,7 @@ export function Footer() {
                 Rezervácia
               </h4>
               <a
-                href="https://www.booking.com/hotel/sk/chalet-beyond.html"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:contact@chaletbeyond.sk"
                 className="flex items-center gap-2 group mb-3"
                 style={{
                   fontFamily: "'Karla', sans-serif",
@@ -134,9 +132,21 @@ export function Footer() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "oklch(0.72 0.12 65)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "oklch(0.78 0.015 75)")}
               >
-                <ExternalLink size={13} style={{ flexShrink: 0 }} />
-                Booking.com
+                <Mail size={13} style={{ flexShrink: 0 }} />
+                contact@chaletbeyond.sk
               </a>
+              <p
+                style={{
+                  fontFamily: "'Karla', sans-serif",
+                  fontSize: "0.8rem",
+                  fontWeight: 300,
+                  color: "oklch(0.45 0.015 65)",
+                  lineHeight: 1.6,
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Iba priama rezervácia – bez sprostredkovateľov.
+              </p>
               <p
                 style={{
                   fontFamily: "'Karla', sans-serif",
@@ -157,6 +167,31 @@ export function Footer() {
             className="pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
             style={{ borderTop: "1px solid oklch(0.72 0.12 65 / 0.12)" }}
           >
+            <div className="flex flex-col gap-1">
+              <p
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.1em",
+                  color: "oklch(0.55 0.020 65)",
+                  textTransform: "uppercase",
+                }}
+              >
+                Chalet Beyond · Vysoké Tatry, Slovensko
+              </p>
+              <a
+                href="mailto:contact@chaletbeyond.sk"
+                style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.62rem",
+                  letterSpacing: "0.1em",
+                  color: "oklch(0.55 0.020 65)",
+                  textDecoration: "none",
+                }}
+              >
+                contact@chaletbeyond.sk
+              </a>
+            </div>
             <p
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
@@ -166,18 +201,7 @@ export function Footer() {
                 textTransform: "uppercase",
               }}
             >
-              © 2025 Chalet Beyond · Veľká Lomnica · Slovensko
-            </p>
-            <p
-              style={{
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "0.62rem",
-                letterSpacing: "0.1em",
-                color: "oklch(0.38 0.010 65)",
-                textTransform: "uppercase",
-              }}
-            >
-              Black Stork Golf Resort · PGA Certified
+              © 2025 Chalet Beyond. Všetky práva vyhradené.
             </p>
           </div>
         </FadeUp>

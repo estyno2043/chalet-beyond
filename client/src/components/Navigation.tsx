@@ -74,75 +74,13 @@ export function Navigation() {
           className="flex items-center gap-2.5 select-none group"
           aria-label="Chalet Beyond — domov"
         >
-          {/* Mountain peak mark */}
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            className="flex-shrink-0"
-          >
-            {/* Outer circle */}
-            <circle cx="16" cy="16" r="15" stroke="rgba(180,120,40,0.35)" strokeWidth="1" />
-            {/* Mountain silhouette */}
-            <path
-              d="M5 23 L11 13 L15 17 L16 15.5 L22 8 L27 23 Z"
-              fill="oklch(0.08 0.010 55)"
-              stroke="none"
-            />
-            {/* Back peak (lighter) */}
-            <path
-              d="M16 15.5 L22 8 L27 23 L16 23 Z"
-              fill="oklch(0.55 0.020 65)"
-              opacity="0.6"
-            />
-            {/* Front peak (amber) */}
-            <path
-              d="M5 23 L11 13 L16 23 Z"
-              fill="oklch(0.72 0.12 65)"
-            />
-            {/* Snow cap */}
-            <path
-              d="M22 8 L24.5 13.5 L19.5 13.5 Z"
-              fill="oklch(0.92 0.008 75)"
-              opacity="0.9"
-            />
-            {/* Chalet roof line */}
-            <path
-              d="M10 23 L10 20 L13 18 L16 20 L16 23"
-              fill="oklch(0.14 0.020 55)"
-              stroke="rgba(180,120,40,0.4)"
-              strokeWidth="0.5"
-            />
-          </svg>
-          {/* Wordmark */}
-          <div className="flex flex-col leading-none">
-            <span
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: '1.05rem',
-                letterSpacing: '0.14em',
-                color: 'oklch(0.92 0.008 75)',
-                lineHeight: 1,
-                transition: 'color 0.3s ease',
-              }}
-            >
-              CHALET
-            </span>
-            <span
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: '1.05rem',
-                letterSpacing: '0.14em',
-                color: 'oklch(0.72 0.12 65)',
-                lineHeight: 1,
-              }}
-            >
-              BEYOND
-            </span>
-          </div>
+          {/* Brand logo (image) */}
+          <img
+            src="/logo.png"
+            alt="Chalet Beyond"
+            className="flex-shrink-0 w-auto select-none"
+            style={{ height: "44px", objectFit: "contain" }}
+          />
         </a>
 
         {/* Desktop links */}
@@ -301,9 +239,8 @@ export function Navigation() {
               Rezervovať pobyt
             </a>
             <a
-              href="https://www.booking.com/hotel/sk/chalet-beyond.html"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:contact@chaletbeyond.sk"
+              onClick={() => setOpen(false)}
               className="w-full flex items-center justify-center py-4 rounded-sm text-center"
               style={{
                 fontFamily: "'Bebas Neue', sans-serif",
@@ -313,7 +250,7 @@ export function Navigation() {
                 border: '1px solid rgba(180,120,40,0.3)',
               }}
             >
-              Booking.com
+              Napíšte nám
             </a>
           </div>
         </div>

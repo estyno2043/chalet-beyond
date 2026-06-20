@@ -2,16 +2,16 @@
  * CHALET BEYOND — Booking Section
  * Interactive date range calendar using react-day-picker (already in deps)
  * Check-in/check-out selection, guest count, inquiry form
- * Links to Booking.com for actual reservation
+ * Direct booking only — CTA opens an email inquiry to contact@chaletbeyond.sk
  */
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp } from "@/components/FadeUp";
 import { Calendar } from "@/components/ui/calendar";
-import { Users, CalendarDays, ArrowRight, ExternalLink } from "lucide-react";
+import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 
-const BOOKING_URL = "https://www.booking.com/hotel/sk/chalet-beyond.html";
+const CONTACT_EMAIL = "contact@chaletbeyond.sk";
 
 function formatDate(date: Date | undefined): string {
   if (!date) return "—";
@@ -36,7 +36,20 @@ export function BookingSection() {
   const canProceed = dateRange?.from && dateRange?.to && nights > 0;
 
   const handleBooking = () => {
-    window.open(BOOKING_URL, "_blank", "noopener,noreferrer");
+    const subject = "Dopyt na rezerváciu — Chalet Beyond";
+    const body = [
+      "Dobrý deň,",
+      "",
+      "rád/rada by som overil/a dostupnosť Chalet Beyond pre tento termín:",
+      `Check-in: ${formatDate(dateRange?.from)}`,
+      `Check-out: ${formatDate(dateRange?.to)}`,
+      `Počet nocí: ${nights || "—"}`,
+      `Počet hostí: ${guests}`,
+      "",
+      "Ďakujem.",
+    ].join("\n");
+    window.location.href =
+      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
   return (
@@ -67,8 +80,8 @@ export function BookingSection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                VYBERTE SI<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>TERMÍN</span>
+                PREKONÁVA VAŠE<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>OČAKÁVANIA</span>
               </h2>
             </div>
             <p
@@ -76,11 +89,12 @@ export function BookingSection() {
                 fontFamily: "'Karla', sans-serif",
                 fontSize: "0.95rem",
                 fontWeight: 300,
-                color: "oklch(0.58 0.020 65)",
+                lineHeight: 1.7,
+                color: "oklch(0.62 0.020 65)",
                 maxWidth: "38ch",
               }}
             >
-              Vyberte dátumy a pokračujte na Booking.com pre záväznú rezerváciu.
+              Iba priama rezervácia – žiadne poplatky za platformu, žiadni sprostredkovatelia.
             </p>
           </div>
         </FadeUp>
@@ -400,8 +414,8 @@ export function BookingSection() {
                   pointerEvents: canProceed ? "auto" : "none",
                 }}
               >
-                <span>Rezervovať na Booking</span>
-                <ExternalLink size={14} />
+                <span>Skontrolovať dostupnosť</span>
+                <ArrowRight size={16} />
               </motion.button>
 
               {!canProceed && (
@@ -425,9 +439,10 @@ export function BookingSection() {
                   fontWeight: 300,
                   color: "oklch(0.45 0.015 65)",
                   textAlign: "center",
+                  lineHeight: 1.6,
                 }}
               >
-                Rezervácia prebieha cez Booking.com
+                Minimálna dĺžka pobytu 2 noci · Celý objekt · Sezónne ceny
               </p>
             </div>
           </FadeUp>

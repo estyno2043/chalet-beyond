@@ -116,7 +116,7 @@ export function GallerySection() {
                   textTransform: "uppercase",
                 }}
               >
-                Priestory
+                Architektúra
               </p>
               <h2
                 style={{
@@ -127,19 +127,20 @@ export function GallerySection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                250 m² SÚKROMIA
+                POSTAVENÉ PRE<br />TÚTO KRAJINU
               </h2>
             </div>
             <p
               style={{
                 fontFamily: "'Karla', sans-serif",
-                fontSize: "0.9rem",
+                fontSize: "0.95rem",
                 fontWeight: 300,
-                color: "oklch(0.58 0.020 65)",
-                maxWidth: "38ch",
+                lineHeight: 1.7,
+                color: "oklch(0.62 0.020 65)",
+                maxWidth: "44ch",
               }}
             >
-              3 spálne · 3 kúpeľne · Sauna · Vírivka · Kozub · Plne vybavená kuchyňa
+              Tmavá kovová strecha. Vertikálny drevený obklad. Zasklenie od podlahy až po strop, ktoré vťahuje borovicový les dovnútra. Cez deň mizne v lese. V noci ho teplé svetlo mení na maják.
             </p>
           </div>
         </FadeUp>

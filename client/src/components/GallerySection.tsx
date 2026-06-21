@@ -15,9 +15,9 @@ interface GalleryImg {
 
 const IMAGES: GalleryImg[] = [
   {
-    src: "/gallery/exterior-night.jpg",
-    label: "Exteriér v noci",
-    desc: "Tmavá kovová strecha, vertikálny drevený obklad, teplé okná pri zotmení.",
+    src: "/gallery/golf-fairway.jpg",
+    label: "PGA Golfové ihrisko Black Stork",
+    desc: "Jediné PGA-certifikované ihrisko na Slovensku — dve minúty od vchodových dverí.",
   },
   {
     src: "/gallery/mountain-view.jpg",
@@ -40,9 +40,9 @@ const IMAGES: GalleryImg[] = [
     desc: "Harvia kachle, cédrové lavice, podsvietenie.",
   },
   {
-    src: "/gallery/bathroom.jpg",
-    label: "Kúpeľňa",
-    desc: "Travertín, dvojité umývadlo, sklená sprcha.",
+    src: "/gallery/exterior-night.jpg",
+    label: "Exteriér v noci",
+    desc: "Tmavá kovová strecha, drevený obklad, teplé okná pri zotmení.",
   },
 ];
 

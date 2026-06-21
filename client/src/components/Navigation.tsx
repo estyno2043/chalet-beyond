@@ -55,7 +55,6 @@ export function Navigation() {
           'bg-transparent border-b border-transparent': !scrolled && !open,
         },
       )}
-      style={{ willChange: 'transform' }}
     >
       <div
         className={cn(
@@ -160,26 +159,22 @@ export function Navigation() {
         </button>
       </div>
 
-      {/* Mobile full-screen menu overlay */}
+      {/* Mobile full-screen menu overlay — simple fade+lift, no tw-animate-css. */}
       <div
         className={cn(
-          'fixed top-14 right-0 bottom-0 left-0 z-50 flex flex-col overflow-hidden md:hidden',
+          'fixed right-0 bottom-0 left-0 z-50 flex flex-col overflow-y-auto md:hidden',
           'border-t border-[rgba(180,120,40,0.15)]',
           'bg-[oklch(0.06_0.008_55/0.98)] backdrop-blur-xl',
           open ? 'pointer-events-auto' : 'pointer-events-none',
         )}
         style={{
+          top: scrolled ? '3rem' : '3.5rem',
           opacity: open ? 1 : 0,
-          transition: 'opacity 0.25s ease',
+          transform: open ? 'translateY(0)' : 'translateY(-8px)',
+          transition: 'opacity 0.25s ease, transform 0.25s ease',
         }}
       >
-        <div
-          data-slot={open ? 'open' : 'closed'}
-          className={cn(
-            'data-[slot=open]:animate-in data-[slot=open]:zoom-in-95 data-[slot=closed]:animate-out data-[slot=closed]:zoom-out-95 ease-out',
-            'flex h-full w-full flex-col justify-between gap-y-2 p-6',
-          )}
-        >
+        <div className="flex h-full w-full flex-col justify-between gap-y-2 p-6">
           <div className="grid gap-y-1 pt-4">
             {links.map((link, i) => (
               <a

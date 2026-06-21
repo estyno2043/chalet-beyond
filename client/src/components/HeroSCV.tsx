@@ -136,10 +136,11 @@ export function HeroSCV() {
 
   const { chapter, showIntro, textVisible, brandRevealed } = state;
 
-  // parent height = pinned scroll distance + sticky height (100vh). Pinned
-  // distance = chapter scrub + brand hold, so the frozen ch3 frame + brand
-  // reveal stay pinned through the whole hold.
-  const totalHeight = `${CHAPTERS.length * SCROLL_PER_CHAPTER_VH + BRAND_REVEAL_VH + 100}vh`;
+  // parent height = pinned scroll distance + sticky height. Uses `svh` so the
+  // pin math survives mobile address-bar resize (vh on iOS/Android Chrome
+  // includes the hidden address-bar area and causes the sticky to "cut off"
+  // when the bar reappears).
+  const totalHeight = `${CHAPTERS.length * SCROLL_PER_CHAPTER_VH + BRAND_REVEAL_VH + 100}svh`;
 
   return (
     <div id="hero" style={{ height: totalHeight, background: "oklch(0.06 0.008 55)" }}>
@@ -161,8 +162,8 @@ export function HeroSCV() {
           .scv-caption { justify-content: flex-end; padding-bottom: 14vh !important; }
         }
       `}</style>
-      {/* Sticky viewport */}
-      <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
+      {/* Sticky viewport — svh matches the parent units (see totalHeight). */}
+      <div style={{ position: "sticky", top: 0, height: "100svh", overflow: "hidden" }}>
         {/* Videos */}
         {CHAPTERS.map((c, i) => (
           <video

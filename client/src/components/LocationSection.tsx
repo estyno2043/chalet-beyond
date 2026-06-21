@@ -44,13 +44,13 @@ const locations = [
 export function LocationSection() {
   return (
     <section id="okolie" className="relative py-24 md:py-36 overflow-hidden">
-      {/* Background: mountain view photo */}
+      {/* Background: zoomed Lomnický štít — same source as the gallery shot. */}
       <div className="absolute inset-0">
         <img
-          src="/manus-storage/chalet-mountain-view_91debae8.png"
+          src="/gallery/mountain-view.jpg"
           alt="Výhľad na Lomnický štít"
           className="w-full h-full object-cover"
-          style={{ objectPosition: "center 40%" }}
+          style={{ objectPosition: "center 35%", transform: "scale(1.25)" }}
         />
         <div
           className="absolute inset-0"

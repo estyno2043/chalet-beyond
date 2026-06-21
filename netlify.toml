@@ -1,0 +1,26 @@
+[build]
+  command = "pnpm build"
+  publish = "dist/public"
+
+[build.environment]
+  NODE_VERSION = "20"
+  PNPM_VERSION = "10"
+
+# Long-cache fingerprinted assets — Vite already hashes them.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Videos: allow Range requests (HTML5 video scrubbing) and a sensible cache.
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+    Accept-Ranges = "bytes"
+
+# SPA fallback — wouter handles client-side routes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

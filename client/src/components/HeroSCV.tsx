@@ -64,7 +64,6 @@ interface HeroState {
 export function HeroSCV() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const rafRef = useRef<number | null>(null);
-  const scrollYRef = useRef(0);
   const stateRef = useRef<HeroState>({
     chapter: 0,
     showIntro: true,
@@ -74,16 +73,12 @@ export function HeroSCV() {
   const [state, setState] = useState<HeroState>(stateRef.current);
 
   useEffect(() => {
-    const onScroll = () => {
-      scrollYRef.current = window.scrollY;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    scrollYRef.current = window.scrollY;
-
     const lastIdx = CHAPTERS.length - 1;
 
     const tick = () => {
-      const scrollY = scrollYRef.current;
+      // Read scrollY directly each frame — covers programmatic scrolls that
+      // don't fire 'scroll' events (e.g. Chrome's instant scrollTo).
+      const scrollY = window.scrollY;
       const vh = window.innerHeight;
       const pxPerChapter = (SCROLL_PER_CHAPTER_VH / 100) * vh;
 
@@ -135,7 +130,6 @@ export function HeroSCV() {
 
     rafRef.current = requestAnimationFrame(tick);
     return () => {
-      window.removeEventListener("scroll", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
@@ -149,6 +143,21 @@ export function HeroSCV() {
 
   return (
     <div id="hero" style={{ height: totalHeight, background: "oklch(0.06 0.008 55)" }}>
+      {/* Per-chapter object-position lets us anchor the important focal point
+          (e.g. the golf ball, which sits on the left of ch1's wide frame) so
+          mobile portrait viewports don't crop it out. */}
+      <style>{`
+        .scv-video { object-position: 50% 50%; }
+        .scv-caption { justify-content: center; }
+        @media (max-width: 767px) {
+          .scv-video-ch1 { object-position: 25% 60%; }
+          .scv-video-ch2 { object-position: 50% 50%; }
+          .scv-video-ch3 { object-position: 50% 55%; }
+          /* Push captions to lower 30% on mobile so they don't sit on the
+             focal point of the video (golf ball, summit, chalet roof). */
+          .scv-caption { justify-content: flex-end; padding-bottom: 14vh !important; }
+        }
+      `}</style>
       {/* Sticky viewport */}
       <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden" }}>
         {/* Videos */}
@@ -162,6 +171,7 @@ export function HeroSCV() {
             preload="auto"
             muted
             playsInline
+            className={`scv-video scv-video-ch${i + 1}`}
             style={{
               position: "absolute",
               inset: 0,
@@ -196,17 +206,18 @@ export function HeroSCV() {
           }}
         />
 
-        {/* Chapter captions (Task 2) — each fully centered */}
+        {/* Chapter captions — centered on desktop, anchored low on mobile so
+            they don't sit on top of the golf ball / mountain focal point. */}
         {CHAPTERS.map((c, i) => (
           <div
             key={i}
+            className="scv-caption"
             style={{
               position: "absolute",
               inset: 0,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
               textAlign: "center",
               padding: "0 1.5rem",
               pointerEvents: "none",

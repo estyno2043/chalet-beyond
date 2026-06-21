@@ -1,42 +1,48 @@
 /*
- * CHALET BEYOND — Gallery / Priestory Section
- * Mobile-first: full-width tall images stacked vertically on mobile
- * Desktop: asymmetric grid
- * Fade-up reveal animations, hover overlay
+ * CHALET BEYOND — Architektúra / Gallery Section
+ * "POSTAVENÉ PRE TÚTO KRAJINU" — 5 photos of the actual chalet.
+ * Mobile: stacked column with one large hero + 2-up rows.
+ * Desktop: asymmetric grid — large left hero, smaller right column, wide row.
  */
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
 
-const images = [
+interface GalleryImg {
+  src: string;
+  label: string;
+  desc: string;
+}
+
+const IMAGES: GalleryImg[] = [
   {
-    src: "/manus-storage/chalet-living_c24d113a.png",
-    label: "Obývacia izba",
-    desc: "Kožená sedačka, kozub, drevenný strop — srdce chaletu.",
-    large: true,
+    src: "/gallery/exterior-night.jpg",
+    label: "Exteriér v noci",
+    desc: "Tmavá kovová strecha, vertikálny drevený obklad, teplé okná pri zotmení.",
   },
   {
-    src: "/manus-storage/chalet-mountain-view_91debae8.png",
-    label: "Výhľad na Lomničák",
-    desc: "Ikonická panoráma Vysokých Tatier pri západe slnka.",
-    large: false,
+    src: "/gallery/mountain-view.jpg",
+    label: "Výhľad na Lomnický štít",
+    desc: "Ranná panoráma priamo zo strechy chaletu.",
   },
   {
-    src: "/manus-storage/chalet-sauna_22931760.png",
-    label: "Fínska sauna",
-    desc: "Harvia kachle, cédrové lavice, podsvietenie.",
-    large: false,
-  },
-  {
-    src: "/manus-storage/chalet-interior-dining_31d1b175.png",
+    src: "/gallery/dining.jpg",
     label: "Jedáleň & kuchyňa",
     desc: "Projektor, kozub, plne vybavená kuchyňa pre 8 hostí.",
-    large: false,
   },
   {
-    src: "/manus-storage/chalet-bedroom_f7acdc90.png",
+    src: "/gallery/bedroom.jpg",
     label: "Spálňa",
-    desc: "3 spálne, každá s vlastnou kúpeľňou.",
-    large: false,
+    desc: "Tri spálne, každá s vlastným ambientom.",
+  },
+  {
+    src: "/gallery/sauna.jpg",
+    label: "Fínska sauna",
+    desc: "Harvia kachle, cédrové lavice, podsvietenie.",
+  },
+  {
+    src: "/gallery/bathroom.jpg",
+    label: "Kúpeľňa",
+    desc: "Travertín, dvojité umývadlo, sklená sprcha.",
   },
 ];
 
@@ -45,11 +51,13 @@ function GalleryImage({
   label,
   desc,
   height = "300px",
+  objectPosition = "center",
 }: {
   src: string;
   label: string;
   desc: string;
   height?: string;
+  objectPosition?: string;
 }) {
   return (
     <div
@@ -60,10 +68,9 @@ function GalleryImage({
         src={src}
         alt={label}
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        style={{ display: "block" }}
+        style={{ display: "block", objectPosition }}
         loading="lazy"
       />
-      {/* Overlay */}
       <div
         className="absolute inset-0 flex flex-col justify-end p-4 md:p-5"
         style={{
@@ -147,59 +154,67 @@ export function GallerySection() {
 
         {/* Desktop: asymmetric grid */}
         <div className="hidden md:block">
-          {/* Top row: large left + 2 small right */}
+          {/* Top: large exterior + right column with mountain + bedroom */}
           <div className="grid grid-cols-3 gap-3 mb-3">
             <FadeUp delay={0} className="col-span-2">
               <GalleryImage
-                src="/manus-storage/chalet-living_c24d113a.png"
-                label="Obývacia izba"
-                desc="Kožená sedačka, kozub, drevenný strop — srdce chaletu."
-                height="480px"
+                src={IMAGES[0].src}
+                label={IMAGES[0].label}
+                desc={IMAGES[0].desc}
+                height="520px"
               />
             </FadeUp>
             <div className="col-span-1 flex flex-col gap-3">
               <FadeUp delay={0.1} className="flex-1">
                 <GalleryImage
-                  src="/manus-storage/chalet-mountain-view_91debae8.png"
-                  label="Výhľad na Lomničák"
-                  desc="Ikonická panoráma Vysokých Tatier pri západe slnka."
-                  height="232px"
+                  src={IMAGES[1].src}
+                  label={IMAGES[1].label}
+                  desc={IMAGES[1].desc}
+                  height="252px"
+                  objectPosition="center 40%"
                 />
               </FadeUp>
               <FadeUp delay={0.2} className="flex-1">
                 <GalleryImage
-                  src="/manus-storage/chalet-sauna_22931760.png"
-                  label="Fínska sauna"
-                  desc="Harvia kachle, cédrové lavice, podsvietenie."
-                  height="232px"
+                  src={IMAGES[3].src}
+                  label={IMAGES[3].label}
+                  desc={IMAGES[3].desc}
+                  height="252px"
                 />
               </FadeUp>
             </div>
           </div>
-          {/* Bottom row: wide + small */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* Bottom: dining wide + sauna + bathroom */}
+          <div className="grid grid-cols-4 gap-3">
             <FadeUp delay={0.1} className="col-span-2">
               <GalleryImage
-                src="/manus-storage/chalet-interior-dining_31d1b175.png"
-                label="Jedáleň & kuchyňa"
-                desc="Projektor, kozub, plne vybavená kuchyňa pre 8 hostí."
-                height="280px"
+                src={IMAGES[2].src}
+                label={IMAGES[2].label}
+                desc={IMAGES[2].desc}
+                height="300px"
               />
             </FadeUp>
             <FadeUp delay={0.2} className="col-span-1">
               <GalleryImage
-                src="/manus-storage/chalet-bedroom_f7acdc90.png"
-                label="Spálňa"
-                desc="3 spálne, každá s vlastnou kúpeľňou."
-                height="280px"
+                src={IMAGES[4].src}
+                label={IMAGES[4].label}
+                desc={IMAGES[4].desc}
+                height="300px"
+              />
+            </FadeUp>
+            <FadeUp delay={0.3} className="col-span-1">
+              <GalleryImage
+                src={IMAGES[5].src}
+                label={IMAGES[5].label}
+                desc={IMAGES[5].desc}
+                height="300px"
               />
             </FadeUp>
           </div>
         </div>
 
-        {/* Mobile: 2-column grid for compact luxury feel */}
+        {/* Mobile: stacked column */}
         <div className="md:hidden">
-          {/* Hero image full width */}
           <StaggerContainer className="flex flex-col gap-2" staggerDelay={0.07}>
             <motion.div
               variants={{
@@ -208,18 +223,14 @@ export function GallerySection() {
               }}
             >
               <GalleryImage
-                src="/manus-storage/chalet-living_c24d113a.png"
-                label="Obývacia izba"
-                desc="Kožená sedačka, kozub, drevenný strop."
+                src={IMAGES[0].src}
+                label={IMAGES[0].label}
+                desc={IMAGES[0].desc}
                 height="280px"
               />
             </motion.div>
-            {/* 2-col row */}
             <div className="grid grid-cols-2 gap-2">
-              {[
-                { src: "/manus-storage/chalet-mountain-view_91debae8.png", label: "Výhľad na Lomničák", desc: "Panoráma Tatier." },
-                { src: "/manus-storage/chalet-sauna_22931760.png", label: "Fínska sauna", desc: "Harvia kachle." },
-              ].map((img, i) => (
+              {[IMAGES[1], IMAGES[3]].map((img, i) => (
                 <motion.div
                   key={img.src}
                   variants={{
@@ -227,11 +238,16 @@ export function GallerySection() {
                     visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
                   }}
                 >
-                  <GalleryImage {...img} height="180px" />
+                  <GalleryImage
+                    src={img.src}
+                    label={img.label}
+                    desc={img.desc}
+                    height="180px"
+                    objectPosition={img.src.includes("mountain") ? "center 40%" : "center"}
+                  />
                 </motion.div>
               ))}
             </div>
-            {/* Another full-width */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -239,25 +255,30 @@ export function GallerySection() {
               }}
             >
               <GalleryImage
-                src="/manus-storage/chalet-interior-dining_31d1b175.png"
-                label="Jedáleň & kuchyňa"
-                desc="Projektor, kozub, plne vybavená kuchyňa."
+                src={IMAGES[2].src}
+                label={IMAGES[2].label}
+                desc={IMAGES[2].desc}
                 height="220px"
               />
             </motion.div>
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
-              }}
-            >
-              <GalleryImage
-                src="/manus-storage/chalet-bedroom_f7acdc90.png"
-                label="Spálňa"
-                desc="3 spálne, každá s vlastnou kúpeľňou."
-                height="200px"
-              />
-            </motion.div>
+            <div className="grid grid-cols-2 gap-2">
+              {[IMAGES[4], IMAGES[5]].map((img, i) => (
+                <motion.div
+                  key={img.src}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: i * 0.08, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] } },
+                  }}
+                >
+                  <GalleryImage
+                    src={img.src}
+                    label={img.label}
+                    desc={img.desc}
+                    height="200px"
+                  />
+                </motion.div>
+              ))}
+            </div>
           </StaggerContainer>
         </div>
       </div>

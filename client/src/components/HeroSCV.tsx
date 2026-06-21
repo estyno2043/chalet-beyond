@@ -150,8 +150,11 @@ export function HeroSCV() {
         .scv-video { object-position: 50% 50%; }
         .scv-caption { justify-content: center; }
         @media (max-width: 767px) {
+          /* Keep the golf ball / focal subject visible through the whole
+             chapter transition. Ch2 has the ball travelling across an orbit
+             view — anchor 30% so the ball stays in frame as it moves. */
           .scv-video-ch1 { object-position: 25% 60%; }
-          .scv-video-ch2 { object-position: 50% 50%; }
+          .scv-video-ch2 { object-position: 30% 50%; }
           .scv-video-ch3 { object-position: 50% 55%; }
           /* Push captions to lower 30% on mobile so they don't sit on the
              focal point of the video (golf ball, summit, chalet roof). */

@@ -14,10 +14,12 @@
  * 7. BookingSection — date range calendar + booking summary
  * 8. Footer
  */
+import { useState, useEffect } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { HeroSCV } from "@/components/HeroSCV";
+import { HeroMobile } from "@/components/HeroMobile";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -30,6 +32,18 @@ import { Footer } from "@/components/Footer";
 export default function Home() {
   useSmoothScroll();
 
+  // Initializer reads the real viewport before first paint so the mobile
+  // hero never mounts the SCV (and never preloads its 3 chapter videos).
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 767px)").matches,
+  );
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 767px)");
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <div
       className="min-h-screen"
@@ -37,8 +51,9 @@ export default function Home() {
     >
       <ScrollProgressBar />
       <Navigation />
-      {/* Scroll-controlled video hero — 3 chapters + brand reveal (id="hero" inside) */}
-      <HeroSCV />
+      {/* Hero: mobile = looping interior walkthrough + animated brand reveal;
+          desktop = scroll-controlled SCV (3 chapters). id="hero" inside both. */}
+      {isMobile ? <HeroMobile /> : <HeroSCV />}
       {/* Rest of the landing page below the hero */}
       <ChaletIntroSection />
       {/* Scroll-driven word-by-word text reveal */}

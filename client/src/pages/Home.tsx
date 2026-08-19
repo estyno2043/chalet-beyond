@@ -26,6 +26,7 @@ import { GallerySection } from "@/components/GallerySection";
 import { AmenitiesSection } from "@/components/AmenitiesSection";
 import { QuoteSection } from "@/components/QuoteSection";
 import { LocationSection } from "@/components/LocationSection";
+import { PricingSection } from "@/components/PricingSection";
 import { BookingSection } from "@/components/BookingSection";
 import { Footer } from "@/components/Footer";
 
@@ -62,6 +63,8 @@ export default function Home() {
       <QuoteSection />
       <AmenitiesSection />
       <LocationSection />
+      {/* Price before the form: the guest should read the rate, then act on it */}
+      <PricingSection />
       <BookingSection />
       <Footer />
     </div>

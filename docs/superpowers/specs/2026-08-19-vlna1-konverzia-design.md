@@ -135,15 +135,19 @@ Tú istú funkciu bude neskôr volať Stripe Checkout na výpočet sumy. Preto v
 
 Odpoveď 200:
 ```json
-{ "blocked": ["2026-08-20", "2026-08-21"], "updated": "2026-08-19T10:00:00Z" }
+{ "blocked": ["2026-08-20", "2026-08-21"], "updated": "2026-08-19T10:00:00Z", "degraded": false }
 ```
 
-Odpoveď 502 pri zlyhaní zdroja:
+`degraded: true` znamená, že časť zdrojov neodpovedala a zoznam je neúplný. Termíny zo zdrojov, ktoré odpovedali, sa aj tak vrátia — zahodiť ich by ukázalo obsadené noci ako voľné.
+
+Odpoveď 502 nastáva, až keď zlyhajú **všetky** zdroje:
 ```json
 { "error": "ical_unreachable" }
 ```
 
-Hlavička: `Cache-Control: public, max-age=1800`
+`ical_invalid` namiesto toho, keď zdroj odpovedal, ale neposlal kalendár — typicky zrušená export URL vracajúca prihlasovaciu stránku. Iná príčina, iná oprava.
+
+Hlavičky: `Cache-Control: no-store` (prehliadač nesmie držať vlastnú kópiu, inak hosť s otvorenou stránkou vidí noci predané pred chvíľou) a `Netlify-CDN-Cache-Control: public, max-age=1800` (záťaž absorbuje CDN). Neúplná odpoveď sa necachuje vôbec.
 
 ### `POST /api/inquiry`
 

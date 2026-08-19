@@ -222,7 +222,10 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    strictPort: false, // Will find next available port if 3000 is busy
+    // Fail loudly instead of drifting to another port: netlify.toml pins
+    // targetPort 3000, so a silent move leaves `netlify dev` proxying to
+    // whatever else already owns 3000 while this server idles elsewhere.
+    strictPort: true,
     host: true,
     allowedHosts: [
       ".manuspre.computer",

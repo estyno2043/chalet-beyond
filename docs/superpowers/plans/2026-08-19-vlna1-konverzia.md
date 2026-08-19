@@ -1111,7 +1111,12 @@ import { useEffect, useState } from "react";
 Then add this immediately above `export function BookingSection() {`:
 
 ```tsx
-/** Occupied nights from Booking and Airbnb. Empty when the feed is unreachable. */
+/**
+ * Occupied nights from Booking and Airbnb. Empty when every feed is unreachable.
+ * `failed` also covers a partial answer: the endpoint returns `degraded: true`
+ * when some feeds did not respond, so the list is real but incomplete and the
+ * guest still needs telling that availability could not be fully confirmed.
+ */
 function useBlockedDates(): { blocked: Date[]; failed: boolean } {
   const [blocked, setBlocked] = useState<Date[]>([]);
   const [failed, setFailed] = useState(false);
@@ -1123,9 +1128,10 @@ function useBlockedDates(): { blocked: Date[]; failed: boolean } {
         if (!response.ok) throw new Error(String(response.status));
         return response.json();
       })
-      .then((data: { blocked: string[] }) => {
+      .then((data: { blocked: string[]; degraded?: boolean }) => {
         if (cancelled) return;
         setBlocked(data.blocked.map((day) => new Date(`${day}T00:00:00`)));
+        if (data.degraded) setFailed(true);
       })
       .catch(() => {
         if (!cancelled) setFailed(true);
@@ -1900,7 +1906,7 @@ Expected: build completes, `dist/public` written.
 
 - [ ] **Step 4: Availability reaches the calendar (spec criterion 1)**
 
-Block a test date in the Booking extranet, wait for the 30-minute cache to lapse or restart `netlify dev`, then reload.
+Block a test date in the Booking extranet, then reload. The browser is sent `Cache-Control: no-store`, so no waiting is needed locally — the 30-minute cache is `Netlify-CDN-Cache-Control`, which only applies to a deployed CDN and not to `netlify dev`.
 
 Expected: that day is unclickable in the calendar.
 

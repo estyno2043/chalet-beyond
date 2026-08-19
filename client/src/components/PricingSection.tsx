@@ -24,6 +24,8 @@ const rows = Array.from({ length: MAX_GUESTS - 1 }, (_, i) => {
   };
 });
 
+const guestLabel = (n: number) => `${n} ${n < 5 ? "hostia" : "hostí"}`;
+
 export function PricingSection() {
   return (
     <section
@@ -76,8 +78,77 @@ export function PricingSection() {
         </FadeUp>
 
         <FadeUp delay={0.1}>
+          {/* Mobile default: one card per tier. A 480px table forces the direct
+              price and the saving off a 375px screen, leaving only Booking's
+              higher rate readable — the opposite of what this section argues.
+              Cards lead with the direct price; the table returns at md. */}
+          <div className="md:hidden flex flex-col gap-px">
+            {rows.map(({ guests, direct, booking }) => (
+              <div
+                key={guests}
+                className="flex items-center justify-between gap-4 p-4"
+                style={{
+                  background: "oklch(0.12 0.012 55)",
+                  border: "1px solid oklch(0.72 0.12 65 / 0.18)",
+                  borderRadius: "2px",
+                }}
+              >
+                <div>
+                  <p
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: "0.7rem",
+                      letterSpacing: "0.1em",
+                      color: "oklch(0.78 0.015 75)",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {guestLabel(guests)}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "'Karla', sans-serif",
+                      fontSize: "0.8rem",
+                      fontWeight: 300,
+                      color: MUTED,
+                      marginTop: "0.35rem",
+                    }}
+                  >
+                    <span style={{ textDecoration: "line-through" }}>
+                      {booking} €
+                    </span>{" "}
+                    na Booking.com
+                  </p>
+                </div>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <p
+                    style={{
+                      fontFamily: "'Bebas Neue', sans-serif",
+                      fontSize: "1.75rem",
+                      lineHeight: 1,
+                      letterSpacing: "0.02em",
+                      color: "oklch(0.92 0.008 75)",
+                    }}
+                  >
+                    {direct} €
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "'Karla', sans-serif",
+                      fontSize: "0.8rem",
+                      color: AMBER,
+                      marginTop: "0.3rem",
+                    }}
+                  >
+                    ušetríte {booking - direct} €
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
           <div
-            className="overflow-x-auto"
+            className="hidden md:block overflow-x-auto"
             style={{
               background: "oklch(0.12 0.012 55)",
               border: "1px solid oklch(0.72 0.12 65 / 0.18)",

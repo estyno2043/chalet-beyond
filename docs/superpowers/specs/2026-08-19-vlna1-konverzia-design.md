@@ -164,7 +164,11 @@ Telo požiadavky:
 }
 ```
 
-Odpovede: `200 { "ok": true }`, `400 { "error": "…" }`, `502 { "error": "…" }`
+Odpovede: `200 { "ok": true }`, `400 { "error": "…" }`, `429 { "error": "…" }`, `502 { "error": "…" }`
+
+Voliteľné pole `website` je honeypot — v formulári skryté, takže ho vyplní iba bot. Pri vyplnení sa nič neodošle a vráti sa `200`, aby útočník nedostal návod skúsiť to znova.
+
+Limity: 5 dopytov na IP za 15 minút a 3 na tú istú adresu príjemcu za hodinu → `429`. Bez nich by ktokoľvek mohol z overenej domény posielať e-maily na ľubovoľnú adresu, koľkokrát chce — potvrdenka ide na adresu z tela požiadavky. Limity sú v pamäti inštancie, takže brzdia zaplavenie z jedného zdroja, nie distribuovaný útok.
 
 Validácia na serveri: povinné `from`, `to`, `guests`, `name`, `email`, `phone`; `guests` v rozsahu 1–8; `to` neskôr než `from`; počet nocí ≥ `MIN_NIGHTS`. Validácia na klientovi je len pohodlie, server jej neverí.
 

@@ -38,6 +38,10 @@ export const inquirySchema = z
     email: z.email("Zadajte platný e-mail"),
     phone: z.string().trim().min(6, "Zadajte telefónne číslo").max(30),
     message: z.string().trim().max(2000).optional(),
+    // Honeypot: hidden in the form, so a human never fills it and a bot that
+    // completes every field does. Checked in the handler, not rejected here —
+    // a caught bot gets a normal-looking 200 rather than a hint to retry.
+    website: z.string().max(200).optional(),
   })
   .refine((value) => nightsBetween(value.from, value.to) >= MIN_NIGHTS, {
     message: `Minimálna dĺžka pobytu je ${MIN_NIGHTS} noci`,

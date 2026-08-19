@@ -1346,6 +1346,10 @@ git commit -m "feat(booking): show direct price, total and saving in the summary
 Delete the `CONTACT_EMAIL` constant and the entire `handleBooking` function, and add this state and submit handler in their place inside the component:
 
 ```tsx
+  // `website` is the honeypot the endpoint checks: render it hidden and never
+  // let a human reach it. A filled value makes the server answer 200 without
+  // sending anything, so leaving it out of the form entirely is also fine —
+  // but the field must never be visible or focusable if included.
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");

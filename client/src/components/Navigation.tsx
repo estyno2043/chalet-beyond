@@ -17,6 +17,7 @@ const links = [
   { label: 'Chalet', href: '#chalet' },
   { label: 'Priestory', href: '#priestory' },
   { label: 'Okolie', href: '#okolie' },
+  { label: 'Cenník', href: '#cennik' },
   { label: 'Rezervácia', href: '#rezervacia' },
 ];
 

@@ -27,7 +27,13 @@ export const inquirySchema = z
   .object({
     from: isoDate,
     to: isoDate,
-    guests: z.number().int().min(1).max(MAX_GUESTS),
+    // Messages are spelled out because the client renders them verbatim to the
+    // guest; Zod's defaults are English and read like internals.
+    guests: z
+      .number()
+      .int()
+      .min(1, "Zadajte počet hostí")
+      .max(MAX_GUESTS, `Najviac ${MAX_GUESTS} hostí`),
     name: z.string().trim().min(2, "Zadajte meno").max(100),
     email: z.email("Zadajte platný e-mail"),
     phone: z.string().trim().min(6, "Zadajte telefónne číslo").max(30),

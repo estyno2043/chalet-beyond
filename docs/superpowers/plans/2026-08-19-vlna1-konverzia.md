@@ -833,10 +833,10 @@ Create `shared/contact.ts`. Replace the placeholder number with the real one bef
  */
 
 /** E.164, used for tel: and wa.me links. */
-export const PHONE = "+421900000000";
+export const PHONE = "+421000000000";
 
 /** Human-readable form shown in the interface. */
-export const PHONE_DISPLAY = "+421 900 000 000";
+export const PHONE_DISPLAY = "+421 000 000 000";
 
 export const EMAIL = "contact@chaletbeyond.sk";
 
@@ -1888,7 +1888,7 @@ Work through the spec's seven success criteria. Every one must pass before this 
 
 - [ ] **Step 1: Confirm the placeholder phone number is gone**
 
-Run: `grep -rn "421900000000" shared/ client/`
+Run: `grep -rn "421000000000" shared/ client/`
 
 Expected: no matches. If the real number is still unknown, this branch is not deployable — record it and stop.
 

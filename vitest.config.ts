@@ -10,6 +10,10 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["shared/**/*.test.ts", "netlify/**/*.test.ts"],
+    include: [
+      "shared/**/*.test.ts",
+      "netlify/**/*.test.ts",
+      "client/**/*.test.{ts,tsx}",
+    ],
   },
 });

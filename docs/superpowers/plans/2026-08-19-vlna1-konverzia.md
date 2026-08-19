@@ -1222,15 +1222,17 @@ Below `const nights = getNights(dateRange?.from, dateRange?.to);` add:
 
 ```tsx
   const price =
-    dateRange?.from && dateRange?.to && nights > 0
+    dateRange?.from && dateRange?.to && nights >= MIN_NIGHTS
       ? calcTotal(dateRange.from, dateRange.to, guests)
       : null;
 ```
 
-Then tighten the guard on the next line so a one-night selection cannot be submitted:
+The guard is `>= MIN_NIGHTS`, not `> 0`: `calcTotal` throws below the minimum rather than returning a negative total, so calling it for a one-night selection would crash the render.
+
+Then the submit guard is simply:
 
 ```tsx
-  const canProceed = Boolean(price) && nights >= MIN_NIGHTS;
+  const canProceed = price !== null;
 ```
 
 - [ ] **Step 3: Show the numbers**

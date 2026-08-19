@@ -3,9 +3,18 @@ import { MAX_GUESTS, MIN_NIGHTS } from "../../../shared/pricing";
 
 const MS_PER_DAY = 86_400_000;
 
+// The shape check alone is not enough: Date.parse rolls impossible days forward
+// (2026-02-30 becomes 2026-03-02) instead of failing, which would price a stay
+// from a different date than the one the guest sent. Require a round trip.
 const isoDate = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/, "Dátum musí byť v tvare RRRR-MM-DD");
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Dátum musí byť v tvare RRRR-MM-DD")
+  .refine((value) => {
+    const parsed = new Date(`${value}T00:00:00Z`);
+    return (
+      !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(value)
+    );
+  }, "Neexistujúci dátum");
 
 export function nightsBetween(from: string, to: string): number {
   return Math.round(

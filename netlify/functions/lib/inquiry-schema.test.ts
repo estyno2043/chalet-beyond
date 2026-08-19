@@ -51,6 +51,24 @@ describe("inquirySchema", () => {
     );
   });
 
+  it("rejects a date that does not exist rather than rolling it forward", () => {
+    // Date.parse turns 2026-02-30 into 2026-03-02, which would price the stay
+    // from a different day than the one shown to the owner.
+    const result = inquirySchema.safeParse({
+      ...valid,
+      from: "2026-02-30",
+      to: "2026-03-04",
+    });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.message).toBe("Neexistujúci dátum");
+  });
+
+  it("reports an impossible month as a date problem, not a length problem", () => {
+    const result = inquirySchema.safeParse({ ...valid, from: "2026-13-01" });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues[0]?.message).toBe("Neexistujúci dátum");
+  });
+
   it("rejects a non-object payload", () => {
     expect(inquirySchema.safeParse(null).success).toBe(false);
   });

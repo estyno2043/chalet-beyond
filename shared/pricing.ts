@@ -54,6 +54,13 @@ export function calcTotal(from: Date, to: Date, guests: number): PriceBreakdown 
 
   // Math.round absorbs the 23- and 25-hour days either side of a clock change.
   const nights = Math.round((to.getTime() - from.getTime()) / MS_PER_DAY);
+  // Enforced here rather than in each caller: Stripe Checkout will call this to
+  // compute an amount, and a negative total reaching a payment is far worse
+  // than a rejected call.
+  if (nights < MIN_NIGHTS) {
+    throw new Error(`Stay must be at least ${MIN_NIGHTS} nights, got ${nights}`);
+  }
+
   const total = perNight * nights;
   const bookingTotal = bookingPerNight * nights;
 

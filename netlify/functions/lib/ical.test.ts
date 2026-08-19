@@ -43,29 +43,41 @@ describe("parseBlockedDates", () => {
 
   it("handles folded lines", () => {
     const feed =
-      "BEGIN:VEVENT\r\nDTSTART;VALUE=DATE:2026\r\n 0820\r\nDTEND;VALUE=DATE:20260821\r\nEND:VEVENT";
+      "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART;VALUE=DATE:2026\r\n 0820\r\nDTEND;VALUE=DATE:20260821\r\nEND:VEVENT\r\nEND:VCALENDAR";
     expect(parseBlockedDates(feed)).toEqual(["2026-08-20"]);
   });
 
   it("handles date-time values as well as plain dates", () => {
     const feed =
-      "BEGIN:VEVENT\nDTSTART:20261005T140000Z\nDTEND:20261007T100000Z\nEND:VEVENT";
+      "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART:20261005T140000Z\nDTEND:20261007T100000Z\nEND:VEVENT\nEND:VCALENDAR";
     expect(parseBlockedDates(feed)).toEqual(["2026-10-05", "2026-10-06"]);
   });
 
   it("crosses a month boundary", () => {
     const feed =
-      "BEGIN:VEVENT\nDTSTART;VALUE=DATE:20260930\nDTEND;VALUE=DATE:20261002\nEND:VEVENT";
+      "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:20260930\nDTEND;VALUE=DATE:20261002\nEND:VEVENT\nEND:VCALENDAR";
     expect(parseBlockedDates(feed)).toEqual(["2026-09-30", "2026-10-01"]);
   });
 
   it("ignores an event missing an end date", () => {
-    const feed = "BEGIN:VEVENT\nDTSTART;VALUE=DATE:20260820\nEND:VEVENT";
+    const feed =
+      "BEGIN:VCALENDAR\nBEGIN:VEVENT\nDTSTART;VALUE=DATE:20260820\nEND:VEVENT\nEND:VCALENDAR";
     expect(parseBlockedDates(feed)).toEqual([]);
   });
 
-  it("returns nothing for empty or unrelated input", () => {
-    expect(parseBlockedDates("")).toEqual([]);
-    expect(parseBlockedDates("not a calendar at all")).toEqual([]);
+  it("returns nothing for a calendar with no events", () => {
+    expect(parseBlockedDates("BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR")).toEqual(
+      [],
+    );
+  });
+
+  it("throws rather than reporting everything free when the feed is not a calendar", () => {
+    // An expired Booking export URL answers 200 with an HTML login page.
+    expect(() =>
+      parseBlockedDates(
+        "<!doctype html><html><body>Session expired. Please log in.</body></html>",
+      ),
+    ).toThrow(/BEGIN:VCALENDAR/);
+    expect(() => parseBlockedDates("")).toThrow(/BEGIN:VCALENDAR/);
   });
 });

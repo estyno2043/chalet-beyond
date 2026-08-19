@@ -33,8 +33,19 @@ function nightsBetween(startISO: string, endISO: string): string[] {
   return days;
 }
 
-/** Returns every occupied night as a sorted, deduplicated list of YYYY-MM-DD. */
+/**
+ * Returns every occupied night as a sorted, deduplicated list of YYYY-MM-DD.
+ *
+ * Throws when the payload is not a calendar at all. An expired feed URL is
+ * served as a 200 HTML page, and silently reading that as "nothing is booked"
+ * would show sold nights as free — the double booking this module exists to
+ * prevent. The caller must fail loudly instead.
+ */
 export function parseBlockedDates(ics: string): string[] {
+  if (!ics.includes("BEGIN:VCALENDAR")) {
+    throw new Error("Not an iCal feed: no BEGIN:VCALENDAR");
+  }
+
   const blocked = new Set<string>();
   let start: string | null = null;
   let end: string | null = null;
@@ -59,5 +70,7 @@ export function parseBlockedDates(ics: string): string[] {
     else end = toISO(match[2]);
   }
 
-  return [...blocked].sort();
+  // Array.from rather than a spread: tsconfig sets no `target`, so tsc assumes
+  // ES5 and rejects iterating a Set directly.
+  return Array.from(blocked).sort();
 }

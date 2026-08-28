@@ -11,7 +11,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
-import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
+import {
+  BOOKING_LISTING_URL,
+  BOOKING_RATING,
+  EMAIL,
+  PHONE,
+  PHONE_DISPLAY,
+} from "@shared/contact";
 
 function formatDate(date: Date | undefined): string {
   if (!date) return "—";
@@ -333,6 +339,38 @@ export function BookingSection() {
                   Veľká Lomnica, Vysoké Tatry
                 </p>
               </div>
+
+              {/* The score alone, attributed and linked. The property has one
+                  review, so a review section would advertise its own thinness. */}
+              <a
+                href={BOOKING_LISTING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+                style={{ textDecoration: "none" }}
+              >
+                <span
+                  style={{
+                    fontFamily: "'Bebas Neue', sans-serif",
+                    fontSize: "1rem",
+                    color: "oklch(0.06 0.008 55)",
+                    background: "oklch(0.72 0.12 65)",
+                    padding: "0.15rem 0.5rem",
+                    borderRadius: "2px",
+                  }}
+                >
+                  {BOOKING_RATING}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "'Karla', sans-serif",
+                    fontSize: "0.78rem",
+                    color: "oklch(0.62 0.020 65)",
+                  }}
+                >
+                  Hodnotenie na Booking.com
+                </span>
+              </a>
 
               {/* Divider */}
               <div className="amber-rule" />

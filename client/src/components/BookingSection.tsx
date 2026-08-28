@@ -741,8 +741,8 @@ export function BookingSection() {
                 { label: "Fajčenie", value: "Zakázané" },
                 { label: "Domáce zvieratá", value: "Nie sú povolené" },
                 { label: "Ticho", value: "23:00 – 05:00" },
-                { label: "Vek", value: "Bez obmedzenia" },
-                { label: "Deti", value: "Vítané" },
+                { label: "Deti", value: "Vítané, od 16 r. ako dospelí" },
+                { label: "Postieľky", value: "Nie sú k dispozícii" },
                 { label: "Kapacita", value: "Max. 8 osôb" },
               ].map((rule) => (
                 <div key={rule.label}>

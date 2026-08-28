@@ -8,22 +8,30 @@ import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
 import {
   Wifi, Car, Thermometer, Waves, Flame, Utensils,
-  Tv, ShowerHead, Wind, Mountain, TreePine, Baby
+  Tv, ShowerHead, Wind, Mountain, TreePine, Baby,
+  Plane, Snowflake, WashingMachine, Coffee
 } from "lucide-react";
 
+// "Vhodné pre rodiny" is deliberately absent: Booking states cribs and extra
+// beds are unavailable, so a blanket family promise sets up a complaint on
+// arrival. The high chair is a fact and stands in its place.
 const amenities = [
   { icon: Wifi, label: "Bezplatné WiFi" },
   { icon: Car, label: "Súkromné parkovanie" },
+  { icon: Plane, label: "Letiskový transfer" },
   { icon: Thermometer, label: "Fínska sauna" },
   { icon: Waves, label: "Vírivka / Hot tub" },
   { icon: Flame, label: "Kozub" },
   { icon: Utensils, label: "Plne vybavená kuchyňa" },
-  { icon: Tv, label: "Projektor & TV" },
-  { icon: ShowerHead, label: "3 kúpeľne" },
+  { icon: Coffee, label: "Kávovar" },
+  { icon: Tv, label: "Projektor, TV & Netflix" },
+  { icon: WashingMachine, label: "Práčka & sušička" },
+  { icon: ShowerHead, label: "3 kúpeľne, župany" },
+  { icon: Snowflake, label: "Lyžiareň" },
   { icon: Wind, label: "Vonkajší gril (BBQ)" },
   { icon: Mountain, label: "Výhľad na hory" },
   { icon: TreePine, label: "Záhrada & terasa" },
-  { icon: Baby, label: "Vhodné pre rodiny" },
+  { icon: Baby, label: "Detská stolička" },
 ];
 
 const specs = [

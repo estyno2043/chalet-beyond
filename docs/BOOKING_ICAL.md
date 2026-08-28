@@ -11,6 +11,8 @@ Booking má v extranete pod *Rates & Availability → Sync calendars* dve oddele
 
 **Pre `ICAL_URLS` potrebujeme Export.** Ten nevyžaduje od nás žiadnu URL, žiadny kalendár, žiadnu hotovú stránku — Booking ho vygeneruje sám a hneď.
 
+Booking to sám potvrdzuje: v extranete v paneli **„Vysvetlenie stavov"** je samostatný stav **„Len export"** — *„Druhej platforme posielame iba informácie o rezervácii. Do vášho kalendára na Booking.com sa nič neimportuje."* Export bez importu je teda podporovaný režim, nie provizórium. Cieľový stav je **„OK"** (*„Prepojenie importu a exportu funguje bez problémov"*), ku ktorému sa dostaneme po doplnení importu.
+
 Import je opačný smer a **teraz ho spraviť nedá**: aby sme Bookingu dali odkaz, museli by sme publikovať vlastný `.ics` feed s našimi priamymi rezerváciami. Lenže priame rezervácie zatiaľ nikde neukladáme — `/api/inquiry` pošle e-mail a skončí, žiadna databáza nie je. Import má zmysel až keď budú priame rezervácie niekde uložené (Stripe checkout, Vlna 2+); vtedy Bookingu dáme URL v tvare `https://chaletbeyond.sk/api/calendar.ics`.
 
 **Obojsmerné prepojenie je správny cieľ, len nie je podmienkou prvého kroku.** Export sa dá zapnúť hneď a funguje samostatne. Import sa doplní neskôr a nič na exporte nemení.
@@ -29,11 +31,15 @@ Import je opačný smer a **teraz ho spraviť nedá**: aby sme Bookingu dali odk
 4. Vybrať izbu **Vila s 3 spálňami** (jediný typ, ktorý objekt má)
 5. Otvorí sa „Pridať kalendár pre: Vila s 3 spálňami" → kliknúť **„Prejdite rovno na export"**
    *(Nevypĺňať polia „Skopírujte odkaz na kalendár nižšie" ani „Názov kalendára" — to je import, opačný smer.)*
-6. V sekcii **Export kalendára** skopírovať zobrazenú URL — vyzerá približne takto:
+6. V sekcii **Vyberte si, čo chcete exportovať** zvoliť **rezervácie aj zatvorené termíny**, nie len rezervácie.
+
+   > ⚠️ **Toto je jediné miesto, kde sa dá nastavenie pokaziť tak, že to nikto hneď nezbadá.** Ak sa exportujú len rezervácie, termíny, ktoré majiteľ zavrel ručne (údržba, vlastný pobyt, rodina), sa do nášho feedu nedostanú. Náš kalendár ich ukáže ako voľné, hosť si taký termín vyberie a odošle dopyt — a nikde to nevyhodí chybu, lebo feed je technicky v poriadku. Vyzerá to ako funkčná synchronizácia až do prvého konfliktu.
+
+7. Skopírovať zobrazenú URL — vyzerá približne takto:
    ```
    https://ical.booking.com/v1/export?t=<dlhý-token>
    ```
-7. Odkaz je **tajný** — kto ho má, vidí obsadenosť objektu. Neposielať ho v chate, needovávať do repa.
+8. Odkaz je **tajný** — kto ho má, vidí obsadenosť objektu. Neposielať ho v chate, needovávať do repa.
 
 ### Kam ho zapísať
 

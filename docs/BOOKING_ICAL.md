@@ -79,6 +79,29 @@ Očakávané: `{"blocked":["2026-..-..",...],"updated":"...","degraded":false}`
 
 ---
 
+## Plán pre import (obojsmerné prepojenie)
+
+Rozhodnuté: **až po dokončení Vlny 1**, ako samostatná špecifikácia. Do vtedy beží „Len export" a majiteľ potvrdzuje dopyty ručne, tak ako doteraz — čiže oproti dnešku nevzniká žiadne nové riziko.
+
+Chýbajúci diel nie je URL, ale **úložisko potvrdených priamych rezervácií**. Dnes si neukladáme nič.
+
+Dve cesty, ako ho naplniť:
+
+| | Kto zapisuje | Kedy |
+|---|---|---|
+| **B — potvrdenie majiteľom** | tlačidlo *Potvrdiť rezerváciu* v dopytovom e-maile | dá sa hneď, bez Stripe |
+| **A — cez Stripe** | webhook po úspešnej platbe | Vlna 2 |
+
+Úložisko je v oboch prípadoch to isté (**Netlify Blobs** — súčasť Netlify, free plán, žiadna databáza navyše), takže `/api/calendar.ics` sa pri prechode z B na A nemení. Postaviť B, neskôr pripojiť A.
+
+### Dve podmienky, bez ktorých sa to ticho pokazí
+
+**Náš feed smie obsahovať výhradne priame rezervácie.** Nikdy nie termíny stiahnuté z Bookingu. Inak vznikne slučka: Booking vyexportuje termín → my si ho stiahneme → vydáme ho vo vlastnom feede → Booking si ho naimportuje späť ako cudzí blok. Toto je najčastejšia príčina, prečo obojsmerné iCal prepojenia začnú robiť neporiadok. `/api/availability` (čítanie z Bookingu) a `/api/calendar.ics` (zápis pre Booking) preto musia mať **oddelené zdroje dát** — nikdy sa nesmú kŕmiť navzájom.
+
+**Dvojitú rezerváciu to nevylúči úplne.** Obe strany sťahujú každých 1–2 h. Dvaja hostia si môžu rezervovať ten istý týždeň na dvoch platformách v rámci toho okna a prejdú obaja. Riziko výrazne klesne, nezmizne. Úplne to rieši až channel manager s push API (Smoobu, Beds24) — mesačný poplatok, pre jeden objekt zatiaľ neopodstatnený.
+
+---
+
 ## Na čo si dať pozor
 
 **Synchronizácia nie je okamžitá.** Booking a Airbnb obnovujú iCal typicky každých 1–2 hodiny. Náš endpoint navyše cachuje odpoveď 30 minút na CDN. Medzi rezerváciou na Bookingu a jej zobrazením na našom webe teda môže uplynúť aj ~2,5 hodiny — v tom okne existuje riziko dvojitej rezervácie. Preto formulár posiela **nezáväzný dopyt**, nie potvrdenú rezerváciu; dostupnosť potvrdzuje majiteľ.

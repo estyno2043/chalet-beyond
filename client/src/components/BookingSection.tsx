@@ -10,6 +10,7 @@ import { FadeUp } from "@/components/FadeUp";
 import { Calendar } from "@/components/ui/calendar";
 import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
+import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
 
 const CONTACT_EMAIL = "contact@chaletbeyond.sk";
 
@@ -69,7 +70,13 @@ export function BookingSection() {
   const { blocked, failed: availabilityFailed } = useBlockedDates();
 
   const nights = getNights(dateRange?.from, dateRange?.to);
-  const canProceed = dateRange?.from && dateRange?.to && nights > 0;
+  // Guarded on MIN_NIGHTS, not > 0: calcTotal throws below the minimum rather
+  // than returning a negative total, so a one-night selection would crash here.
+  const price =
+    dateRange?.from && dateRange?.to && nights >= MIN_NIGHTS
+      ? calcTotal(dateRange.from, dateRange.to, guests)
+      : null;
+  const canProceed = price !== null;
 
   const handleBooking = () => {
     const subject = "Dopyt na rezerváciu — Chalet Beyond";
@@ -358,29 +365,63 @@ export function BookingSection() {
                     {dateRange?.to ? formatDate(dateRange.to) : "—"}
                   </span>
                 </div>
-                {nights > 0 && (
-                  <div className="flex justify-between items-center">
-                    <span
+                {price && (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <span
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.65rem",
+                          letterSpacing: "0.1em",
+                          color: "oklch(0.58 0.020 65)",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {price.nights} × {price.perNight} €
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "'Bebas Neue', sans-serif",
+                          fontSize: "1.6rem",
+                          color: "oklch(0.92 0.008 75)",
+                        }}
+                      >
+                        {price.total} €
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.65rem",
+                          letterSpacing: "0.1em",
+                          color: "oklch(0.58 0.020 65)",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        Na Booking.com
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "'Karla', sans-serif",
+                          fontSize: "0.875rem",
+                          color: "oklch(0.58 0.020 65)",
+                          textDecoration: "line-through",
+                        }}
+                      >
+                        {price.bookingTotal} €
+                      </span>
+                    </div>
+                    <p
                       style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.1em",
-                        color: "oklch(0.58 0.020 65)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      Počet nocí
-                    </span>
-                    <span
-                      style={{
-                        fontFamily: "'Bebas Neue', sans-serif",
-                        fontSize: "1.2rem",
+                        fontFamily: "'Karla', sans-serif",
+                        fontSize: "0.85rem",
                         color: "oklch(0.72 0.12 65)",
                       }}
                     >
-                      {nights}
-                    </span>
-                  </div>
+                      Ušetríte {price.savings} €
+                    </p>
+                  </>
                 )}
               </div>
 
@@ -493,7 +534,8 @@ export function BookingSection() {
                   lineHeight: 1.6,
                 }}
               >
-                Minimálna dĺžka pobytu 2 noci · Celý objekt · Sezónne ceny
+                Minimálna dĺžka pobytu 2 noci · Celý objekt · Bezplatné storno do
+                14 dní pred príchodom
               </p>
             </div>
           </FadeUp>

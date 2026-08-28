@@ -29,6 +29,7 @@ import { LocationSection } from "@/components/LocationSection";
 import { PricingSection } from "@/components/PricingSection";
 import { BookingSection } from "@/components/BookingSection";
 import { Footer } from "@/components/Footer";
+import { StickyContactBar } from "@/components/StickyContactBar";
 
 export default function Home() {
   useSmoothScroll();
@@ -67,6 +68,8 @@ export default function Home() {
       <PricingSection />
       <BookingSection />
       <Footer />
+      {/* Last so it layers above everything */}
+      <StickyContactBar />
     </div>
   );
 }

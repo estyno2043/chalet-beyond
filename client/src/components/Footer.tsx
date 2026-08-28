@@ -9,7 +9,10 @@ import { MapPin, Mail } from "lucide-react";
 export function Footer() {
   return (
     <footer
-      className="py-16 md:py-20"
+      // pb-32 on mobile clears the fixed contact bar, which otherwise sits over
+      // the copyright line at the bottom of the page. md:pb-20 restores the
+      // normal spacing where the bar is not rendered.
+      className="py-16 pb-32 md:py-20 md:pb-20"
       style={{
         background: "oklch(0.08 0.010 55)",
         borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",

@@ -226,6 +226,16 @@ export default defineConfig({
     // targetPort 3000, so a silent move leaves `netlify dev` proxying to
     // whatever else already owns 3000 while this server idles elsewhere.
     strictPort: true,
+    // Reach the Netlify functions from this dev server. Browsing through
+    // netlify dev on :8888 does not work: its SPA catch-all rewrites Vite's
+    // own module requests (/src/main.tsx, /@vite/*) to index.html, so they
+    // arrive as text/html and the app never boots. Developing on :3000 keeps
+    // Vite's fallback intact while /api still reaches the functions.
+    // Run `pnpm exec netlify dev` alongside `pnpm dev`; without it /api simply
+    // fails and the calendar falls back to showing no blocked dates.
+    proxy: {
+      "/api": "http://localhost:8888",
+    },
     host: true,
     allowedHosts: [
       ".manuspre.computer",

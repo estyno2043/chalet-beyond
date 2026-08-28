@@ -14,9 +14,20 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <script type="module">
+      // Vite substitutes import.meta.env inside a module script. The %VAR% form
+      // is only replaced when the variable is defined, so an unset one shipped
+      // the literal "%VITE_ANALYTICS_ENDPOINT%/umami" as a URL — which recorded
+      // nothing and crashed `netlify dev` with "URI malformed" on every load.
+      const endpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT;
+      const websiteId = import.meta.env.VITE_ANALYTICS_WEBSITE_ID;
+      if (endpoint && websiteId) {
+        const tag = document.createElement("script");
+        tag.defer = true;
+        tag.src = `${endpoint}/umami`;
+        tag.dataset.websiteId = websiteId;
+        document.head.appendChild(tag);
+      }
+    </script>
   </body>
 </html>

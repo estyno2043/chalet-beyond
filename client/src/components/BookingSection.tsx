@@ -4,7 +4,7 @@
  * Check-in/check-out selection, guest count, inquiry form
  * Direct booking only — CTA opens an email inquiry to contact@chaletbeyond.sk
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp } from "@/components/FadeUp";
 import { Calendar } from "@/components/ui/calendar";
@@ -27,10 +27,46 @@ function getNights(from: Date | undefined, to: Date | undefined): number {
   return Math.round((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
 }
 
+/**
+ * Occupied nights from Booking and Airbnb. Empty when every feed is unreachable.
+ * `failed` also covers a partial answer: the endpoint returns `degraded: true`
+ * when some feeds did not respond, so the list is real but incomplete and the
+ * guest still needs telling that availability could not be fully confirmed.
+ */
+function useBlockedDates(): { blocked: Date[]; failed: boolean } {
+  const [blocked, setBlocked] = useState<Date[]>([]);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/availability")
+      .then((response) => {
+        if (!response.ok) throw new Error(String(response.status));
+        return response.json();
+      })
+      .then((data: { blocked: string[]; degraded?: boolean }) => {
+        if (cancelled) return;
+        // No `Z`: react-day-picker compares local-midnight dates, so a UTC date
+        // would land on the previous day for anyone east of Greenwich.
+        setBlocked(data.blocked.map((day) => new Date(`${day}T00:00:00`)));
+        if (data.degraded) setFailed(true);
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { blocked, failed };
+}
+
 export function BookingSection() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [guests, setGuests] = useState(2);
   const [step, setStep] = useState<"calendar" | "confirm">("calendar");
+  const { blocked, failed: availabilityFailed } = useBlockedDates();
 
   const nights = getNights(dateRange?.from, dateRange?.to);
   const canProceed = dateRange?.from && dateRange?.to && nights > 0;
@@ -131,7 +167,7 @@ export function BookingSection() {
                   selected={dateRange}
                   onSelect={setDateRange}
                   numberOfMonths={1}
-                  disabled={{ before: new Date() }}
+                  disabled={[{ before: new Date() }, ...blocked]}
                   className="rounded-none"
                   style={{
                     "--rdp-accent-color": "oklch(0.72 0.12 65)",
@@ -140,6 +176,21 @@ export function BookingSection() {
                   } as React.CSSProperties}
                 />
               </div>
+
+              {availabilityFailed && (
+                <p
+                  className="mt-4"
+                  style={{
+                    fontFamily: "'Karla', sans-serif",
+                    fontSize: "0.75rem",
+                    fontWeight: 300,
+                    color: "oklch(0.45 0.015 65)",
+                    textAlign: "center",
+                  }}
+                >
+                  Obsadenosť sa nepodarilo načítať — dostupnosť overíme e-mailom.
+                </p>
+              )}
 
               {/* Selected range display */}
               <AnimatePresence>

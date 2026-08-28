@@ -94,8 +94,13 @@ export default async (request: Request): Promise<Response> => {
   const apiKey = process.env.RESEND_API_KEY;
   const owner = process.env.OWNER_EMAIL;
   if (!apiKey || !owner) {
+    // The cause goes to the log; the guest gets a sentence. `error` is rendered
+    // to them verbatim, so an internal code here would surface as UI text.
     console.error("inquiry: RESEND_API_KEY or OWNER_EMAIL is not set");
-    return Response.json({ error: "mail_not_configured" }, { status: 502 });
+    return Response.json(
+      { error: "Dopyt sa nepodarilo odoslať." },
+      { status: 502 },
+    );
   }
 
   const price = calcTotal(utc(from), utc(to), guests);
@@ -128,7 +133,10 @@ export default async (request: Request): Promise<Response> => {
     if (error) throw new Error(`${error.name}: ${error.message}`);
   } catch (error) {
     console.error("inquiry: owner notification failed", error);
-    return Response.json({ error: "mail_failed" }, { status: 502 });
+    return Response.json(
+      { error: "Dopyt sa nepodarilo odoslať." },
+      { status: 502 },
+    );
   }
 
   try {

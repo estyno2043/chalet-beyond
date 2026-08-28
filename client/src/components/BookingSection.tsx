@@ -11,8 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
-
-const CONTACT_EMAIL = "contact@chaletbeyond.sk";
+import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 
 function formatDate(date: Date | undefined): string {
   if (!date) return "—";
@@ -78,21 +77,40 @@ export function BookingSection() {
       : null;
   const canProceed = price !== null;
 
-  const handleBooking = () => {
-    const subject = "Dopyt na rezerváciu — Chalet Beyond";
-    const body = [
-      "Dobrý deň,",
-      "",
-      "rád/rada by som overil/a dostupnosť Chalet Beyond pre tento termín:",
-      `Check-in: ${formatDate(dateRange?.from)}`,
-      `Check-out: ${formatDate(dateRange?.to)}`,
-      `Počet nocí: ${nights || "—"}`,
-      `Počet hostí: ${guests}`,
-      "",
-      "Ďakujem.",
-    ].join("\n");
-    window.location.href =
-      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState("");
+
+  // Built from local date parts: toISOString() would shift the selected day
+  // back by one for anyone in a positive UTC offset, which is all of Slovakia.
+  const iso = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!dateRange?.from || !dateRange?.to) return;
+
+    setStatus("sending");
+    setError("");
+
+    try {
+      const response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          from: iso(dateRange.from),
+          to: iso(dateRange.to),
+          guests,
+          ...form,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error ?? "Odoslanie zlyhalo");
+      setStatus("sent");
+    } catch (err) {
+      setStatus("error");
+      setError(err instanceof Error ? err.message : "Odoslanie zlyhalo");
+    }
   };
 
   return (
@@ -495,33 +513,149 @@ export function BookingSection() {
                 </p>
               </div>
 
-              {/* CTA */}
-              <motion.button
-                onClick={handleBooking}
-                className="w-full btn-amber justify-center gap-3 mt-2"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  opacity: canProceed ? 1 : 0.5,
-                  pointerEvents: canProceed ? "auto" : "none",
-                }}
-              >
-                <span>Skontrolovať dostupnosť</span>
-                <ArrowRight size={16} />
-              </motion.button>
-
-              {!canProceed && (
-                <p
+              {status === "sent" ? (
+                <div
                   style={{
-                    fontFamily: "'Karla', sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 300,
-                    color: "oklch(0.45 0.015 65)",
-                    textAlign: "center",
+                    border: "1px solid oklch(0.72 0.12 65 / 0.4)",
+                    padding: "1.25rem",
+                    borderRadius: "2px",
                   }}
                 >
-                  Vyberte dátumy pre pokračovanie
-                </p>
+                  <p
+                    style={{
+                      fontFamily: "'Bebas Neue', sans-serif",
+                      fontSize: "1.3rem",
+                      color: "oklch(0.72 0.12 65)",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    Dopyt odoslaný
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "'Karla', sans-serif",
+                      fontSize: "0.85rem",
+                      fontWeight: 300,
+                      color: "oklch(0.78 0.015 75)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    Ozveme sa do 24 hodín. Potvrdenie sme poslali na {form.email}.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  {(
+                    [
+                      { key: "name", label: "Meno a priezvisko", type: "text" },
+                      { key: "email", label: "E-mail", type: "email" },
+                      { key: "phone", label: "Telefón", type: "tel" },
+                    ] as const
+                  ).map((field) => (
+                    <input
+                      key={field.key}
+                      type={field.type}
+                      required
+                      placeholder={field.label}
+                      value={form[field.key]}
+                      onChange={(event) =>
+                        setForm({ ...form, [field.key]: event.target.value })
+                      }
+                      style={{
+                        fontFamily: "'Karla', sans-serif",
+                        fontSize: "0.9rem",
+                        color: "oklch(0.92 0.008 75)",
+                        background: "oklch(0.10 0.012 55)",
+                        border: "1px solid oklch(0.72 0.12 65 / 0.25)",
+                        borderRadius: "2px",
+                        padding: "0.7rem 0.85rem",
+                        width: "100%",
+                      }}
+                    />
+                  ))}
+                  <textarea
+                    placeholder="Poznámka (nepovinné)"
+                    rows={3}
+                    value={form.message}
+                    onChange={(event) =>
+                      setForm({ ...form, message: event.target.value })
+                    }
+                    style={{
+                      fontFamily: "'Karla', sans-serif",
+                      fontSize: "0.9rem",
+                      color: "oklch(0.92 0.008 75)",
+                      background: "oklch(0.10 0.012 55)",
+                      border: "1px solid oklch(0.72 0.12 65 / 0.25)",
+                      borderRadius: "2px",
+                      padding: "0.7rem 0.85rem",
+                      width: "100%",
+                      resize: "vertical",
+                    }}
+                  />
+
+                  <motion.button
+                    type="submit"
+                    disabled={!canProceed || status === "sending"}
+                    className="w-full btn-amber justify-center gap-3 mt-1"
+                    whileHover={{ scale: canProceed ? 1.01 : 1 }}
+                    whileTap={{ scale: canProceed ? 0.97 : 1 }}
+                    style={{
+                      opacity: canProceed && status !== "sending" ? 1 : 0.5,
+                      cursor: canProceed ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    <span>
+                      {status === "sending"
+                        ? "Odosielam…"
+                        : "Odoslať nezáväzný dopyt"}
+                    </span>
+                    {status !== "sending" && <ArrowRight size={16} />}
+                  </motion.button>
+
+                  {!canProceed && (
+                    <p
+                      style={{
+                        fontFamily: "'Karla', sans-serif",
+                        fontSize: "0.75rem",
+                        fontWeight: 300,
+                        color: "oklch(0.45 0.015 65)",
+                        textAlign: "center",
+                      }}
+                    >
+                      Vyberte termín aspoň na 2 noci
+                    </p>
+                  )}
+
+                  {status === "error" && (
+                    <p
+                      style={{
+                        fontFamily: "'Karla', sans-serif",
+                        fontSize: "0.78rem",
+                        color: "oklch(0.65 0.15 25)",
+                        textAlign: "center",
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      {error}
+                      <br />
+                      Zavolajte nám na{" "}
+                      <a
+                        href={`tel:${PHONE}`}
+                        style={{ color: "oklch(0.72 0.12 65)" }}
+                      >
+                        {PHONE_DISPLAY}
+                      </a>{" "}
+                      alebo napíšte na{" "}
+                      <a
+                        href={`mailto:${EMAIL}`}
+                        style={{ color: "oklch(0.72 0.12 65)" }}
+                      >
+                        {EMAIL}
+                      </a>
+                      .
+                    </p>
+                  )}
+                </form>
               )}
 
               <p

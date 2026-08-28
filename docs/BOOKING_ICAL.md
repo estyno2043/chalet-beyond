@@ -13,7 +13,7 @@ Booking má v extranete pod *Rates & Availability → Sync calendars* dve oddele
 
 Booking to sám potvrdzuje: v extranete v paneli **„Vysvetlenie stavov"** je samostatný stav **„Len export"** — *„Druhej platforme posielame iba informácie o rezervácii. Do vášho kalendára na Booking.com sa nič neimportuje."* Export bez importu je teda podporovaný režim, nie provizórium. Cieľový stav je **„OK"** (*„Prepojenie importu a exportu funguje bez problémov"*), ku ktorému sa dostaneme po doplnení importu.
 
-Import je opačný smer a **teraz ho spraviť nedá**: aby sme Bookingu dali odkaz, museli by sme publikovať vlastný `.ics` feed s našimi priamymi rezerváciami. Lenže priame rezervácie zatiaľ nikde neukladáme — `/api/inquiry` pošle e-mail a skončí, žiadna databáza nie je. Import má zmysel až keď budú priame rezervácie niekde uložené (Stripe checkout, Vlna 2+); vtedy Bookingu dáme URL v tvare `https://chaletbeyond.sk/api/calendar.ics`.
+Import je opačný smer a **teraz ho spraviť nedá**: aby sme Bookingu dali odkaz, museli by sme publikovať vlastný `.ics` feed s našimi priamymi rezerváciami. Lenže priame rezervácie zatiaľ nikde neukladáme — `/api/inquiry` pošle e-mail a skončí, žiadna databáza nie je. Import príde hneď po Vlne 1; vtedy Bookingu dáme URL v tvare `https://chaletbeyond.sk/api/calendar.ics`.
 
 **Obojsmerné prepojenie je správny cieľ, len nie je podmienkou prvého kroku.** Export sa dá zapnúť hneď a funguje samostatne. Import sa doplní neskôr a nič na exporte nemení.
 
@@ -85,14 +85,17 @@ Rozhodnuté: **až po dokončení Vlny 1**, ako samostatná špecifikácia. Do v
 
 Chýbajúci diel nie je URL, ale **úložisko potvrdených priamych rezervácií**. Dnes si neukladáme nič.
 
-Dve cesty, ako ho naplniť:
+Zapisovať doň bude **potvrdenie majiteľom** — tlačidlo *Potvrdiť rezerváciu* v dopytovom e-maile. Úložisko: **Netlify Blobs** (súčasť Netlify, free plán, žiadna databáza navyše).
 
-| | Kto zapisuje | Kedy |
-|---|---|---|
-| **B — potvrdenie majiteľom** | tlačidlo *Potvrdiť rezerváciu* v dopytovom e-maile | dá sa hneď, bez Stripe |
-| **A — cez Stripe** | webhook po úspešnej platbe | Vlna 2 |
+> **Platby budú pravdepodobne prebiehať mimo web, manuálne (prevod, hotovosť).** Detaily sa ešte upresnia, ale synchronizácia kalendára je požiadavka bez ohľadu na to, ako sa platí. Potvrdenie majiteľom teda nie je dočasný most k Stripe — je to **primárny a možno trvalý mechanizmus**, takže má znieť podľa toho.
 
-Úložisko je v oboch prípadoch to isté (**Netlify Blobs** — súčasť Netlify, free plán, žiadna databáza navyše), takže `/api/calendar.ics` sa pri prechode z B na A nemení. Postaviť B, neskôr pripojiť A.
+### Čo z manuálnych platieb vyplýva
+
+**Uvoľnenie termínu je rovnako dôležité ako potvrdenie.** Pri platbe kartou sa nezaplatená rezervácia zruší sama. Pri prevode alebo hotovosti časť dohodnutých pobytov padne — hosť sa neozve, nezaplatí, zmení termín. Ak sa taký termín z feedu neuvoľní, ostane Bookingu zablokovaný a majiteľ prichádza o predaj bez toho, aby si to všimol.
+
+Preto e-mail potrebuje **dva odkazy, nie jeden**: *Potvrdiť* a *Uvoľniť*. Oba podpísané tokenom, aby ich nevedel spustiť ktokoľvek.
+
+**Prehľad blokovaných termínov nepotrebuje vlastnú stránku.** Keď Booking náš feed importuje, majiteľ ich vidí priamo vo svojom kalendári v extranete. A termíny, ktoré si zavrie ručne pre vlastnú potrebu, k nám prídu existujúcim exportom. Žiadne admin rozhranie teda netreba stavať.
 
 ### Dve podmienky, bez ktorých sa to ticho pokazí
 

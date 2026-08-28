@@ -59,7 +59,7 @@ Kontrolný príklad — týždeň pre 8 osôb: hosť zaplatí 4 725 € namiesto
 
 ### Mimo rozsahu
 
-- **Stripe Checkout** — príde, keď bude účet hotový. Vlna 1 stavia cenovú logiku tak, aby ju Stripe vedel použiť bez prepisovania, ale žiadny platobný kód sa teraz nepíše.
+- **Online platba** — neisté. Platby budú pravdepodobne prebiehať mimo web (prevod, hotovosť), Stripe sa možno nezavedie vôbec; upresní sa neskôr. Vlna 1 preto nepíše žiadny platobný kód a ani si ho nepredpisuje. Cenová logika je oddelená v `shared/pricing.ts` jednoducho preto, že ju potrebuje web aj e-maily — nie kvôli budúcej platobnej bráne.
 - **Viacjazyčnosť (DE/EN/SK)** — Vlna 2. Texty sa preto sústreďujú do `data/` súborov, aby sa neskôr prekladali na jednom mieste.
 - **Sekcia recenzií** — objekt má na Bookingu 1 recenziu. Sekcia s jednou recenziou znižuje dôveru viac než jej absencia. Vráti sa, keď bude recenzií aspoň 5.
 - **Skrátenie hero sekcie, optimalizácia videí, SEO meta a JSON-LD** — Vlna 3.
@@ -129,7 +129,7 @@ export function calcTotal(
 };
 ```
 
-Tú istú funkciu bude neskôr volať Stripe Checkout na výpočet sumy. Preto vracia hotové čísla, nie polotovar.
+Vracia hotové čísla, nie polotovar, aby ten istý výpočet použil web aj e-maily a nemohli sa rozísť.
 
 ### `GET /api/availability`
 

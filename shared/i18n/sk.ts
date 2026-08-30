@@ -243,6 +243,10 @@ export const sk = {
     callAria: "Zavolať na",
     whatsappAria: "Napísať cez WhatsApp",
   },
-} as const;
+};
 
+/**
+ * The shape every language must satisfy. Deliberately no `as const`: a literal
+ * type would demand the exact Slovak strings from every translation.
+ */
 export type Dict = typeof sk;

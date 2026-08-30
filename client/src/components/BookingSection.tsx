@@ -12,6 +12,11 @@ import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
 import {
+  checkoutOnlyDays,
+  isoDay,
+  rangeIsFree,
+} from "@shared/availability";
+import {
   BOOKING_LISTING_URL,
   BOOKING_RATING,
   EMAIL,
@@ -39,8 +44,8 @@ function getNights(from: Date | undefined, to: Date | undefined): number {
  * when some feeds did not respond, so the list is real but incomplete and the
  * guest still needs telling that availability could not be fully confirmed.
  */
-function useBlockedDates(): { blocked: Date[]; failed: boolean } {
-  const [blocked, setBlocked] = useState<Date[]>([]);
+function useBlockedDates(): { blocked: string[]; failed: boolean } {
+  const [blocked, setBlocked] = useState<string[]>([]);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -52,9 +57,7 @@ function useBlockedDates(): { blocked: Date[]; failed: boolean } {
       })
       .then((data: { blocked: string[]; degraded?: boolean }) => {
         if (cancelled) return;
-        // No `Z`: react-day-picker compares local-midnight dates, so a UTC date
-        // would land on the previous day for anyone east of Greenwich.
-        setBlocked(data.blocked.map((day) => new Date(`${day}T00:00:00`)));
+        setBlocked(data.blocked);
         if (data.degraded) setFailed(true);
       })
       .catch(() => {
@@ -74,6 +77,53 @@ export function BookingSection() {
   const [step, setStep] = useState<"calendar" | "confirm">("calendar");
   const { blocked, failed: availabilityFailed } = useBlockedDates();
 
+  // A sold night bars that day as an arrival, but the first night of a run is
+  // still a valid departure — the outgoing guest leaves in the morning, the next
+  // arrives in the afternoon. Only the rest of a run is unusable either way.
+  const checkoutOnly = checkoutOnlyDays(blocked);
+  const unselectable = blocked
+    .filter((day) => !checkoutOnly.has(day))
+    .map((day) => new Date(`${day}T00:00:00`));
+
+  const handleSelect = (range: DateRange | undefined, triggerDate: Date) => {
+    const clicked = isoDay(triggerDate);
+
+    if (!range?.from) {
+      setDateRange(undefined);
+      return;
+    }
+
+    // react-day-picker reports the first click as from === to, so a selection
+    // only counts as finished once the two differ. Reading the in-progress
+    // state as finished restarts the range on the guest's second click.
+    const finished =
+      dateRange?.from &&
+      dateRange?.to &&
+      isoDay(dateRange.from) !== isoDay(dateRange.to);
+
+    // Beginning a stay: a sold night can never be an arrival, so ignore the
+    // click rather than wiping what the guest already picked.
+    if (finished || !dateRange?.from) {
+      if (checkoutOnly.has(clicked)) return;
+      setDateRange({ from: triggerDate, to: undefined });
+      return;
+    }
+
+    // Completing one: refuse a span that would consume a night already sold,
+    // and treat the click as the start of a new attempt instead.
+    const spansSoldNight =
+      range.to &&
+      isoDay(range.to) !== isoDay(range.from) &&
+      !rangeIsFree(isoDay(range.from), isoDay(range.to), blocked);
+    if (spansSoldNight) {
+      if (checkoutOnly.has(clicked)) return;
+      setDateRange({ from: triggerDate, to: undefined });
+      return;
+    }
+
+    setDateRange(range);
+  };
+
   const nights = getNights(dateRange?.from, dateRange?.to);
   // Guarded on MIN_NIGHTS, not > 0: calcTotal throws below the minimum rather
   // than returning a negative total, so a one-night selection would crash here.
@@ -87,11 +137,6 @@ export function BookingSection() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
 
-  // Built from local date parts: toISOString() would shift the selected day
-  // back by one for anyone in a positive UTC offset, which is all of Slovakia.
-  const iso = (date: Date) =>
-    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!dateRange?.from || !dateRange?.to) return;
@@ -104,8 +149,8 @@ export function BookingSection() {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          from: iso(dateRange.from),
-          to: iso(dateRange.to),
+          from: isoDay(dateRange.from),
+          to: isoDay(dateRange.to),
           guests,
           ...form,
         }),
@@ -196,9 +241,9 @@ export function BookingSection() {
                 <Calendar
                   mode="range"
                   selected={dateRange}
-                  onSelect={setDateRange}
+                  onSelect={handleSelect}
                   numberOfMonths={1}
-                  disabled={[{ before: new Date() }, ...blocked]}
+                  disabled={[{ before: new Date() }, ...unselectable]}
                   className="rounded-none"
                   style={{
                     "--rdp-accent-color": "oklch(0.72 0.12 65)",

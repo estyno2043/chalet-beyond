@@ -15,34 +15,31 @@
  */
 import { useEffect, useRef, useState } from "react";
 import { BrandReveal } from "@/components/BrandReveal";
+import { useT } from "@/i18n/LanguageProvider";
 
 interface Chapter {
   src: string;
-  title: string;
-  subtitle: string;
+  chapterIndex: number;
 }
 
 // ── Chapter copy (Task 2) ────────────────────────────────────────────────────
 const CHAPTERS: Chapter[] = [
   {
     src: "/videos/chapter1.mp4",
-    title: "GOLFOVÉ IHRISKO BLACK STORK",
-    subtitle: "úder, ktorý všetko začal",
+    chapterIndex: 0,
   },
   {
     src: "/videos/chapter2.mp4",
-    title: "ZA KAŽDÝM HORIZONTOM",
-    subtitle: "27 jamiek · jediné PGA ihrisko na Slovensku",
+    chapterIndex: 1,
   },
   {
     src: "/videos/chapter3.mp4",
-    title: "VAŠE SÚKROMNÉ ÚTOČISKO",
-    subtitle: "štyri ročné obdobia · jedna adresa",
+    chapterIndex: 2,
   },
 ];
 
 // Coordinates of the chalet / Black Stork resort, Veľká Lomnica.
-const COORDS = "49°08'N 20°20'E — VEĽKÁ LOMNICA";
+
 
 /** Viewport-heights of scroll each chapter consumes. Tighter = clip advances
  *  faster per pixel, so short videos never sit frozen. */
@@ -62,6 +59,7 @@ interface HeroState {
 }
 
 export function HeroSCV() {
+  const t = useT();
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const rafRef = useRef<number | null>(null);
   const stateRef = useRef<HeroState>({
@@ -244,7 +242,7 @@ export function HeroSCV() {
                   "0 2px 10px rgba(0,0,0,0.65), 0 8px 40px rgba(0,0,0,0.55)",
               }}
             >
-              {c.title}
+              {t.hero.chapters[c.chapterIndex].title}
             </h1>
             <p
               style={{
@@ -258,19 +256,19 @@ export function HeroSCV() {
                 textShadow: "0 1px 10px rgba(0,0,0,0.75)",
               }}
             >
-              {c.subtitle}
+              {t.hero.chapters[c.chapterIndex].subtitle}
             </p>
           </div>
         ))}
 
         {/* Page-load brand intro (kept from original) */}
-        {showIntro ? <BrandReveal topLine={COORDS} /> : null}
+        {showIntro ? <BrandReveal topLine={t.hero.coords} /> : null}
 
         {/* End-of-chapter-3 brand reveal (Task 1) — replays the same technique */}
         {brandRevealed ? (
           <BrandReveal
             key="brand-ch3"
-            subtitle="Vysoké Tatry · Black Stork Golf · Slovakia"
+            subtitle={t.hero.tagline}
             showScrollCue
           />
         ) : null}

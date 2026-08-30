@@ -5,8 +5,10 @@
  */
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function QuoteSection() {
+  const t = useT();
   const { ref, isInView } = useScrollAnimation(0.2, true);
 
   return (
@@ -50,10 +52,10 @@ export function QuoteSection() {
                 marginBottom: "1.5rem",
               }}
             >
-              O ticho zimných večerov pri kozube,<br />
-              v horúcej vírivke pod hviezdami.<br />
+              {t.quote.l1}<br />
+              {t.quote.l2}<br />
               <span style={{ color: "oklch(0.72 0.12 65)" }}>
-                O rannú kávu s panorámou, ktorá berie dych.
+                {t.quote.l3}
               </span>
             </p>
           </motion.blockquote>
@@ -71,7 +73,7 @@ export function QuoteSection() {
               textTransform: "uppercase",
             }}
           >
-            O priestor, kde architektúra a príroda hovoria jedným jazykom.
+            {t.quote.l4}
           </motion.p>
         </div>
       </div>

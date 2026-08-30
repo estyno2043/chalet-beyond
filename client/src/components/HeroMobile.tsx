@@ -6,8 +6,10 @@
  */
 import { useEffect, useRef } from "react";
 import { BrandReveal } from "@/components/BrandReveal";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function HeroMobile() {
+  const t = useT();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   // iOS occasionally blocks autoplay until an explicit play() call.
@@ -56,7 +58,7 @@ export function HeroMobile() {
 
       {/* Animated brand identity — same reveal technique as the page intro */}
       <BrandReveal
-        subtitle="Vysoké Tatry · Black Stork Golf · Slovakia"
+        subtitle={t.hero.tagline}
         showScrollCue
       />
     </div>

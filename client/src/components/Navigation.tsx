@@ -12,16 +12,19 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScrollThreshold } from '@/components/ui/use-scroll';
+import { useT } from "@/i18n/LanguageProvider";
 
-const links = [
-  { label: 'Chalet', href: '#chalet' },
-  { label: 'Priestory', href: '#priestory' },
-  { label: 'Okolie', href: '#okolie' },
-  { label: 'Cenník', href: '#cennik' },
-  { label: 'Rezervácia', href: '#rezervacia' },
-];
+const HREFS = ['#chalet', '#priestory', '#okolie', '#cennik', '#rezervacia'] as const;
 
 export function Navigation() {
+  const t = useT();
+  const links = [
+    { label: t.nav.chalet, href: HREFS[0] },
+    { label: t.nav.priestory, href: HREFS[1] },
+    { label: t.nav.okolie, href: HREFS[2] },
+    { label: t.nav.cennik, href: HREFS[3] },
+    { label: t.nav.rezervacia, href: HREFS[4] },
+  ];
   const [open, setOpen] = React.useState(false);
   const scrolled = useScrollThreshold(10);
 
@@ -72,7 +75,7 @@ export function Navigation() {
             setOpen(false);
           }}
           className="flex items-center gap-2.5 select-none group"
-          aria-label="Chalet Beyond — domov"
+          aria-label={t.nav.home}
         >
           {/* Brand logo (image) */}
           <img
@@ -138,13 +141,13 @@ export function Navigation() {
               el.style.boxShadow = '0 0 0 1px rgba(180,120,40,0.3), 0 2px 8px rgba(180,120,40,0.25)';
             }}
           >
-            Rezervovať
+            {t.nav.book}
           </a>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          aria-label={open ? 'Zavrieť menu' : 'Otvoriť menu'}
+          aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
           aria-expanded={open}
           onClick={() => setOpen(!open)}
           className={cn(
@@ -232,7 +235,7 @@ export function Navigation() {
                 boxShadow: '0 0 0 1px rgba(180,120,40,0.3), 0 4px 16px rgba(180,120,40,0.3)',
               }}
             >
-              Rezervovať pobyt
+              {t.nav.bookStay}
             </a>
             <a
               href="mailto:contact@chaletbeyond.sk"
@@ -246,7 +249,7 @@ export function Navigation() {
                 border: '1px solid rgba(180,120,40,0.3)',
               }}
             >
-              Napíšte nám
+              {t.nav.writeUs}
             </a>
           </div>
         </div>

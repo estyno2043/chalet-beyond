@@ -8,12 +8,13 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp } from "@/components/FadeUp";
 import { X, ChevronLeft, ChevronRight, Images } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 const B = "/gallery/booking/";
 
 interface Album {
   id: string;
-  title: string;
+  titleKey: "interior" | "spalne" | "wellness" | "exterior" | "okolie";
   cover: string;
   coverPos?: string;
   images: string[];
@@ -22,7 +23,7 @@ interface Album {
 const ALBUMS: Album[] = [
   {
     id: "interior",
-    title: "Interiér",
+    titleKey: "interior" as const,
     cover: `${B}856619250.jpg`,
     images: [
       `${B}856619250.jpg`,
@@ -38,7 +39,7 @@ const ALBUMS: Album[] = [
   },
   {
     id: "spalne",
-    title: "Spálne",
+    titleKey: "spalne" as const,
     cover: `${B}856621487.jpg`,
     images: [
       `${B}856621487.jpg`,
@@ -50,7 +51,7 @@ const ALBUMS: Album[] = [
   },
   {
     id: "wellness",
-    title: "Sauna & wellness",
+    titleKey: "wellness" as const,
     cover: `${B}846907929.jpg`,
     images: [
       `${B}846907929.jpg`,
@@ -62,7 +63,7 @@ const ALBUMS: Album[] = [
   },
   {
     id: "exterior",
-    title: "Exteriér",
+    titleKey: "exterior" as const,
     cover: `${B}856619975.jpg`,
     images: [
       `${B}856619975.jpg`,
@@ -78,7 +79,7 @@ const ALBUMS: Album[] = [
   },
   {
     id: "okolie",
-    title: "Golf & Tatry",
+    titleKey: "okolie" as const,
     cover: "/gallery/golf-fairway.jpg",
     images: [
       "/gallery/golf-fairway.jpg",
@@ -103,6 +104,7 @@ function Lightbox({
   onClose: () => void;
   onIndex: (i: number) => void;
 }) {
+  const t = useT();
   const total = album.images.length;
   const touchX = useRef<number | null>(null);
 
@@ -157,11 +159,11 @@ function Lightbox({
             color: "oklch(0.72 0.12 65)",
           }}
         >
-          {album.title} · {index + 1}/{total}
+          {t.gallery.albums[album.titleKey]} · {index + 1}/{total}
         </span>
         <button
           onClick={onClose}
-          aria-label="Zavrieť"
+          aria-label={t.gallery.close}
           className="flex items-center justify-center rounded-sm"
           style={{
             width: 40,
@@ -190,7 +192,7 @@ function Lightbox({
           <motion.img
             key={album.images[index]}
             src={album.images[index]}
-            alt={`${album.title} ${index + 1}`}
+            alt={`${t.gallery.albums[album.titleKey]} ${index + 1}`}
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.99 }}
@@ -208,7 +210,7 @@ function Lightbox({
         {/* Desktop arrows */}
         <button
           onClick={() => go(-1)}
-          aria-label="Predchádzajúca"
+          aria-label={t.gallery.prev}
           className="hidden sm:flex items-center justify-center absolute left-3 rounded-full"
           style={{ width: 48, height: 48, background: "oklch(0.10 0.010 55 / 0.6)", color: "oklch(0.92 0.008 75)", border: "1px solid oklch(0.72 0.12 65 / 0.25)" }}
         >
@@ -216,7 +218,7 @@ function Lightbox({
         </button>
         <button
           onClick={() => go(1)}
-          aria-label="Ďalšia"
+          aria-label={t.gallery.next}
           className="hidden sm:flex items-center justify-center absolute right-3 rounded-full"
           style={{ width: 48, height: 48, background: "oklch(0.10 0.010 55 / 0.6)", color: "oklch(0.92 0.008 75)", border: "1px solid oklch(0.72 0.12 65 / 0.25)" }}
         >
@@ -256,6 +258,7 @@ function Lightbox({
 
 // ── Section ──────────────────────────────────────────────────────────────────
 export function GallerySection() {
+  const t = useT();
   const [openAlbum, setOpenAlbum] = useState<number | null>(null);
   const [imgIndex, setImgIndex] = useState(0);
 
@@ -281,7 +284,7 @@ export function GallerySection() {
                   textTransform: "uppercase",
                 }}
               >
-                Architektúra
+                {t.gallery.eyebrow}
               </p>
               <h2
                 style={{
@@ -292,7 +295,7 @@ export function GallerySection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                POSTAVENÉ PRE<br />TÚTO KRAJINU
+                {t.gallery.headlineA}<br />{t.gallery.headlineB}
               </h2>
             </div>
             <p
@@ -305,7 +308,7 @@ export function GallerySection() {
                 maxWidth: "44ch",
               }}
             >
-              Tmavá kovová strecha. Vertikálny drevený obklad. Zasklenie od podlahy až po strop. Vyberte si priestor a prezrite si galériu.
+              {t.gallery.body}
             </p>
           </div>
         </FadeUp>
@@ -325,7 +328,7 @@ export function GallerySection() {
               >
                 <img
                   src={album.cover}
-                  alt={album.title}
+                  alt={t.gallery.albums[album.titleKey]}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   style={{ objectPosition: album.coverPos || "center" }}
@@ -360,7 +363,7 @@ export function GallerySection() {
                       lineHeight: 1,
                     }}
                   >
-                    {album.title}
+                    {t.gallery.albums[album.titleKey]}
                   </span>
                 </div>
               </button>

@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, Phone } from "lucide-react";
 import { PHONE, PHONE_DISPLAY, WHATSAPP_URL } from "@shared/contact";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function StickyContactBar() {
+  const t = useT();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function StickyContactBar() {
         >
           <a
             href={`tel:${PHONE}`}
-            aria-label={`Zavolať na ${PHONE_DISPLAY}`}
+            aria-label={`${t.contact.callAria} ${PHONE_DISPLAY}`}
             className="flex items-center justify-center gap-2"
             style={{
               background: "oklch(0.10 0.012 55)",
@@ -58,13 +60,13 @@ export function StickyContactBar() {
             }}
           >
             <Phone size={15} style={{ color: "oklch(0.72 0.12 65)" }} />
-            Zavolať
+            {t.contact.call}
           </a>
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Napísať cez WhatsApp"
+            aria-label={t.contact.whatsappAria}
             className="flex items-center justify-center gap-2"
             style={{
               background: "oklch(0.72 0.12 65)",
@@ -78,7 +80,7 @@ export function StickyContactBar() {
             }}
           >
             <MessageCircle size={15} />
-            WhatsApp
+            {t.contact.whatsapp}
           </a>
         </motion.div>
       )}

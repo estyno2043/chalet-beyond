@@ -6,11 +6,10 @@
  * Design: dark background, amber ghost text, cream revealed text
  */
 import { TextGradientScroll } from "@/components/ui/text-gradient-scroll";
-
-const REVEAL_TEXT =
-  "V srdci Vysokých Tatier, tam kde sa pokoj prírody stretáva s výnimočným dizajnom. Tu nejde len o bývanie. Ide o zážitok. O ticho zimných večerov pri kozube, v horúcej vírivke pod hviezdami. O rannú kávu s panorámou, ktorá berie dych. O priestor, kde architektúra a príroda hovoria jedným jazykom.";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function TextRevealSection() {
+  const t = useT();
   return (
     <section
       className="relative w-full"
@@ -37,7 +36,7 @@ export function TextRevealSection() {
         }}
       >
         <TextGradientScroll
-          text={REVEAL_TEXT}
+          text={t.textReveal}
           type="letter"
           textOpacity="soft"
           className="leading-relaxed"

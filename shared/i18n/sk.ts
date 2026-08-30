@@ -19,6 +19,8 @@ export const sk = {
     bookStay: "Rezervovať pobyt",
     writeUs: "Napíšte nám",
     home: "Chalet Beyond — domov",
+    menuOpen: "Otvoriť menu",
+    menuClose: "Zavrieť menu",
   },
 
   hero: {
@@ -65,6 +67,9 @@ export const sk = {
     headlineB: "TÚTO KRAJINU",
     body: "Tmavá kovová strecha. Vertikálny drevený obklad. Zasklenie od podlahy až po strop. Vyberte si priestor a prezrite si galériu.",
     photos: "FOTIEK",
+    close: "Zavrieť",
+    prev: "Predchádzajúca",
+    next: "Ďalšia",
     albums: {
       interior: "Interiér",
       spalne: "Spálne",
@@ -221,6 +226,9 @@ export const sk = {
   footer: {
     tagline: "Beyond your expectations. V srdci Vysokých Tatier.",
     addressLabel: "Adresa",
+    addressStreet: "Kamenná 2004/25A",
+    addressCity: "059 52 Veľká Lomnica",
+    addressCountry: "Slovensko",
     bookingLabel: "Rezervácia",
     directOnly: "Iba priama rezervácia – bez sprostredkovateľov.",
     airport: "Letisko Poprad-Tatry",

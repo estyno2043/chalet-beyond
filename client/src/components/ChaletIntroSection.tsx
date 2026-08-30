@@ -5,31 +5,29 @@
  */
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
+import { useT } from "@/i18n/LanguageProvider";
 
 const features = [
   {
     emoji: "⛳",
-    title: "GOLF",
-    desc: "Golfový rezort Black Stork – jediné golfové ihrisko PGA na Slovensku. 27 jamiek certifikovaných podľa štandardov kvality PGA od roku 2011. Dve minúty od vchodových dverí.",
+    featureIndex: 0,
   },
   {
     emoji: "🌲",
-    title: "SÚKROMIE",
-    desc: "Celý pozemok je výhradne váš. Príďte, zmiznite, resetujte sa.",
+    featureIndex: 1,
   },
   {
     emoji: "🧖",
-    title: "WELLNESS",
-    desc: "Súkromná sauna a vonkajšia vírivka. Otvorené celoročne, vyhrievané a pripravené.",
+    featureIndex: 2,
   },
   {
     emoji: "🏔",
-    title: "TATRY",
-    desc: "Lomnický štít na obzore. Lyžiarske vleky 10 minút odtiaľto. Zjazdovky od záhradnej bránky.",
+    featureIndex: 3,
   },
 ];
 
 export function ChaletIntroSection() {
+  const t = useT();
   return (
     <section id="chalet" className="py-16 md:py-36">
       <div className="container">
@@ -52,7 +50,7 @@ export function ChaletIntroSection() {
                   textTransform: "uppercase",
                 }}
               >
-                Čo je Chalet Beyond?
+                {t.intro.eyebrow}
               </p>
               <h2
                 style={{
@@ -63,8 +61,8 @@ export function ChaletIntroSection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                NIE JE TO HOTEL.<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>NIE JE TO AIRBNB.</span>
+                {t.intro.headlineA}<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.intro.headlineB}</span>
               </h2>
             </div>
           </FadeUp>
@@ -80,7 +78,7 @@ export function ChaletIntroSection() {
                   color: "oklch(0.78 0.015 75)",
                 }}
               >
-                Súkromný horský rezort určený pre tých, ktorí chcú mať Tatry úplne pre seba. Pár krokov od ihriska Black Stork fairway. Priamy výhľad na Lomnický štít. Žiadna recepcia, žiadne spoločné priestory – len chata a hory.
+                {t.intro.body}
               </p>
             </div>
           </FadeUp>
@@ -93,7 +91,7 @@ export function ChaletIntroSection() {
         >
           {features.map((item) => (
             <motion.div
-              key={item.title}
+              key={item.featureIndex}
               variants={staggerItem}
               className="glow-hover p-7 md:p-9 group"
               style={{
@@ -119,7 +117,7 @@ export function ChaletIntroSection() {
                   marginBottom: "0.6rem",
                 }}
               >
-                {item.title}
+                {t.intro.features[item.featureIndex].title}
               </h3>
               <p
                 style={{
@@ -130,7 +128,7 @@ export function ChaletIntroSection() {
                   color: "oklch(0.62 0.020 65)",
                 }}
               >
-                {item.desc}
+                {t.intro.features[item.featureIndex].desc}
               </p>
             </motion.div>
           ))}

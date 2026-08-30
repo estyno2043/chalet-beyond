@@ -11,6 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
+import { useLang, useT } from "@/i18n/LanguageProvider";
 import {
   checkoutOnlyDays,
   isoDay,
@@ -24,9 +25,9 @@ import {
   PHONE_DISPLAY,
 } from "@shared/contact";
 
-function formatDate(date: Date | undefined): string {
+function formatDate(date: Date | undefined, lang: string): string {
   if (!date) return "—";
-  return date.toLocaleDateString("sk-SK", {
+  return date.toLocaleDateString(lang, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -72,6 +73,8 @@ function useBlockedDates(): { blocked: string[]; failed: boolean } {
 }
 
 export function BookingSection() {
+  const t = useT();
+  const lang = useLang();
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [guests, setGuests] = useState(2);
   const [step, setStep] = useState<"calendar" | "confirm">("calendar");
@@ -156,11 +159,11 @@ export function BookingSection() {
         }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error ?? "Odoslanie zlyhalo");
+      if (!response.ok) throw new Error(data.error ?? t.booking.sendFailed);
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Odoslanie zlyhalo");
+      setError(err instanceof Error ? err.message : t.booking.sendFailed);
     }
   };
 
@@ -181,7 +184,7 @@ export function BookingSection() {
                   textTransform: "uppercase",
                 }}
               >
-                Rezervácia
+                {t.booking.eyebrow}
               </p>
               <h2
                 style={{
@@ -192,8 +195,8 @@ export function BookingSection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                PREKONÁVA VAŠE<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>OČAKÁVANIA</span>
+                {t.booking.headlineA}<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.booking.headlineB}</span>
               </h2>
             </div>
             <p
@@ -206,7 +209,7 @@ export function BookingSection() {
                 maxWidth: "38ch",
               }}
             >
-              Iba priama rezervácia – žiadne poplatky za platformu, žiadni sprostredkovatelia.
+              {t.booking.intro}
             </p>
           </div>
         </FadeUp>
@@ -233,7 +236,7 @@ export function BookingSection() {
                     textTransform: "uppercase",
                   }}
                 >
-                  Vyberte dátumy
+                  {t.booking.pickDates}
                 </span>
               </div>
 
@@ -264,7 +267,7 @@ export function BookingSection() {
                     textAlign: "center",
                   }}
                 >
-                  Obsadenosť sa nepodarilo načítať — dostupnosť overíme e-mailom.
+                  {t.booking.availabilityFailed}
                 </p>
               )}
 
@@ -291,7 +294,7 @@ export function BookingSection() {
                             marginBottom: "0.4rem",
                           }}
                         >
-                          Check-in
+                          {t.booking.checkIn}
                         </p>
                         <p
                           style={{
@@ -301,7 +304,7 @@ export function BookingSection() {
                             color: "oklch(0.92 0.008 75)",
                           }}
                         >
-                          {formatDate(dateRange.from)}
+                          {formatDate(dateRange.from, lang)}
                         </p>
                       </div>
                       <div>
@@ -315,7 +318,7 @@ export function BookingSection() {
                             marginBottom: "0.4rem",
                           }}
                         >
-                          Check-out
+                          {t.booking.checkOut}
                         </p>
                         <p
                           style={{
@@ -325,7 +328,7 @@ export function BookingSection() {
                             color: "oklch(0.92 0.008 75)",
                           }}
                         >
-                          {formatDate(dateRange.to)}
+                          {formatDate(dateRange.to, lang)}
                         </p>
                       </div>
                     </div>
@@ -339,7 +342,7 @@ export function BookingSection() {
                           color: "oklch(0.72 0.12 65)",
                         }}
                       >
-                        {nights} {nights === 1 ? "noc" : nights < 5 ? "noci" : "nocí"}
+                        {nights} {nights === 1 ? t.booking.nights1 : nights < 5 ? t.booking.nightsFew : t.booking.nightsMany}
                       </p>
                     )}
                   </motion.div>
@@ -370,7 +373,7 @@ export function BookingSection() {
                     marginBottom: "0.25rem",
                   }}
                 >
-                  Chalet Beyond
+                  {t.booking.propertyName}
                 </h3>
                 <p
                   style={{
@@ -381,7 +384,7 @@ export function BookingSection() {
                     textTransform: "uppercase",
                   }}
                 >
-                  Veľká Lomnica, Vysoké Tatry
+                  {t.booking.propertyPlace}
                 </p>
               </div>
 
@@ -413,7 +416,7 @@ export function BookingSection() {
                     color: "oklch(0.62 0.020 65)",
                   }}
                 >
-                  Hodnotenie na Booking.com
+                  {t.booking.ratingLabel}
                 </span>
               </a>
 
@@ -432,7 +435,7 @@ export function BookingSection() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Check-in
+                    {t.booking.checkIn}
                   </span>
                   <span
                     style={{
@@ -441,7 +444,7 @@ export function BookingSection() {
                       color: "oklch(0.78 0.015 75)",
                     }}
                   >
-                    {dateRange?.from ? formatDate(dateRange.from) : "—"}
+                    {dateRange?.from ? formatDate(dateRange.from, lang) : "—"}
                   </span>
                 </div>
                 <div className="flex justify-between items-center">
@@ -454,7 +457,7 @@ export function BookingSection() {
                       textTransform: "uppercase",
                     }}
                   >
-                    Check-out
+                    {t.booking.checkOut}
                   </span>
                   <span
                     style={{
@@ -463,7 +466,7 @@ export function BookingSection() {
                       color: "oklch(0.78 0.015 75)",
                     }}
                   >
-                    {dateRange?.to ? formatDate(dateRange.to) : "—"}
+                    {dateRange?.to ? formatDate(dateRange.to, lang) : "—"}
                   </span>
                 </div>
                 {price && (
@@ -500,7 +503,7 @@ export function BookingSection() {
                           textTransform: "uppercase",
                         }}
                       >
-                        Na Booking.com
+                        {t.booking.onBooking}
                       </span>
                       <span
                         style={{
@@ -520,7 +523,7 @@ export function BookingSection() {
                         color: "oklch(0.72 0.12 65)",
                       }}
                     >
-                      Ušetríte {price.savings} €
+                      {t.booking.youSave} {price.savings} €
                     </p>
                   </>
                 )}
@@ -543,7 +546,7 @@ export function BookingSection() {
                         textTransform: "uppercase",
                       }}
                     >
-                      Hostia
+                      {t.booking.guests}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -592,7 +595,7 @@ export function BookingSection() {
                     color: "oklch(0.45 0.015 65)",
                   }}
                 >
-                  Max. 8 hostí
+                  {t.booking.maxGuests}
                 </p>
               </div>
 
@@ -612,7 +615,7 @@ export function BookingSection() {
                       marginBottom: "0.5rem",
                     }}
                   >
-                    Dopyt odoslaný
+                    {t.booking.sentTitle}
                   </p>
                   <p
                     style={{
@@ -623,16 +626,16 @@ export function BookingSection() {
                       lineHeight: 1.6,
                     }}
                   >
-                    Ozveme sa do 24 hodín. Potvrdenie sme poslali na {form.email}.
+                    {t.booking.sentBody} {form.email}.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                   {(
                     [
-                      { key: "name", label: "Meno a priezvisko", type: "text" },
-                      { key: "email", label: "E-mail", type: "email" },
-                      { key: "phone", label: "Telefón", type: "tel" },
+                      { key: "name", label: t.booking.nameField, type: "text" },
+                      { key: "email", label: t.booking.emailField, type: "email" },
+                      { key: "phone", label: t.booking.phoneField, type: "tel" },
                     ] as const
                   ).map((field) => (
                     <input
@@ -657,7 +660,7 @@ export function BookingSection() {
                     />
                   ))}
                   <textarea
-                    placeholder="Poznámka (nepovinné)"
+                    placeholder={t.booking.messageField}
                     rows={3}
                     value={form.message}
                     onChange={(event) =>
@@ -689,8 +692,8 @@ export function BookingSection() {
                   >
                     <span>
                       {status === "sending"
-                        ? "Odosielam…"
-                        : "Odoslať nezáväzný dopyt"}
+                        ? t.booking.sending
+                        : t.booking.submit}
                     </span>
                     {status !== "sending" && <ArrowRight size={16} />}
                   </motion.button>
@@ -705,7 +708,7 @@ export function BookingSection() {
                         textAlign: "center",
                       }}
                     >
-                      Vyberte termín aspoň na 2 noci
+                      {t.booking.needTwoNights}
                     </p>
                   )}
 
@@ -721,14 +724,14 @@ export function BookingSection() {
                     >
                       {error}
                       <br />
-                      Zavolajte nám na{" "}
+                      {t.booking.callUs}{" "}
                       <a
                         href={`tel:${PHONE}`}
                         style={{ color: "oklch(0.72 0.12 65)" }}
                       >
                         {PHONE_DISPLAY}
                       </a>{" "}
-                      alebo napíšte na{" "}
+                      {t.booking.orWrite}{" "}
                       <a
                         href={`mailto:${EMAIL}`}
                         style={{ color: "oklch(0.72 0.12 65)" }}
@@ -751,8 +754,7 @@ export function BookingSection() {
                   lineHeight: 1.6,
                 }}
               >
-                Minimálna dĺžka pobytu 2 noci · Celý objekt · Bezplatné storno do
-                14 dní pred príchodom
+                {t.booking.finePrint}
               </p>
             </div>
           </FadeUp>
@@ -777,18 +779,18 @@ export function BookingSection() {
                 marginBottom: "1rem",
               }}
             >
-              Pravidlá domu
+              {t.rules.title}
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: "Check-in", value: "15:00 – 23:00" },
-                { label: "Check-out", value: "08:00 – 11:00" },
-                { label: "Fajčenie", value: "Zakázané" },
-                { label: "Domáce zvieratá", value: "Nie sú povolené" },
-                { label: "Ticho", value: "23:00 – 05:00" },
-                { label: "Deti", value: "Vítané, od 16 r. ako dospelí" },
-                { label: "Postieľky", value: "Nie sú k dispozícii" },
-                { label: "Kapacita", value: "Max. 8 osôb" },
+                { label: t.rules.checkIn, value: "15:00 – 23:00" },
+                { label: t.rules.checkOut, value: "08:00 – 11:00" },
+                { label: t.rules.smoking, value: t.rules.smokingValue },
+                { label: t.rules.pets, value: t.rules.petsValue },
+                { label: t.rules.quiet, value: "23:00 – 05:00" },
+                { label: t.rules.children, value: t.rules.childrenValue },
+                { label: t.rules.cribs, value: t.rules.cribsValue },
+                { label: t.rules.capacity, value: t.rules.capacityValue },
               ].map((rule) => (
                 <div key={rule.label}>
                   <p

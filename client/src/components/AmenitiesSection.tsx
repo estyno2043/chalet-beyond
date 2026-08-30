@@ -11,39 +11,41 @@ import {
   Tv, ShowerHead, Wind, Mountain, TreePine, Baby,
   Plane, Snowflake, WashingMachine, Coffee
 } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 // "Vhodné pre rodiny" is deliberately absent: Booking states cribs and extra
 // beds are unavailable, so a blanket family promise sets up a complaint on
 // arrival. The high chair is a fact and stands in its place.
 const amenities = [
-  { icon: Wifi, label: "Bezplatné WiFi" },
-  { icon: Car, label: "Súkromné parkovanie" },
-  { icon: Plane, label: "Letiskový transfer" },
-  { icon: Thermometer, label: "Fínska sauna" },
-  { icon: Waves, label: "Vírivka / Hot tub" },
-  { icon: Flame, label: "Kozub" },
-  { icon: Utensils, label: "Plne vybavená kuchyňa" },
-  { icon: Coffee, label: "Kávovar" },
-  { icon: Tv, label: "Projektor, TV & Netflix" },
-  { icon: WashingMachine, label: "Práčka & sušička" },
-  { icon: ShowerHead, label: "3 kúpeľne, župany" },
-  { icon: Snowflake, label: "Lyžiareň" },
-  { icon: Wind, label: "Vonkajší gril (BBQ)" },
-  { icon: Mountain, label: "Výhľad na hory" },
-  { icon: TreePine, label: "Záhrada & terasa" },
-  { icon: Baby, label: "Detská stolička" },
+  { icon: Wifi, key: "wifi" as const },
+  { icon: Car, key: "parking" as const },
+  { icon: Plane, key: "transfer" as const },
+  { icon: Thermometer, key: "sauna" as const },
+  { icon: Waves, key: "hotTub" as const },
+  { icon: Flame, key: "fireplace" as const },
+  { icon: Utensils, key: "kitchen" as const },
+  { icon: Coffee, key: "coffee" as const },
+  { icon: Tv, key: "tv" as const },
+  { icon: WashingMachine, key: "laundry" as const },
+  { icon: ShowerHead, key: "bathrooms" as const },
+  { icon: Snowflake, key: "skiStorage" as const },
+  { icon: Wind, key: "bbq" as const },
+  { icon: Mountain, key: "mountainView" as const },
+  { icon: TreePine, key: "garden" as const },
+  { icon: Baby, key: "highChair" as const },
 ];
 
 const specs = [
-  { label: "Rozloha", value: "250 m²" },
-  { label: "Spálne", value: "3" },
-  { label: "Kúpeľne", value: "3" },
-  { label: "Max. hostí", value: "8" },
-  { label: "Check-in", value: "15:00 – 23:00" },
-  { label: "Check-out", value: "08:00 – 11:00" },
+  { key: "area" as const, value: "250 m²" },
+  { key: "bedrooms" as const, value: "3" },
+  { key: "bathrooms" as const, value: "3" },
+  { key: "maxGuests" as const, value: "8" },
+  { key: "checkIn" as const, value: "15:00 – 23:00" },
+  { key: "checkOut" as const, value: "08:00 – 11:00" },
 ];
 
 export function AmenitiesSection() {
+  const t = useT();
   return (
     <section className="py-16 md:py-32" style={{ background: "oklch(0.10 0.012 55)" }}>
       <div className="container">
@@ -61,7 +63,7 @@ export function AmenitiesSection() {
                   textTransform: "uppercase",
                 }}
               >
-                Vybavenie
+                {t.amenities.eyebrow}
               </p>
               <h2
                 style={{
@@ -72,8 +74,8 @@ export function AmenitiesSection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                VŠETKO, ČO<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>POTREBUJETE</span>
+                {t.amenities.headlineA}<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.amenities.headlineB}</span>
               </h2>
             </div>
           </div>
@@ -84,7 +86,7 @@ export function AmenitiesSection() {
           <div className="grid grid-cols-3 gap-px">
             {specs.map((spec) => (
               <div
-                key={spec.label}
+                key={t.amenities.specs[spec.key]}
                 className="p-4 text-center"
                 style={{
                   background: "oklch(0.14 0.012 55)",
@@ -111,7 +113,7 @@ export function AmenitiesSection() {
                     textTransform: "uppercase",
                   }}
                 >
-                  {spec.label}
+                  {t.amenities.specs[spec.key]}
                 </p>
               </div>
             ))}
@@ -128,7 +130,7 @@ export function AmenitiesSection() {
               const Icon = item.icon;
               return (
                 <motion.div
-                  key={item.label}
+                  key={t.amenities.items[item.key]}
                   variants={staggerItem}
                   className="glow-hover flex items-center gap-3 p-4 md:p-5 group"
                   style={{
@@ -151,7 +153,7 @@ export function AmenitiesSection() {
                       color: "oklch(0.78 0.015 75)",
                     }}
                   >
-                    {item.label}
+                    {t.amenities.items[item.key]}
                   </span>
                 </motion.div>
               );
@@ -177,12 +179,12 @@ export function AmenitiesSection() {
                   marginBottom: "1.25rem",
                 }}
               >
-                Parametre
+                {t.amenities.specsTitle}
               </h3>
               <div className="flex flex-col gap-0">
                 {specs.map((spec, i) => (
                   <div
-                    key={spec.label}
+                    key={t.amenities.specs[spec.key]}
                     className="flex justify-between items-baseline py-3"
                     style={{
                       borderBottom: i < specs.length - 1 ? "1px solid oklch(0.72 0.12 65 / 0.12)" : "none",
@@ -197,7 +199,7 @@ export function AmenitiesSection() {
                         textTransform: "uppercase",
                       }}
                     >
-                      {spec.label}
+                      {t.amenities.specs[spec.key]}
                     </span>
                     <span
                       style={{

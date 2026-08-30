@@ -8,6 +8,7 @@ import {
   MAX_GUESTS,
   PRICE_PER_NIGHT,
 } from "@shared/pricing";
+import { useT } from "@/i18n/LanguageProvider";
 
 const MONO = "'JetBrains Mono', monospace";
 const AMBER = "oklch(0.72 0.12 65)";
@@ -24,9 +25,10 @@ const rows = Array.from({ length: MAX_GUESTS - 1 }, (_, i) => {
   };
 });
 
-const guestLabel = (n: number) => `${n} ${n < 5 ? "hostia" : "hostí"}`;
+
 
 export function PricingSection() {
+  const t = useT();
   return (
     <section
       id="cennik"
@@ -46,7 +48,7 @@ export function PricingSection() {
               textTransform: "uppercase",
             }}
           >
-            Cenník
+            {t.pricing.eyebrow}
           </p>
           <h2
             style={{
@@ -57,9 +59,9 @@ export function PricingSection() {
               color: "oklch(0.92 0.008 75)",
             }}
           >
-            O 10 % LACNEJŠIE
+            {t.pricing.headlineA}
             <br />
-            <span style={{ color: AMBER }}>AKO NA BOOKINGU</span>
+            <span style={{ color: AMBER }}>{t.pricing.headlineB}</span>
           </h2>
           <p
             style={{
@@ -72,8 +74,7 @@ export function PricingSection() {
               marginTop: "1.25rem",
             }}
           >
-            Rezerváciou priamo u nás neplatíte províziu sprostredkovateľa. Ceny sú
-            za celý objekt vrátane daní a poplatkov.
+            {t.pricing.body}
           </p>
         </FadeUp>
 
@@ -103,7 +104,7 @@ export function PricingSection() {
                       textTransform: "uppercase",
                     }}
                   >
-                    {guestLabel(guests)}
+                    {`${guests} ${guests < 5 ? t.pricing.guestsFew : t.pricing.guestsMany}`}
                   </p>
                   <p
                     style={{
@@ -117,7 +118,7 @@ export function PricingSection() {
                     <span style={{ textDecoration: "line-through" }}>
                       {booking} €
                     </span>{" "}
-                    na Booking.com
+                    {t.pricing.onBooking}
                   </p>
                 </div>
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
@@ -140,7 +141,7 @@ export function PricingSection() {
                       marginTop: "0.3rem",
                     }}
                   >
-                    ušetríte {booking - direct} €
+                    {t.pricing.youSave} {booking - direct} €
                   </p>
                 </div>
               </div>
@@ -164,7 +165,7 @@ export function PricingSection() {
             >
               <thead>
                 <tr>
-                  {["Hostí", "Booking.com", "Priamo u nás", "Ušetríte"].map(
+                  {[t.pricing.colGuests, t.pricing.colBooking, t.pricing.colDirect, t.pricing.colSaving].map(
                     (head) => (
                       <th
                         key={head}
@@ -174,7 +175,7 @@ export function PricingSection() {
                           letterSpacing: "0.1em",
                           color: MUTED,
                           textTransform: "uppercase",
-                          textAlign: head === "Hostí" ? "left" : "right",
+                          textAlign: head === t.pricing.colGuests ? "left" : "right",
                           padding: "1rem 1.25rem",
                           borderBottom: "1px solid oklch(0.72 0.12 65 / 0.18)",
                           fontWeight: 400,
@@ -250,8 +251,7 @@ export function PricingSection() {
               lineHeight: 1.6,
             }}
           >
-            Ceny za noc pri prenájme celého objektu. Minimálna dĺžka pobytu 2 noci ·
-            Bezplatné storno do 14 dní pred príchodom.
+            {t.pricing.finePrint}
           </p>
         </FadeUp>
       </div>

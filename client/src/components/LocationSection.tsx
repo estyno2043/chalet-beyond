@@ -7,48 +7,40 @@
 import { motion } from "framer-motion";
 import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
 import { MapPin, Snowflake, Bike, Waves, Trophy } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 const locations = [
   {
     icon: Trophy,
-    label: "Golf Black Stork PGA",
-    distance: "priamo na ihrisku",
-    desc: "Jediné golfové ihrisko na Slovensku s certifikátom PGA.",
+    placeIndex: 0,
   },
   {
     icon: Snowflake,
-    label: "Tatranská Lomnica",
-    distance: "10 min autom",
-    desc: "Skalnaté pleso, Lomnické sedlo — raj pre zimné športy.",
+    placeIndex: 1,
   },
   {
     icon: Bike,
-    label: "Cyklotrasy & turistika",
-    distance: "priamo z chaletu",
-    desc: "Sieť dychberúcich cyklotrás a turistických chodníkov v srdci Tatier.",
+    placeIndex: 2,
   },
   {
     icon: Waves,
-    label: "AquaCity Poprad",
-    distance: "10 min autom",
-    desc: "Termálne kúpalisko — ideálne pre rodiny s deťmi.",
+    placeIndex: 3,
   },
   {
     icon: MapPin,
-    label: "Poprad-Tatry Airport",
-    distance: "15 min autom",
-    desc: "Priame lety z Viedne, Prahy, Varšavy a ďalších miest.",
+    placeIndex: 4,
   },
 ];
 
 export function LocationSection() {
+  const t = useT();
   return (
     <section id="okolie" className="relative py-24 md:py-36 overflow-hidden">
       {/* Background: zoomed Lomnický štít — same source as the gallery shot. */}
       <div className="absolute inset-0">
         <img
           src="/gallery/mountain-view.jpg"
-          alt="Výhľad na Lomnický štít"
+          alt={t.location.imageAlt}
           className="w-full h-full object-cover"
           style={{ objectPosition: "center 35%", transform: "scale(1.25)" }}
         />
@@ -76,7 +68,7 @@ export function LocationSection() {
                   textTransform: "uppercase",
                 }}
               >
-                Poloha
+                {t.location.eyebrow}
               </p>
               <h2
                 style={{
@@ -87,8 +79,8 @@ export function LocationSection() {
                   color: "oklch(0.92 0.008 75)",
                 }}
               >
-                SRDCE<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>TATIER</span>
+                {t.location.headlineA}<br />
+                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.location.headlineB}</span>
               </h2>
             </div>
             <div style={{ maxWidth: "44ch" }}>
@@ -101,7 +93,7 @@ export function LocationSection() {
                   color: "oklch(0.78 0.015 75)",
                 }}
               >
-                Chalet Beyond sa nachádza priamo na ihrisku Black Stork — jedinom golfovom ihrisku na Slovensku s prestížnym certifikátom PGA. Miesto, kde sa stretáva svetová úroveň golfu s neopakovateľnou scenériou Tatier.
+                {t.location.body}
               </p>
             </div>
           </div>
@@ -116,7 +108,7 @@ export function LocationSection() {
             const Icon = loc.icon;
             return (
               <motion.div
-                key={loc.label}
+                key={loc.placeIndex}
                 variants={staggerItem}
                 className="glow-hover p-6"
                 style={{
@@ -143,7 +135,7 @@ export function LocationSection() {
                           color: "oklch(0.92 0.008 75)",
                         }}
                       >
-                        {loc.label}
+                        {t.location.places[loc.placeIndex].name}
                       </h3>
                       <span
                         style={{
@@ -154,7 +146,7 @@ export function LocationSection() {
                           textTransform: "uppercase",
                         }}
                       >
-                        {loc.distance}
+                        {t.location.places[loc.placeIndex].distance}
                       </span>
                     </div>
                     <p
@@ -166,7 +158,7 @@ export function LocationSection() {
                         color: "oklch(0.58 0.020 65)",
                       }}
                     >
-                      {loc.desc}
+                      {t.location.places[loc.placeIndex].desc}
                     </p>
                   </div>
                 </div>

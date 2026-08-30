@@ -5,8 +5,10 @@
  */
 import { FadeUp } from "@/components/FadeUp";
 import { MapPin, Mail } from "lucide-react";
+import { useT } from "@/i18n/LanguageProvider";
 
 export function Footer() {
+  const t = useT();
   return (
     <footer
       // pb-32 on mobile clears the fixed contact bar, which otherwise sits over
@@ -59,7 +61,7 @@ export function Footer() {
                   maxWidth: "28ch",
                 }}
               >
-                Beyond your expectations. V srdci Vysokých Tatier.
+                {t.footer.tagline}
               </p>
             </div>
 
@@ -75,7 +77,7 @@ export function Footer() {
                   marginBottom: "1rem",
                 }}
               >
-                Adresa
+                {t.footer.addressLabel}
               </h4>
               <div className="flex items-start gap-2">
                 <MapPin size={13} style={{ color: "oklch(0.72 0.12 65)", marginTop: "3px", flexShrink: 0 }} />
@@ -89,9 +91,9 @@ export function Footer() {
                     fontStyle: "normal",
                   }}
                 >
-                  Kamenná 2004/25A<br />
-                  059 52 Veľká Lomnica<br />
-                  Slovensko
+                  {t.footer.addressStreet}<br />
+                  {t.footer.addressCity}<br />
+                  {t.footer.addressCountry}
                 </address>
               </div>
               <p
@@ -119,7 +121,7 @@ export function Footer() {
                   marginBottom: "1rem",
                 }}
               >
-                Rezervácia
+                {t.footer.bookingLabel}
               </h4>
               <a
                 href="mailto:contact@chaletbeyond.sk"
@@ -148,7 +150,7 @@ export function Footer() {
                   marginBottom: "0.75rem",
                 }}
               >
-                Iba priama rezervácia – bez sprostredkovateľov.
+                {t.footer.directOnly}
               </p>
               <p
                 style={{
@@ -159,8 +161,8 @@ export function Footer() {
                   lineHeight: 1.6,
                 }}
               >
-                Letisko Poprad-Tatry<br />
-                15 min autom
+                {t.footer.airport}<br />
+                {t.footer.airportDistance}
               </p>
             </div>
           </div>
@@ -180,7 +182,7 @@ export function Footer() {
                   textTransform: "uppercase",
                 }}
               >
-                Chalet Beyond · Vysoké Tatry, Slovensko
+                {t.footer.strip}
               </p>
               <a
                 href="mailto:contact@chaletbeyond.sk"
@@ -204,7 +206,7 @@ export function Footer() {
                 textTransform: "uppercase",
               }}
             >
-              © 2025 Chalet Beyond. Všetky práva vyhradené.
+              {t.footer.copyright}
             </p>
           </div>
         </FadeUp>

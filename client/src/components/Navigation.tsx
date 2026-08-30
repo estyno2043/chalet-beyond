@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScrollThreshold } from '@/components/ui/use-scroll';
 import { useT } from "@/i18n/LanguageProvider";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const HREFS = ['#chalet', '#priestory', '#okolie', '#cennik', '#rezervacia'] as const;
 
@@ -110,6 +111,10 @@ export function Navigation() {
               {link.label}
             </a>
           ))}
+
+          <div className="ml-2 mr-1">
+            <LanguageSwitcher />
+          </div>
 
           {/* CTA button */}
           <a
@@ -219,6 +224,9 @@ export function Navigation() {
           </div>
 
           <div className="flex flex-col gap-3 pb-8">
+            <div className="pb-2">
+              <LanguageSwitcher compact />
+            </div>
             <a
               href="#rezervacia"
               onClick={(e) => {

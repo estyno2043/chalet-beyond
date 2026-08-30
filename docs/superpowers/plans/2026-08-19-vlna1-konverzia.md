@@ -1892,7 +1892,7 @@ Work through the spec's seven success criteria. Every one must pass before this 
 
 - [ ] **Step 1: Confirm the placeholder phone number is gone**
 
-Run: `grep -rn "421000000000" shared/ client/`
+Run: `grep -rn "421000000000" shared/ client/` — the real number landed on 2026-08-30, so this now returns nothing.
 
 Expected: no matches. If the real number is still unknown, this branch is not deployable — record it and stop.
 

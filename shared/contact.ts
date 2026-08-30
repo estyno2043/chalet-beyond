@@ -1,18 +1,12 @@
 /*
  * CHALET BEYOND — contact details.
- *
- * PHONE is a placeholder until the owner supplies the real number, and it uses
- * the unassignable 000 prefix on purpose: the 0900 range is premium-rate in
- * Slovakia, so a plausible-looking placeholder that slipped into production
- * would charge guests who tapped "Zavolať". This one can only fail to connect.
- * Task 16 greps for it and blocks the deploy.
  */
 
 /** E.164, used for tel: and wa.me links. */
-export const PHONE = "+421000000000";
+export const PHONE = "+421905111061";
 
 /** Human-readable form shown in the interface. */
-export const PHONE_DISPLAY = "+421 000 000 000";
+export const PHONE_DISPLAY = "+421 905 111 061";
 
 export const EMAIL = "contact@chaletbeyond.sk";
 

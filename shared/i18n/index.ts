@@ -1,4 +1,6 @@
 import { de } from "./de";
+import { en } from "./en";
+import { pl } from "./pl";
 import { sk } from "./sk";
 import type { Dict } from "./sk";
 import type { Lang } from "./types";
@@ -14,6 +16,6 @@ export type { Dict };
 export const dictionaries: Record<Lang, Dict> = {
   sk,
   de,
-  en: sk,
-  pl: sk,
+  en,
+  pl,
 };

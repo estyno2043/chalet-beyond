@@ -1,5 +1,10 @@
 # Chalet Beyond — project instructions
 
+## Začni tu
+
+**[PLAYBOOK.md](PLAYBOOK.md)** — stav projektu, čo je ďalej, ako sa tu pracuje,
+architektúra a pasce, ktoré nás už stáli čas. Prečítať pred novou prácou.
+
 ## Dizajn a UI
 
 Pri vizuálnej práci používať v tomto poradí — podrobnosti v [docs/UI_LIBRARIES.md](docs/UI_LIBRARIES.md):

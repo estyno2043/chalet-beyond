@@ -1,8 +1,54 @@
-# UI a animačné knižnice — referenčný zdroj
+# UI zdroje — skills a knižnice
 
-Pri tvorbe alebo úprave komponentov a animácií čerpať prednostne z týchto knižníc. Sú to väčšinou copy-paste komponenty (nie npm balíčky s runtime závislosťou) postavené na Tailwind CSS a Framer Motion / Motion — rovnaký stack, aký už projekt používa (`client/src/components/ui/*`, `framer-motion` v `package.json`).
+Dva druhy zdrojov: **skills**, ktoré určujú *ako* o dizajne rozhodovať, a **knižnice**, z ktorých sa berú hotové komponenty. Skills idú prvé — knižnica bez úsudku dá poskladané kusy, nie dizajn.
 
-## Zoznam
+---
+
+## Skills (nainštalované, používať priebežne)
+
+### Impeccable — layout a spacing
+
+**Kedy:** na začiatku každej vizuálnej úlohy a pri prehodnocovaní hotového rozloženia.
+
+Plugin `impeccable@impeccable`. 23 príkazov cez `/impeccable <príkaz> <cieľ>` a 61 deterministických pravidiel na odhalenie typických AI vzorov — všade Inter, fialovo-modré gradienty, karty v kartách, ikona v zaoblenom štvorci nad každým nadpisom.
+
+| Príkaz | Na čo |
+|---|---|
+| `/impeccable init` | raz na projekt — vytvorí `PRODUCT.md` a `DESIGN.md`, z ktorých čerpajú ostatné príkazy |
+| `/impeccable audit` | nájde problémy v existujúcom rozložení |
+| `/impeccable polish` | doladí spacing, hierarchiu, typografiu |
+| `/impeccable critique` | dizajnová kritika s odôvodnením |
+
+> ⚠️ `init` sa ešte **nespúšťal**. Kým nevznikne `DESIGN.md`, ostatné príkazy nemajú kontext o tomto projekte a budú hádať. Spustiť pred prvým väčším vizuálnym zásahom.
+
+### Emil Kowalski — animácie a design engineering
+
+**Kedy:** pri akejkoľvek animácii a pri detailoch, ktoré rozhodujú, či rozhranie pôsobí drahé alebo lacné.
+
+Inštalované cez `npx skills add emilkowalski/skills`, verzie pinnuté v `skills-lock.json`.
+
+| Skill | Na čo |
+|---|---|
+| `emil-design-eng` | hlavný — filozofia UI polish a rozhodovanie o detailoch |
+| `animate` | postaví animáciu od nuly so správnou krivkou, trvaním a vlastnosťami |
+| `improve-animations` | zlepší existujúce |
+| `review-animations` | posúdi hotové |
+| `find-animation-opportunities` | nájde miesta, kde animácia dáva zmysel |
+| `animation-vocabulary` | spoločný slovník na popis pohybu |
+| `pick-ui-library` | výber knižnice pre konkrétny prípad |
+| `apple-design` | Apple HIG princípy |
+
+Rieši presne to, čo agenti kazia najčastejšie — `ease-in` na nábehovú animáciu tam, kde patrí `ease-out`, alebo plný border namiesto poloprehľadného tieňa.
+
+### Poradie pri vizuálnej práci
+
+1. `/impeccable init` (raz), potom `audit` alebo `polish` na rozloženie a spacing
+2. Emilove skills na pohyb a detaily
+3. Až potom siahnuť do knižníc nižšie po konkrétny komponent
+
+---
+
+## Knižnice komponentov
 
 | Knižnica | URL | Zameranie |
 |---|---|---|

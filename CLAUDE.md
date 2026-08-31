@@ -1,5 +1,11 @@
 # Chalet Beyond — project instructions
 
-## UI a animácie
+## Dizajn a UI
 
-Pri vizuálnych úpravách a animáciách čerpať prednostne z knižníc v [docs/UI_LIBRARIES.md](docs/UI_LIBRARIES.md) (Cult UI, Aceternity, Magic UI, Motion Primitives, Eldora UI, Animata, Coss UI, Kibo UI, shadcn/ui) namiesto písania animácií od nuly. Prevziať markup/logiku, štýly prepísať na projektovú paletu (oklch, Bebas Neue/Karla/JetBrains Mono) — nekopírovať cudzí design systém.
+Pri vizuálnej práci používať v tomto poradí — podrobnosti v [docs/UI_LIBRARIES.md](docs/UI_LIBRARIES.md):
+
+1. **Impeccable** (`/impeccable audit`, `/impeccable polish`) na rozloženie, spacing a typografiu. Na začiatku vizuálnej úlohy a pri prehodnocovaní hotového layoutu. `/impeccable init` sa ešte nespúšťal — spustiť pred prvým väčším zásahom, inak ostatné príkazy nemajú kontext projektu.
+2. **Emilove skills** (`emil-design-eng`, `animate`, `improve-animations`, `review-animations`) na animácie a detaily.
+3. **Knižnice komponentov** (Cult UI, Aceternity, Magic UI, Motion Primitives, Eldora, Animata, Coss, Kibo, shadcn/ui) až nakoniec, na konkrétny komponent.
+
+Z knižníc preberať markup a logiku, štýly prepísať na projektovú paletu (oklch, Bebas Neue / Karla / JetBrains Mono) — nekopírovať cudzí design systém.

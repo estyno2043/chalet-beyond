@@ -1,7 +1,7 @@
 # Chalet Beyond — príručka
 
 **Jeden súbor na plánovanie a stavanie.** Otvor ho pred každou novou prácou.
-Aktualizované: 2026-08-31.
+Aktualizované: 2026-09-02.
 
 ---
 
@@ -58,15 +58,14 @@ Hotové: **telefón** `+421 905 111 061`, **iCal feed** (beží na ostrých dát
 
 | # | Práca | Veľkosť | Blokované? |
 |---|---|---|---|
-| 1 | **Opravy z review** — iCal v logoch, server overí dostupnosť, `confirmationSent`, stav načítania kalendára | stredná | nie |
+| ~~1~~ | ~~**Opravy z review** — iCal v logoch, server overí dostupnosť, `confirmationSent`, stav načítania kalendára~~ | — | **hotové 2026-09-02** |
 | 2 | **Obojsmerný kalendár** — úložisko + `/api/calendar.ics`, potvrdzovacie odkazy | veľká | polovica čaká na Resend |
-| 3 | Prístupnosť a upratovanie — labely, `autocomplete`, prettier (56 súborov), advisories | malá | nie |
+| 3 | Prístupnosť a upratovanie — labely, `autocomplete`, prettier (58 súborov), advisories | malá | nie |
 | 4 | **Vlna 3** — skrátenie hero, 20 MB videí, SEO meta a JSON-LD | veľká | SEO čiastočne po doméne |
 | 5 | Sekcia recenzií | malá | čaká na 5+ recenzií |
 
 Podrobnosti k bodu 1: [docs/CODEX_REVIEW_ASSESSMENT.md](docs/CODEX_REVIEW_ASSESSMENT.md).
-Najzávažnejšie je, že **`/api/inquiry` nikdy neoverí, či je termín voľný** — zásada
-„never trust the client" je uplatnená na cenu, na dostupnosť sa zabudla.
+Zostáva z neho už len bod 3 vyššie — labely, `autocomplete`, prettier a advisories.
 
 ---
 

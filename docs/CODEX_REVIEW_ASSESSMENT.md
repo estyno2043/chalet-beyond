@@ -2,7 +2,7 @@
 
 **Predmet:** `docs/superpowers/plans/2026-08-30-full-release-remediation.md`
 **Posúdené:** 2026-08-30, proti `HEAD` na vetve `wave1-konverzia`
-**Stav:** zaznamenané, **nerealizuje sa** — čaká na rozhodnutie
+**Stav:** body 1–4 z poradia nižšie **opravené 2026-09-02**; zostáva 5–6
 
 Review je vecný a väčšina nálezov je pravdivá. Nižšie je overenie každého z nich
 proti skutočnému kódu, nie proti tvrdeniu, plus body, v ktorých s ním nesúhlasím.
@@ -84,10 +84,10 @@ znamenať odmietnutý dopyt.
 
 | # | Práca | Prečo prvé |
 |---|---|---|
-| 1 | iCal URL preč z logov | jeden riadok, únik tajomstva |
-| 2 | Server overí dostupnosť | skutočná diera na dvojitú rezerváciu |
-| 3 | `confirmationSent` v odpovedi | prestať klamať hosťovi |
-| 4 | Stav načítania kalendára | s fail-open pri výpadku |
+| ~~1~~ | ~~iCal URL preč z logov~~ | **hotové** — `aba3d0c`, redakcia v `lib/feeds` |
+| ~~2~~ | ~~Server overí dostupnosť~~ | **hotové** — `e3c9c78`, fail-open |
+| ~~3~~ | ~~`confirmationSent` v odpovedi~~ | **hotové** — `e3c9c78` |
+| ~~4~~ | ~~Stav načítania kalendára~~ | **hotové** — `9150f3d` |
 | 5 | Labely a `autocomplete` | prístupnosť aj konverzia |
 | 6 | Prettier, skrytie telefónu keď nie je nastavený | upratovanie |
 

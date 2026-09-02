@@ -4,6 +4,8 @@
  */
 import { Resend } from "resend";
 import { calcTotal } from "../../shared/pricing";
+import { rangeIsFree } from "../../shared/availability";
+import { feedUrls, loadBlockedDates } from "./lib/feeds";
 import { inquirySchema } from "./lib/inquiry-schema";
 import { exceedsLimit } from "./lib/rate-limit";
 
@@ -91,6 +93,38 @@ export default async (request: Request): Promise<Response> => {
     );
   }
 
+  // The price is recomputed here rather than trusted; availability has to be
+  // treated the same way. The calendar the guest saw may be minutes stale, and
+  // the request need not have come from the calendar at all.
+  //
+  // Fail open: when no feed answers, the range cannot be disproved, and
+  // refusing every inquiry through a Booking outage costs far more than the
+  // occasional conflict the owner resolves by hand.
+  const urls = feedUrls();
+  if (urls.length > 0) {
+    const { blocked, failures } = await loadBlockedDates(urls);
+    for (const failure of failures) {
+      // Redacted upstream: the export token must not reach a log.
+      console.error(`inquiry: feed ${failure.reason}`, failure.url, failure.detail);
+    }
+    if (failures.length === urls.length) {
+      console.warn("inquiry: availability unverified, letting the inquiry through");
+    } else if (!rangeIsFree(from, to, blocked)) {
+      // A partial answer can only under-report occupied nights, so a collision
+      // with what did load is real no matter which feeds stayed silent.
+      // `code` lets the client show this in the guest's own language. The
+      // other errors here are still Slovak-only; this one is the likeliest to
+      // reach a German or Polish guest, since it fires on a legitimate attempt.
+      return Response.json(
+        {
+          code: "dates_taken",
+          error: "Tento termín je medzitým obsadený. Vyberte prosím iný.",
+        },
+        { status: 409 },
+      );
+    }
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const owner = process.env.OWNER_EMAIL;
   if (!apiKey || !owner) {
@@ -139,6 +173,10 @@ export default async (request: Request): Promise<Response> => {
     );
   }
 
+  // Reported to the client: the panel tells the guest a confirmation is on its
+  // way, and must not say so when the send failed.
+  let confirmationSent = true;
+
   try {
     const { error } = await withTimeout(
       resend.emails.send({
@@ -166,9 +204,10 @@ export default async (request: Request): Promise<Response> => {
   } catch (error) {
     // The lead is already delivered; do not make the guest submit twice.
     console.error("inquiry: guest confirmation failed", error);
+    confirmationSent = false;
   }
 
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, confirmationSent });
 };
 
 export const config = { path: "/api/inquiry" };

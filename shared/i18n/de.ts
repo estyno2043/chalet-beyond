@@ -205,6 +205,8 @@ export const de: Dict = {
     needTwoNights: "Wählen Sie einen Zeitraum von mindestens 2 Nächten",
     sendFailed: "Senden fehlgeschlagen",
     datesTaken: "Dieser Zeitraum ist inzwischen belegt. Bitte wählen Sie einen anderen.",
+    guestsDecrease: "Weniger Gäste",
+    guestsIncrease: "Mehr Gäste",
     callUs: "Rufen Sie uns an unter",
     orWrite: "oder schreiben Sie an",
     finePrint:

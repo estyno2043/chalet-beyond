@@ -200,6 +200,8 @@ export const sk = {
     needTwoNights: "Vyberte termín aspoň na 2 noci",
     sendFailed: "Odoslanie zlyhalo",
     datesTaken: "Tento termín je medzitým obsadený. Vyberte prosím iný.",
+    guestsDecrease: "Menej hostí",
+    guestsIncrease: "Viac hostí",
     callUs: "Zavolajte nám na",
     orWrite: "alebo napíšte na",
     finePrint:

@@ -34,6 +34,15 @@ function formatDate(date: Date | undefined, lang: string): string {
   });
 }
 
+/** Micro-label above each field, in the same mono voice as the section's own labels. */
+const FIELD_LABEL: React.CSSProperties = {
+  fontFamily: "'JetBrains Mono', monospace",
+  fontSize: "0.65rem",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  color: "oklch(0.58 0.020 65)",
+};
+
 function getNights(from: Date | undefined, to: Date | undefined): number {
   if (!from || !to) return 0;
   return Math.round((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
@@ -154,7 +163,15 @@ export function BookingSection() {
       : null;
   const canProceed = price !== null;
 
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  // `website` is the honeypot. /api/inquiry has always dropped submissions that
+  // fill it, but nothing rendered the field, so no bot could ever trip it.
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    website: "",
+  });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
   // The endpoint delivers the lead even when the guest's own copy fails, so
@@ -591,6 +608,8 @@ export function BookingSection() {
                   </div>
                   <div className="flex items-center gap-3">
                     <button
+                      type="button"
+                      aria-label={t.booking.guestsDecrease}
                       onClick={() => setGuests(Math.max(1, guests - 1))}
                       className="w-7 h-7 flex items-center justify-center transition-colors duration-150"
                       style={{
@@ -603,6 +622,7 @@ export function BookingSection() {
                       −
                     </button>
                     <span
+                      aria-live="polite"
                       style={{
                         fontFamily: "'Bebas Neue', sans-serif",
                         fontSize: "1.3rem",
@@ -614,6 +634,8 @@ export function BookingSection() {
                       {guests}
                     </span>
                     <button
+                      type="button"
+                      aria-label={t.booking.guestsIncrease}
                       onClick={() => setGuests(Math.min(8, guests + 1))}
                       className="w-7 h-7 flex items-center justify-center transition-colors duration-150"
                       style={{
@@ -641,6 +663,7 @@ export function BookingSection() {
 
               {status === "sent" ? (
                 <div
+                  role="status"
                   style={{
                     border: "1px solid oklch(0.72 0.12 65 / 0.4)",
                     padding: "1.25rem",
@@ -675,19 +698,66 @@ export function BookingSection() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                   {(
                     [
-                      { key: "name", label: t.booking.nameField, type: "text" },
-                      { key: "email", label: t.booking.emailField, type: "email" },
-                      { key: "phone", label: t.booking.phoneField, type: "tel" },
+                      {
+                        key: "name",
+                        label: t.booking.nameField,
+                        type: "text",
+                        autoComplete: "name",
+                      },
+                      {
+                        key: "email",
+                        label: t.booking.emailField,
+                        type: "email",
+                        autoComplete: "email",
+                      },
+                      {
+                        key: "phone",
+                        label: t.booking.phoneField,
+                        type: "tel",
+                        autoComplete: "tel",
+                      },
                     ] as const
                   ).map((field) => (
-                    <input
-                      key={field.key}
-                      type={field.type}
-                      required
-                      placeholder={field.label}
-                      value={form[field.key]}
+                    // The label replaces the placeholder rather than joining it:
+                    // a placeholder disappears the moment the guest types, so the
+                    // filled form gave no way to check which value went where.
+                    <div key={field.key} className="flex flex-col gap-1.5">
+                      <label htmlFor={`inquiry-${field.key}`} style={FIELD_LABEL}>
+                        {field.label}
+                      </label>
+                      <input
+                        id={`inquiry-${field.key}`}
+                        type={field.type}
+                        required
+                        autoComplete={field.autoComplete}
+                        value={form[field.key]}
+                        onChange={(event) =>
+                          setForm({ ...form, [field.key]: event.target.value })
+                        }
+                        style={{
+                          fontFamily: "'Karla', sans-serif",
+                          fontSize: "0.9rem",
+                          color: "oklch(0.92 0.008 75)",
+                          background: "oklch(0.10 0.012 55)",
+                          border: "1px solid oklch(0.72 0.12 65 / 0.25)",
+                          borderRadius: "2px",
+                          padding: "0.7rem 0.85rem",
+                          width: "100%",
+                        }}
+                      />
+                    </div>
+                  ))}
+                  <div className="flex flex-col gap-1.5">
+                    <label htmlFor="inquiry-message" style={FIELD_LABEL}>
+                      {t.booking.messageField}
+                    </label>
+                    <textarea
+                      id="inquiry-message"
+                      rows={3}
+                      autoComplete="off"
+                      value={form.message}
                       onChange={(event) =>
-                        setForm({ ...form, [field.key]: event.target.value })
+                        setForm({ ...form, message: event.target.value })
                       }
                       style={{
                         fontFamily: "'Karla', sans-serif",
@@ -698,28 +768,37 @@ export function BookingSection() {
                         borderRadius: "2px",
                         padding: "0.7rem 0.85rem",
                         width: "100%",
+                        resize: "vertical",
                       }}
                     />
-                  ))}
-                  <textarea
-                    placeholder={t.booking.messageField}
-                    rows={3}
-                    value={form.message}
-                    onChange={(event) =>
-                      setForm({ ...form, message: event.target.value })
-                    }
+                  </div>
+
+                  {/* The honeypot. Off-screen rather than display:none, because
+                      a bot that skips hidden fields is exactly the one to catch.
+                      aria-hidden and tabIndex keep it away from real guests. */}
+                  <div
+                    aria-hidden="true"
                     style={{
-                      fontFamily: "'Karla', sans-serif",
-                      fontSize: "0.9rem",
-                      color: "oklch(0.92 0.008 75)",
-                      background: "oklch(0.10 0.012 55)",
-                      border: "1px solid oklch(0.72 0.12 65 / 0.25)",
-                      borderRadius: "2px",
-                      padding: "0.7rem 0.85rem",
-                      width: "100%",
-                      resize: "vertical",
+                      position: "absolute",
+                      left: "-9999px",
+                      width: "1px",
+                      height: "1px",
+                      overflow: "hidden",
                     }}
-                  />
+                  >
+                    <label htmlFor="inquiry-website">Website</label>
+                    <input
+                      id="inquiry-website"
+                      name="website"
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website}
+                      onChange={(event) =>
+                        setForm({ ...form, website: event.target.value })
+                      }
+                    />
+                  </div>
 
                   <motion.button
                     type="submit"
@@ -756,6 +835,7 @@ export function BookingSection() {
 
                   {status === "error" && (
                     <p
+                      role="alert"
                       style={{
                         fontFamily: "'Karla', sans-serif",
                         fontSize: "0.78rem",

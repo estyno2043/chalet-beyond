@@ -2,7 +2,7 @@
 
 **Predmet:** `docs/superpowers/plans/2026-08-30-full-release-remediation.md`
 **Posúdené:** 2026-08-30, proti `HEAD` na vetve `wave1-konverzia`
-**Stav:** body 1–4 z poradia nižšie **opravené 2026-09-02**; zostáva 5–6
+**Stav:** body 1–5 z poradia nižšie **opravené 2026-09-02**; zostáva 6
 
 Review je vecný a väčšina nálezov je pravdivá. Nižšie je overenie každého z nich
 proti skutočnému kódu, nie proti tvrdeniu, plus body, v ktorých s ním nesúhlasím.
@@ -88,7 +88,7 @@ znamenať odmietnutý dopyt.
 | ~~2~~ | ~~Server overí dostupnosť~~ | **hotové** — `e3c9c78`, fail-open |
 | ~~3~~ | ~~`confirmationSent` v odpovedi~~ | **hotové** — `e3c9c78` |
 | ~~4~~ | ~~Stav načítania kalendára~~ | **hotové** — `9150f3d` |
-| 5 | Labely a `autocomplete` | prístupnosť aj konverzia |
+| ~~5~~ | ~~Labely a `autocomplete`~~ | **hotové** — `1049def`, plus honeypot, ktorý dovtedy nebol vo formulári |
 | 6 | Prettier, skrytie telefónu keď nie je nastavený | upratovanie |
 
 Body 1–3 sú malé a patria do jednej dávky.

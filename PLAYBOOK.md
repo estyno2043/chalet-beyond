@@ -60,12 +60,13 @@ Hotové: **telefón** `+421 905 111 061`, **iCal feed** (beží na ostrých dát
 |---|---|---|---|
 | ~~1~~ | ~~**Opravy z review** — iCal v logoch, server overí dostupnosť, `confirmationSent`, stav načítania kalendára~~ | — | **hotové 2026-09-02** |
 | 2 | **Obojsmerný kalendár** — úložisko + `/api/calendar.ics`, potvrdzovacie odkazy | veľká | polovica čaká na Resend |
-| 3 | Prístupnosť a upratovanie — labely, `autocomplete`, prettier (58 súborov), advisories | malá | nie |
+| 3 | Upratovanie — prettier (58 súborov), npm advisories | malá | nie |
+| 3b | Dotykové ciele — tlačidlá +/− pri hostoch majú 28px, mobilné minimum je 44px | drobná | nie |
 | 4 | **Vlna 3** — skrátenie hero, 20 MB videí, SEO meta a JSON-LD | veľká | SEO čiastočne po doméne |
 | 5 | Sekcia recenzií | malá | čaká na 5+ recenzií |
 
 Podrobnosti k bodu 1: [docs/CODEX_REVIEW_ASSESSMENT.md](docs/CODEX_REVIEW_ASSESSMENT.md).
-Zostáva z neho už len bod 3 vyššie — labely, `autocomplete`, prettier a advisories.
+Zostáva z neho už len bod 3 vyššie — prettier a advisories.
 
 ---
 

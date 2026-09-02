@@ -182,6 +182,7 @@ export const de: Dict = {
     headlineB: "ERWARTUNGEN",
     intro: "Nur Direktbuchung – keine Plattformgebühren, keine Vermittler.",
     pickDates: "Zeitraum wählen",
+    availabilityLoading: "Belegte Termine werden geladen …",
     availabilityFailed: "Die Belegung konnte nicht geladen werden — wir bestätigen die Verfügbarkeit per E-Mail.",
     checkIn: "Check-in",
     checkOut: "Check-out",
@@ -200,8 +201,10 @@ export const de: Dict = {
     sending: "Wird gesendet…",
     sentTitle: "Anfrage gesendet",
     sentBody: "Wir melden uns innerhalb von 24 Stunden. Eine Bestätigung ging an",
+    sentBodyNoEmail: "Wir melden uns innerhalb von 24 Stunden.",
     needTwoNights: "Wählen Sie einen Zeitraum von mindestens 2 Nächten",
     sendFailed: "Senden fehlgeschlagen",
+    datesTaken: "Dieser Zeitraum ist inzwischen belegt. Bitte wählen Sie einen anderen.",
     callUs: "Rufen Sie uns an unter",
     orWrite: "oder schreiben Sie an",
     finePrint:

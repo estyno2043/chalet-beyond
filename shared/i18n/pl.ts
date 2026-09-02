@@ -179,6 +179,7 @@ export const pl: Dict = {
     headlineB: "OCZEKIWANIA",
     intro: "Tylko rezerwacja bezpośrednia – bez opłat platformy, bez pośredników.",
     pickDates: "Wybierz terminy",
+    availabilityLoading: "Wczytuję zajęte terminy…",
     availabilityFailed: "Nie udało się wczytać dostępności — potwierdzimy ją e-mailem.",
     checkIn: "Zameldowanie",
     checkOut: "Wymeldowanie",
@@ -197,8 +198,10 @@ export const pl: Dict = {
     sending: "Wysyłanie…",
     sentTitle: "Zapytanie wysłane",
     sentBody: "Odezwiemy się w ciągu 24 godzin. Potwierdzenie wysłaliśmy na",
+    sentBodyNoEmail: "Odezwiemy się w ciągu 24 godzin.",
     needTwoNights: "Wybierz termin na co najmniej 2 noce",
     sendFailed: "Wysyłanie nie powiodło się",
+    datesTaken: "Ten termin został właśnie zajęty. Prosimy wybrać inny.",
     callUs: "Zadzwoń do nas pod",
     orWrite: "lub napisz na",
     finePrint:

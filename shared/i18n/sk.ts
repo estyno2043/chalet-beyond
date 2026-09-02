@@ -177,6 +177,7 @@ export const sk = {
     headlineB: "OČAKÁVANIA",
     intro: "Iba priama rezervácia – žiadne poplatky za platformu, žiadni sprostredkovatelia.",
     pickDates: "Vyberte dátumy",
+    availabilityLoading: "Načítavam obsadené termíny…",
     availabilityFailed: "Obsadenosť sa nepodarilo načítať — dostupnosť overíme e-mailom.",
     checkIn: "Check-in",
     checkOut: "Check-out",
@@ -195,8 +196,10 @@ export const sk = {
     sending: "Odosielam…",
     sentTitle: "Dopyt odoslaný",
     sentBody: "Ozveme sa do 24 hodín. Potvrdenie sme poslali na",
+    sentBodyNoEmail: "Ozveme sa do 24 hodín.",
     needTwoNights: "Vyberte termín aspoň na 2 noci",
     sendFailed: "Odoslanie zlyhalo",
+    datesTaken: "Tento termín je medzitým obsadený. Vyberte prosím iný.",
     callUs: "Zavolajte nám na",
     orWrite: "alebo napíšte na",
     finePrint:

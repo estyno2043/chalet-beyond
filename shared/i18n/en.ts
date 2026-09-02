@@ -176,6 +176,7 @@ export const en: Dict = {
     headlineB: "EXPECTATIONS",
     intro: "Direct booking only – no platform fees, no intermediaries.",
     pickDates: "Choose your dates",
+    availabilityLoading: "Loading availability…",
     availabilityFailed: "Availability could not be loaded — we will confirm it by email.",
     checkIn: "Check-in",
     checkOut: "Check-out",
@@ -194,8 +195,10 @@ export const en: Dict = {
     sending: "Sending…",
     sentTitle: "Enquiry sent",
     sentBody: "We will reply within 24 hours. A confirmation went to",
+    sentBodyNoEmail: "We will reply within 24 hours.",
     needTwoNights: "Choose a stay of at least 2 nights",
     sendFailed: "Sending failed",
+    datesTaken: "These dates have just been taken. Please choose another stay.",
     callUs: "Call us on",
     orWrite: "or write to",
     finePrint:

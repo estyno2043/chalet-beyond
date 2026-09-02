@@ -44,10 +44,19 @@ function getNights(from: Date | undefined, to: Date | undefined): number {
  * `failed` also covers a partial answer: the endpoint returns `degraded: true`
  * when some feeds did not respond, so the list is real but incomplete and the
  * guest still needs telling that availability could not be fully confirmed.
+ *
+ * `loading` exists because an empty list is indistinguishable from a free
+ * calendar: without it the picker renders every night as available for as long
+ * as the request is in flight, and a guest can pick a sold week in that gap.
  */
-function useBlockedDates(): { blocked: string[]; failed: boolean } {
+function useBlockedDates(): {
+  blocked: string[];
+  failed: boolean;
+  loading: boolean;
+} {
   const [blocked, setBlocked] = useState<string[]>([]);
   const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -63,13 +72,18 @@ function useBlockedDates(): { blocked: string[]; failed: boolean } {
       })
       .catch(() => {
         if (!cancelled) setFailed(true);
+      })
+      .finally(() => {
+        // Runs on failure too: the picker must open rather than stay locked
+        // through an outage, and the banner then says availability is unconfirmed.
+        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  return { blocked, failed };
+  return { blocked, failed, loading };
 }
 
 export function BookingSection() {
@@ -78,7 +92,11 @@ export function BookingSection() {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [guests, setGuests] = useState(2);
   const [step, setStep] = useState<"calendar" | "confirm">("calendar");
-  const { blocked, failed: availabilityFailed } = useBlockedDates();
+  const {
+    blocked,
+    failed: availabilityFailed,
+    loading: availabilityLoading,
+  } = useBlockedDates();
 
   // A sold night bars that day as an arrival, but the first night of a run is
   // still a valid departure — the outgoing guest leaves in the morning, the next
@@ -139,6 +157,9 @@ export function BookingSection() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [error, setError] = useState("");
+  // The endpoint delivers the lead even when the guest's own copy fails, so
+  // success is not proof the confirmation was sent.
+  const [confirmationSent, setConfirmationSent] = useState(true);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -159,7 +180,14 @@ export function BookingSection() {
         }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error ?? t.booking.sendFailed);
+      if (!response.ok) {
+        throw new Error(
+          data.code === "dates_taken"
+            ? t.booking.datesTaken
+            : (data.error ?? t.booking.sendFailed),
+        );
+      }
+      setConfirmationSent(data.confirmationSent !== false);
       setStatus("sent");
     } catch (err) {
       setStatus("error");
@@ -240,13 +268,23 @@ export function BookingSection() {
                 </span>
               </div>
 
-              <div className="flex justify-center overflow-x-auto">
+              <div
+                className="flex justify-center overflow-x-auto"
+                style={{
+                  opacity: availabilityLoading ? 0.45 : 1,
+                  transition: "opacity 0.2s ease",
+                }}
+              >
                 <Calendar
                   mode="range"
                   selected={dateRange}
                   onSelect={handleSelect}
                   numberOfMonths={1}
-                  disabled={[{ before: new Date() }, ...unselectable]}
+                  disabled={
+                    availabilityLoading
+                      ? true
+                      : [{ before: new Date() }, ...unselectable]
+                  }
                   className="rounded-none"
                   style={{
                     "--rdp-accent-color": "oklch(0.72 0.12 65)",
@@ -256,7 +294,7 @@ export function BookingSection() {
                 />
               </div>
 
-              {availabilityFailed && (
+              {(availabilityLoading || availabilityFailed) && (
                 <p
                   className="mt-4"
                   style={{
@@ -267,7 +305,9 @@ export function BookingSection() {
                     textAlign: "center",
                   }}
                 >
-                  {t.booking.availabilityFailed}
+                  {availabilityLoading
+                    ? t.booking.availabilityLoading
+                    : t.booking.availabilityFailed}
                 </p>
               )}
 
@@ -626,7 +666,9 @@ export function BookingSection() {
                       lineHeight: 1.6,
                     }}
                   >
-                    {t.booking.sentBody} {form.email}.
+                    {confirmationSent
+                      ? `${t.booking.sentBody} ${form.email}.`
+                      : t.booking.sentBodyNoEmail}
                   </p>
                 </div>
               ) : (

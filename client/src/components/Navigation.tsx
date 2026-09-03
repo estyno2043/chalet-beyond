@@ -9,11 +9,13 @@
  * - Mobile menu: full-screen overlay with zoom-in/out animation
  */
 import React from 'react';
+import { Mail, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScrollThreshold } from '@/components/ui/use-scroll';
 import { useT } from "@/i18n/LanguageProvider";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 
 const HREFS = ['#chalet', '#priestory', '#okolie', '#cennik', '#rezervacia'] as const;
 
@@ -61,6 +63,40 @@ export function Navigation() {
         },
       )}
     >
+      {/* Contact strip — phone + email, visible on load and through scroll.
+          A separate row from the nav cluster below on purpose: that row is
+          already tight at 768–940px (the CTA runs past the edge there), so
+          two more text items can't share its space without breaking it further. */}
+      <div
+        className={cn(
+          'mx-auto hidden items-center justify-end gap-5 px-5 h-7 md:flex',
+          scrolled ? 'max-w-4xl' : 'max-w-5xl',
+        )}
+        style={{ transition: 'max-width 0.3s ease-out' }}
+      >
+        {[
+          { href: `tel:${PHONE}`, label: PHONE_DISPLAY, Icon: Phone, aria: `${t.contact.callAria} ${PHONE_DISPLAY}` },
+          { href: `mailto:${EMAIL}`, label: EMAIL, Icon: Mail, aria: t.contact.emailAria },
+        ].map(({ href, label, Icon, aria }) => (
+          <a
+            key={href}
+            href={href}
+            aria-label={aria}
+            className="flex items-center gap-1.5 transition-colors duration-200"
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: '0.68rem',
+              letterSpacing: '0.05em',
+              color: 'oklch(0.80 0.02 75)',
+              textShadow: '0 1px 6px rgba(0,0,0,0.7)',
+            }}
+          >
+            <Icon size={11} style={{ color: 'oklch(0.72 0.12 65)' }} />
+            {label}
+          </a>
+        ))}
+      </div>
+
       <div
         className={cn(
           'mx-auto flex items-center justify-between px-5 transition-all duration-300 ease-out',
@@ -246,7 +282,24 @@ export function Navigation() {
               {t.nav.bookStay}
             </a>
             <a
-              href="mailto:contact@chaletbeyond.sk"
+              href={`tel:${PHONE}`}
+              aria-label={`${t.contact.callAria} ${PHONE_DISPLAY}`}
+              onClick={() => setOpen(false)}
+              className="w-full flex items-center justify-center gap-2 py-4 rounded-sm text-center"
+              style={{
+                fontFamily: "'Bebas Neue', sans-serif",
+                fontSize: '1.2rem',
+                letterSpacing: '0.12em',
+                color: 'oklch(0.72 0.12 65)',
+                border: '1px solid rgba(180,120,40,0.3)',
+              }}
+            >
+              <Phone size={16} />
+              {PHONE_DISPLAY}
+            </a>
+            <a
+              href={`mailto:${EMAIL}`}
+              aria-label={t.contact.emailAria}
               onClick={() => setOpen(false)}
               className="w-full flex items-center justify-center py-4 rounded-sm text-center"
               style={{

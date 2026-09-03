@@ -247,6 +247,7 @@ export const sk = {
     whatsapp: "WhatsApp",
     callAria: "Zavolať na",
     whatsappAria: "Napísať cez WhatsApp",
+    emailAria: "Napísať e-mail",
   },
 };
 

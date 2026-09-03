@@ -246,5 +246,6 @@ export const en: Dict = {
     whatsapp: "WhatsApp",
     callAria: "Call",
     whatsappAria: "Message on WhatsApp",
+    emailAria: "Send an email",
   },
 };

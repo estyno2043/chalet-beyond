@@ -252,5 +252,6 @@ export const de: Dict = {
     whatsapp: "WhatsApp",
     callAria: "Anrufen unter",
     whatsappAria: "Über WhatsApp schreiben",
+    emailAria: "E-Mail schreiben",
   },
 };

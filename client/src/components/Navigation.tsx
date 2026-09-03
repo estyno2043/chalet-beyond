@@ -72,7 +72,6 @@ export function Navigation() {
           'mx-auto hidden items-center justify-end gap-5 px-5 h-7 md:flex',
           scrolled ? 'max-w-4xl' : 'max-w-5xl',
         )}
-        style={{ transition: 'max-width 0.3s ease-out' }}
       >
         {[
           { href: `tel:${PHONE}`, label: PHONE_DISPLAY, Icon: Phone, aria: `${t.contact.callAria} ${PHONE_DISPLAY}` },

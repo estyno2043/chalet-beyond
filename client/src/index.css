@@ -324,11 +324,33 @@
   background: oklch(0.72 0.12 65 / 0.7);
 }
 
-/* Reduced motion */
+/* Motion system — three durations, two easings, nothing else.
+   Categories rather than per-component values, so the same gesture reads the
+   same everywhere: UI feedback is quick, a section reveals once, and only the
+   hero is allowed to be cinematic. */
+:root {
+  --motion-ui: 160ms;
+  --motion-section: 520ms;
+  --motion-cinematic: 1000ms;
+
+  /* UI feedback: leaves immediately, settles hard. */
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
+  /* Entrances: fast out of the gate, long tail — reads as arriving, not sliding. */
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reduced motion.
+   scroll-behavior is reset too: a smooth anchor scroll is motion the guest did
+   not ask for, and the html rule above sets it globally. */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

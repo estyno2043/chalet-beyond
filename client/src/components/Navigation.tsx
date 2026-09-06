@@ -13,14 +13,18 @@ import { Mail, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScrollThreshold } from '@/components/ui/use-scroll';
-import { useT } from "@/i18n/LanguageProvider";
+import { useLang, useT } from "@/i18n/LanguageProvider";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { FLAGS } from "@/i18n/flags";
+import { LANG_NAMES } from "@shared/i18n";
 import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 
 const HREFS = ['#chalet', '#priestory', '#okolie', '#cennik', '#rezervacia'] as const;
 
 export function Navigation() {
   const t = useT();
+  const lang = useLang();
+  const ActiveFlag = FLAGS[lang];
   const links = [
     { label: t.nav.chalet, href: HREFS[0] },
     { label: t.nav.priestory, href: HREFS[1] },
@@ -113,17 +117,25 @@ export function Navigation() {
           className="flex items-center gap-2.5 select-none group"
           aria-label={t.nav.home}
         >
-          {/* Brand logo (image) */}
+          {/* Brand logo. Explicit width and height plus flex-none: with only a
+              height set it was the element the flex row squeezed when the nav
+              ran out of space. */}
           <img
             src="/logo.png"
             alt="Chalet Beyond"
-            className="flex-shrink-0 w-auto select-none"
-            style={{ height: "44px", objectFit: "contain" }}
+            width={44}
+            height={44}
+            className="flex-none select-none"
+            style={{ width: "44px", height: "44px", objectFit: "contain" }}
           />
         </a>
 
-        {/* Desktop links */}
-        <div className="hidden items-center gap-1 md:flex">
+        {/* Full navigation — only where it actually fits.
+            It used to appear from 768px, where the row needs ~852px and the
+            viewport gives ~728px: the CTA ended up 52px past the right edge,
+            unreachable, because a fixed header does not scroll. Below xl the
+            compact cluster takes over and the links live in the menu. */}
+        <div className="hidden items-center gap-1 xl:flex">
           {links.map((link) => (
             <a
               key={link.label}
@@ -185,28 +197,68 @@ export function Navigation() {
           </a>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
-          aria-expanded={open}
-          onClick={() => setOpen(!open)}
-          className={cn(
-            'md:hidden flex items-center justify-center w-10 h-10 rounded-sm',
-            'border border-[rgba(180,120,40,0.25)] bg-transparent',
-            'text-[oklch(0.72_0.12_65)]',
-            'transition-all duration-200',
-            'hover:border-[rgba(180,120,40,0.5)] hover:bg-[rgba(180,120,40,0.08)]',
-            'active:scale-95',
-          )}
-        >
-          <MenuToggleIcon open={open} className="size-5" duration={300} />
-        </button>
+        {/* Compact cluster — everything below xl: reserve CTA, the active
+            language, and the menu. The links and the other languages are one
+            tap away inside the menu rather than fighting for the same row. */}
+        <div className="flex items-center gap-2 xl:hidden">
+          <a
+            href="#rezervacia"
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick('#rezervacia');
+            }}
+            className="hidden sm:flex items-center justify-center rounded-sm active:scale-[0.97]"
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: '0.8rem',
+              letterSpacing: '0.1em',
+              padding: '0.6rem 1rem',
+              minHeight: '44px',
+              background: 'linear-gradient(180deg, oklch(0.72 0.12 65) 0%, oklch(0.60 0.10 60) 100%)',
+              color: 'oklch(0.10 0.010 55)',
+              transition: 'transform var(--motion-ui) var(--ease-ui)',
+            }}
+          >
+            {t.nav.book}
+          </a>
+
+          {/* Active language. Opens the menu, where the full switcher lives —
+              four flags in the header is exactly the width we just reclaimed. */}
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label={LANG_NAMES[lang]}
+            className="flex items-center justify-center w-11 h-11 rounded-sm"
+            style={{
+              border: '1px solid rgba(180,120,40,0.25)',
+              transition: 'border-color var(--motion-ui) var(--ease-ui)',
+            }}
+          >
+            <ActiveFlag />
+          </button>
+
+          <button
+            aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
+            aria-expanded={open}
+            onClick={() => setOpen(!open)}
+            className={cn(
+              'flex items-center justify-center w-11 h-11 rounded-sm',
+              'border border-[rgba(180,120,40,0.25)] bg-transparent',
+              'text-[oklch(0.72_0.12_65)]',
+              'transition-all duration-200',
+              'hover:border-[rgba(180,120,40,0.5)] hover:bg-[rgba(180,120,40,0.08)]',
+              'active:scale-95',
+            )}
+          >
+            <MenuToggleIcon open={open} className="size-5" duration={300} />
+          </button>
+        </div>
       </div>
 
-      {/* Mobile full-screen menu overlay — simple fade+lift, no tw-animate-css. */}
+      {/* Menu overlay — carries the links and the full language switcher for
+          every width below xl, not just phones. */}
       <div
         className={cn(
-          'fixed right-0 bottom-0 left-0 z-50 flex flex-col overflow-y-auto md:hidden',
+          'fixed right-0 bottom-0 left-0 z-50 flex flex-col overflow-y-auto xl:hidden',
           'border-t border-[rgba(180,120,40,0.15)]',
           'bg-[oklch(0.06_0.008_55/0.98)] backdrop-blur-xl',
           open ? 'pointer-events-auto' : 'pointer-events-none',

@@ -29,11 +29,21 @@ export const inquirySchema = z
     to: isoDate,
     // Messages are spelled out because the client renders them verbatim to the
     // guest; Zod's defaults are English and read like internals.
+    // `guests` is the adult count: it selects the price tier.
     guests: z
       .number()
       .int()
-      .min(1, "Zadajte počet hostí")
+      .min(1, "Zadajte počet dospelých")
       .max(MAX_GUESTS, `Najviac ${MAX_GUESTS} hostí`),
+    // Children aged 0-15. Flat rate each, but they still occupy a bed, so the
+    // combined total is bounded below.
+    children: z
+      .number()
+      .int()
+      .min(0, "Počet detí nemôže byť záporný")
+      .max(MAX_GUESTS - 1, `Najviac ${MAX_GUESTS} hostí`)
+      .optional()
+      .default(0),
     name: z.string().trim().min(2, "Zadajte meno").max(100),
     email: z.email("Zadajte platný e-mail"),
     phone: z.string().trim().min(6, "Zadajte telefónne číslo").max(30),
@@ -42,6 +52,10 @@ export const inquirySchema = z
     // completes every field does. Checked in the handler, not rejected here —
     // a caught bot gets a normal-looking 200 rather than a hint to retry.
     website: z.string().max(200).optional(),
+  })
+  .refine((value) => value.guests + (value.children ?? 0) <= MAX_GUESTS, {
+    message: `Najviac ${MAX_GUESTS} hostí vrátane detí`,
+    path: ["children"],
   })
   .refine((value) => nightsBetween(value.from, value.to) >= MIN_NIGHTS, {
     message: `Minimálna dĺžka pobytu je ${MIN_NIGHTS} noci`,

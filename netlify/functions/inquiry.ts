@@ -66,7 +66,8 @@ export default async (request: Request): Promise<Response> => {
     );
   }
 
-  const { from, to, guests, name, email, phone, message, website } = parsed.data;
+  const { from, to, guests, children, name, email, phone, message, website } =
+    parsed.data;
 
   // Honeypot filled means a bot. Answer as if it worked: telling the caller it
   // was detected just invites a retry with the field left blank.
@@ -137,7 +138,7 @@ export default async (request: Request): Promise<Response> => {
     );
   }
 
-  const price = calcTotal(utc(from), utc(to), guests);
+  const price = calcTotal(utc(from), utc(to), guests, children);
   const resend = new Resend(apiKey);
 
   try {
@@ -146,10 +147,10 @@ export default async (request: Request): Promise<Response> => {
         from: SENDER,
         to: owner,
         replyTo: email,
-        subject: `Dopyt ${from} → ${to} · ${guests} hostí · ${price.total} €`,
+        subject: `Dopyt ${from} → ${to} · ${guests + children} hostí · ${price.total} €`,
         text: [
           `Termín:     ${from} → ${to} (${price.nights} nocí)`,
-          `Hostia:     ${guests}`,
+          `Hostia:     ${guests} dospelí${children ? `, ${children} detí (0–15 r.)` : ""}`,
           `Cena:       ${price.perNight} €/noc · spolu ${price.total} €`,
           `Na Bookingu by zaplatil ${price.bookingTotal} € (ušetril ${price.savings} €)`,
           "",
@@ -189,7 +190,7 @@ export default async (request: Request): Promise<Response> => {
           "ďakujeme za dopyt. Ozveme sa do 24 hodín.",
           "",
           `Termín:  ${from} → ${to} (${price.nights} nocí)`,
-          `Hostia:  ${guests}`,
+          `Hostia:  ${guests} dospelí${children ? `, ${children} detí (0–15 r.)` : ""}`,
           `Cena:    ${price.perNight} €/noc · spolu ${price.total} €`,
           "",
           "Toto je predbežná cena, nie záväzná rezervácia.",

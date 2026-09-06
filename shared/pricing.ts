@@ -45,12 +45,48 @@ export interface PriceBreakdown {
 
 const MS_PER_DAY = 86_400_000;
 
-export function calcTotal(from: Date, to: Date, guests: number): PriceBreakdown {
-  const perNight = PRICE_PER_NIGHT[guests];
-  const bookingPerNight = BOOKING_PRICE_PER_NIGHT[guests];
-  if (perNight === undefined || bookingPerNight === undefined) {
-    throw new Error(`No published rate for ${guests} guests`);
+/**
+ * Flat nightly rate per child, on top of the adult tier. Deliberately below the
+ * cheapest extra-adult step (45) so declaring a child as an adult is never
+ * cheaper — a test pins that relationship.
+ */
+export const CHILD_PRICE_PER_NIGHT = 40;
+
+/** Up to and including this age a guest is a child; from 16 they pay the adult tier. */
+export const CHILD_MAX_AGE = 15;
+
+/**
+ * @param adults  Guests aged 16 and over. Sets the tier.
+ * @param children Guests aged 0-15. Flat rate each, and they still occupy a bed.
+ */
+export function calcTotal(
+  from: Date,
+  to: Date,
+  adults: number,
+  children = 0,
+): PriceBreakdown {
+  if (!Number.isInteger(children) || children < 0) {
+    throw new Error(`Children must be a non-negative whole number, got ${children}`);
   }
+  // Eight beds is eight beds, whoever sleeps in them.
+  if (adults + children > MAX_GUESTS) {
+    throw new Error(
+      `At most ${MAX_GUESTS} guests, got ${adults} adults and ${children} children`,
+    );
+  }
+
+  const adultRate = PRICE_PER_NIGHT[adults];
+  const bookingAdultRate = BOOKING_PRICE_PER_NIGHT[adults];
+  if (adultRate === undefined || bookingAdultRate === undefined) {
+    throw new Error(`No published rate for ${adults} adults`);
+  }
+
+  const childSurcharge = CHILD_PRICE_PER_NIGHT * children;
+  // The same surcharge lands on both sides: Booking does not publish its child
+  // policy to us, so adding it only to our side would invent a discount we
+  // cannot stand behind. The advertised saving stays the adult-tier difference.
+  const perNight = adultRate + childSurcharge;
+  const bookingPerNight = bookingAdultRate + childSurcharge;
 
   // Math.round absorbs the 23- and 25-hour days either side of a clock change.
   const nights = Math.round((to.getTime() - from.getTime()) / MS_PER_DAY);

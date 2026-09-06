@@ -10,7 +10,7 @@ import { FadeUp } from "@/components/FadeUp";
 import { Calendar } from "@/components/ui/calendar";
 import { Users, CalendarDays, ArrowRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
-import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
+import { calcTotal, MAX_GUESTS, MIN_NIGHTS } from "@shared/pricing";
 import { useLang, useT } from "@/i18n/LanguageProvider";
 import {
   checkoutOnlyDays,
@@ -95,11 +95,111 @@ function useBlockedDates(): {
   return { blocked, failed, loading };
 }
 
+/**
+ * One labelled counter row. Two of these replace the single guest stepper:
+ * the adult count picks the price tier, children pay a flat rate.
+ *
+ * Targets are 44px because these are the smallest controls a guest has to hit
+ * on a phone; the old 28px buttons were below every touch guideline.
+ */
+function GuestCounter({
+  label,
+  hint,
+  value,
+  min,
+  max,
+  onChange,
+  decreaseLabel,
+  increaseLabel,
+}: {
+  label: string;
+  hint: string;
+  value: number;
+  min: number;
+  max: number;
+  onChange: (next: number) => void;
+  decreaseLabel: string;
+  increaseLabel: string;
+}) {
+  const step = (delta: number) =>
+    onChange(Math.min(max, Math.max(min, value + delta)));
+
+  const button = (delta: number, aria: string, glyph: string, disabled: boolean) => (
+    <button
+      type="button"
+      aria-label={aria}
+      disabled={disabled}
+      onClick={() => step(delta)}
+      className="w-11 h-11 flex items-center justify-center rounded-sm"
+      style={{
+        border: "1px solid oklch(0.72 0.12 65 / 0.3)",
+        color: "oklch(0.72 0.12 65)",
+        fontFamily: "'Karla', sans-serif",
+        fontSize: "1.1rem",
+        opacity: disabled ? 0.3 : 1,
+        cursor: disabled ? "not-allowed" : "pointer",
+        transition: "opacity var(--motion-ui) var(--ease-ui)",
+      }}
+    >
+      {glyph}
+    </button>
+  );
+
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center gap-2">
+        <Users size={14} style={{ color: "oklch(0.72 0.12 65)", flexShrink: 0 }} />
+        <div>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.65rem",
+              letterSpacing: "0.1em",
+              color: "oklch(0.58 0.020 65)",
+              textTransform: "uppercase",
+            }}
+          >
+            {label}
+          </p>
+          <p
+            style={{
+              fontFamily: "'Karla', sans-serif",
+              fontSize: "0.7rem",
+              fontWeight: 300,
+              color: "oklch(0.45 0.015 65)",
+              marginTop: "0.15rem",
+            }}
+          >
+            {hint}
+          </p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {button(-1, decreaseLabel, "\u2212", value <= min)}
+        <span
+          aria-live="polite"
+          style={{
+            fontFamily: "'Bebas Neue', sans-serif",
+            fontSize: "1.3rem",
+            color: "oklch(0.92 0.008 75)",
+            minWidth: "1.5rem",
+            textAlign: "center",
+          }}
+        >
+          {value}
+        </span>
+        {button(1, increaseLabel, "+", value >= max)}
+      </div>
+    </div>
+  );
+}
+
 export function BookingSection() {
   const t = useT();
   const lang = useLang();
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
-  const [guests, setGuests] = useState(2);
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
   const [step, setStep] = useState<"calendar" | "confirm">("calendar");
   const {
     blocked,
@@ -159,7 +259,7 @@ export function BookingSection() {
   // than returning a negative total, so a one-night selection would crash here.
   const price =
     dateRange?.from && dateRange?.to && nights >= MIN_NIGHTS
-      ? calcTotal(dateRange.from, dateRange.to, guests)
+      ? calcTotal(dateRange.from, dateRange.to, adults, children)
       : null;
   const canProceed = price !== null;
 
@@ -192,7 +292,8 @@ export function BookingSection() {
         body: JSON.stringify({
           from: isoDay(dateRange.from),
           to: isoDay(dateRange.to),
-          guests,
+          guests: adults,
+          children,
           ...form,
         }),
       });
@@ -589,66 +690,29 @@ export function BookingSection() {
               {/* Divider */}
               <div className="amber-rule" />
 
-              {/* Guests */}
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Users size={14} style={{ color: "oklch(0.72 0.12 65)" }} />
-                    <span
-                      style={{
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.1em",
-                        color: "oklch(0.58 0.020 65)",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {t.booking.guests}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      type="button"
-                      aria-label={t.booking.guestsDecrease}
-                      onClick={() => setGuests(Math.max(1, guests - 1))}
-                      className="w-7 h-7 flex items-center justify-center transition-colors duration-150"
-                      style={{
-                        border: "1px solid oklch(0.72 0.12 65 / 0.3)",
-                        color: "oklch(0.72 0.12 65)",
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      −
-                    </button>
-                    <span
-                      aria-live="polite"
-                      style={{
-                        fontFamily: "'Bebas Neue', sans-serif",
-                        fontSize: "1.3rem",
-                        color: "oklch(0.92 0.008 75)",
-                        minWidth: "1.5rem",
-                        textAlign: "center",
-                      }}
-                    >
-                      {guests}
-                    </span>
-                    <button
-                      type="button"
-                      aria-label={t.booking.guestsIncrease}
-                      onClick={() => setGuests(Math.min(8, guests + 1))}
-                      className="w-7 h-7 flex items-center justify-center transition-colors duration-150"
-                      style={{
-                        border: "1px solid oklch(0.72 0.12 65 / 0.3)",
-                        color: "oklch(0.72 0.12 65)",
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "1rem",
-                      }}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
+              {/* Guests. Two counters: the adult count picks the price tier,
+                  children pay a flat rate but still take a bed. */}
+              <div className="flex flex-col gap-4">
+                <GuestCounter
+                  label={t.booking.adults}
+                  hint={t.booking.adultsHint}
+                  value={adults}
+                  min={1}
+                  max={MAX_GUESTS - children}
+                  onChange={setAdults}
+                  decreaseLabel={t.booking.guestsDecrease}
+                  increaseLabel={t.booking.guestsIncrease}
+                />
+                <GuestCounter
+                  label={t.booking.children}
+                  hint={t.booking.childrenHint}
+                  value={children}
+                  min={0}
+                  max={MAX_GUESTS - adults}
+                  onChange={setChildren}
+                  decreaseLabel={t.booking.childrenDecrease}
+                  increaseLabel={t.booking.childrenIncrease}
+                />
                 <p
                   style={{
                     fontFamily: "'Karla', sans-serif",
@@ -660,6 +724,7 @@ export function BookingSection() {
                   {t.booking.maxGuests}
                 </p>
               </div>
+
 
               {status === "sent" ? (
                 <div

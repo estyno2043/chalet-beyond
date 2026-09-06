@@ -241,13 +241,28 @@ export function PricingSection() {
             </table>
           </div>
 
+          {/* The child rate sits above the fine print, not inside it: a family
+              deciding whether this fits their budget needs it at a glance. */}
+          <p
+            style={{
+              fontFamily: "'Karla', sans-serif",
+              fontSize: "0.85rem",
+              fontWeight: 400,
+              color: "oklch(0.78 0.015 75)",
+              marginTop: "1.25rem",
+              lineHeight: 1.6,
+            }}
+          >
+            {t.pricing.childPrice}
+          </p>
+
           <p
             style={{
               fontFamily: "'Karla', sans-serif",
               fontSize: "0.75rem",
               fontWeight: 300,
               color: "oklch(0.45 0.015 65)",
-              marginTop: "1rem",
+              marginTop: "0.6rem",
               lineHeight: 1.6,
             }}
           >

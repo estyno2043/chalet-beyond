@@ -4,7 +4,7 @@
  * Physical scene: Arriving at dusk, amber chalet glow against dark pine forest and Lomnický štít silhouette
  *
  * Sections:
- * 0. Hero — HeroMobile below 1024, HeroThresholdStory above
+ * 0. Hero — one looping shot, portrait below 1024, landscape above
  * 1. ChaletIntroSection — "Zážitok": what Chalet Beyond is + 4 feature tiles
  * 2. TextRevealSection — scroll-driven word-by-word text reveal (Framer Motion)
  * 3. GallerySection — 5 photos, asymmetric grid
@@ -18,8 +18,7 @@ import { useState, useEffect } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
-import { HeroThresholdStory } from "@/components/hero/HeroThresholdStory";
-import { HeroMobile } from "@/components/HeroMobile";
+import { Hero } from "@/components/hero/Hero";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -55,9 +54,20 @@ export default function Home() {
     >
       <ScrollProgressBar />
       <Navigation />
-      {/* Hero: below 1024 the compact walkthrough, above it the three-scene
-          Threshold Story. id="hero" lives inside both. */}
-      {isMobile ? <HeroMobile /> : <HeroThresholdStory />}
+      {/* One hero, two crops of the same place: a portrait interior loop on
+          phones, the landscape approach on wider screens. */}
+      {isMobile ? (
+        <Hero
+          compact
+          video="/videos/hero-mobile.mp4"
+          poster="/videos/hero-mobile-poster.jpg"
+        />
+      ) : (
+        <Hero
+          video="/videos/chapter1.mp4"
+          poster="/videos/hero-desktop-poster.jpg"
+        />
+      )}
       {/* Rest of the landing page below the hero */}
       <ChaletIntroSection />
       {/* Scroll-driven word-by-word text reveal */}

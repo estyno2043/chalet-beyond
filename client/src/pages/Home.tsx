@@ -19,6 +19,7 @@ import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { Hero } from "@/components/hero/Hero";
+import { HeroSCV } from "@/components/HeroSCV";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -63,10 +64,7 @@ export default function Home() {
           poster="/videos/hero-mobile-poster.jpg"
         />
       ) : (
-        <Hero
-          video="/videos/chapter1.mp4"
-          poster="/videos/hero-desktop-poster.jpg"
-        />
+        <HeroSCV />
       )}
       {/* Rest of the landing page below the hero */}
       <ChaletIntroSection />

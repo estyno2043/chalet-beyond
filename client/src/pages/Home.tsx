@@ -4,7 +4,7 @@
  * Physical scene: Arriving at dusk, amber chalet glow against dark pine forest and Lomnický štít silhouette
  *
  * Sections:
- * 0. HeroSCV — scroll-controlled video hero (3 chapters + brand reveal)
+ * 0. Hero — HeroMobile below 1024, HeroThresholdStory above
  * 1. ChaletIntroSection — "Zážitok": what Chalet Beyond is + 4 feature tiles
  * 2. TextRevealSection — scroll-driven word-by-word text reveal (Framer Motion)
  * 3. GallerySection — 5 photos, asymmetric grid
@@ -18,7 +18,7 @@ import { useState, useEffect } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
-import { HeroSCV } from "@/components/HeroSCV";
+import { HeroThresholdStory } from "@/components/hero/HeroThresholdStory";
 import { HeroMobile } from "@/components/HeroMobile";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
@@ -34,13 +34,15 @@ import { StickyContactBar } from "@/components/StickyContactBar";
 export default function Home() {
   useSmoothScroll();
 
-  // Initializer reads the real viewport before first paint so the mobile
-  // hero never mounts the SCV (and never preloads its 3 chapter videos).
+  // Boundary is 1024, not 767: the desktop story needs the width to hold three
+  // scenes and a persistent action, so tablets get the compact hero too.
+  // The initializer reads the real viewport before first paint, so the wrong
+  // hero never mounts and never fetches media the other one does not need.
   const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 767px)").matches,
+    () => window.matchMedia("(max-width: 1023px)").matches,
   );
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 767px)");
+    const mql = window.matchMedia("(max-width: 1023px)");
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
@@ -53,9 +55,9 @@ export default function Home() {
     >
       <ScrollProgressBar />
       <Navigation />
-      {/* Hero: mobile = looping interior walkthrough + animated brand reveal;
-          desktop = scroll-controlled SCV (3 chapters). id="hero" inside both. */}
-      {isMobile ? <HeroMobile /> : <HeroSCV />}
+      {/* Hero: below 1024 the compact walkthrough, above it the three-scene
+          Threshold Story. id="hero" lives inside both. */}
+      {isMobile ? <HeroMobile /> : <HeroThresholdStory />}
       {/* Rest of the landing page below the hero */}
       <ChaletIntroSection />
       {/* Scroll-driven word-by-word text reveal */}

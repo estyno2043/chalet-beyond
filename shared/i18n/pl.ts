@@ -28,6 +28,10 @@ export const pl: Dict = {
   hero: {
     tagline: "Tatry Wysokie · Black Stork Golf · Słowacja",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
+    proof: "na Booking.com",
+    ctaPrimary: "Sprawdź dostępność",
+    ctaSecondary: "Poznaj chalet",
+    capacity: "Cały obiekt · do {max} gości · prywatna sauna i jacuzzi",
     chapters: [
       { title: "POLE GOLFOWE BLACK STORK", subtitle: "uderzenie, od którego się zaczęło" },
       { title: "ZA KAŻDYM HORYZONTEM", subtitle: "27 dołków · jedyne pole PGA na Słowacji" },

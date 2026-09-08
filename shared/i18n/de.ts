@@ -31,6 +31,10 @@ export const de: Dict = {
   hero: {
     tagline: "Hohe Tatra · Black Stork Golf · Slowakei",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
+    proof: "auf Booking.com",
+    ctaPrimary: "Verfügbarkeit prüfen",
+    ctaSecondary: "Chalet entdecken",
+    capacity: "Ganzes Objekt · bis zu {max} Gäste · private Sauna und Whirlpool",
     chapters: [
       { title: "GOLFPLATZ BLACK STORK", subtitle: "der Schlag, mit dem alles begann" },
       { title: "HINTER JEDEM HORIZONT", subtitle: "27 Löcher · der einzige PGA-Platz der Slowakei" },

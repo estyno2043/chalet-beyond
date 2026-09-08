@@ -9,13 +9,37 @@
  * of a 10 000px page.
  */
 import { useLocation } from "wouter";
-import { LANGS, LANG_NAMES, pathForLang } from "@shared/i18n";
+import { LANGS, LANG_NAMES, pathForLang, type Lang } from "@shared/i18n";
 import { FLAGS } from "@/i18n/flags";
 import { useLang } from "@/i18n/LanguageProvider";
 
+/**
+ * Switching language while keeping the guest where they were.
+ *
+ * Shared so the inline switcher and the mobile dropdown cannot drift apart:
+ * the hash handling below is subtle enough that a second copy would eventually
+ * lose it.
+ */
+export function useLanguageNavigate() {
+  const [, navigate] = useLocation();
+
+  return (lang: Lang) => {
+    // Read at click time, not render time: React does not re-render when only
+    // the hash changes, so a captured value would be stale. And navigate()
+    // rewrites the URL, so it has to be read before the call, not after.
+    const hash = window.location.hash;
+    navigate(pathForLang(window.location.pathname, lang) + hash);
+    if (hash) {
+      requestAnimationFrame(() =>
+        document.querySelector(hash)?.scrollIntoView({ behavior: "auto" }),
+      );
+    }
+  };
+}
+
 export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const current = useLang();
-  const [, navigate] = useLocation();
+  const go = useLanguageNavigate();
 
   return (
     <div
@@ -37,15 +61,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
             href={href}
             onClick={(event) => {
               event.preventDefault();
-              // Captured before navigating: navigate() rewrites the URL and the
-              // hash is gone by the time the new page settles.
-              const hash = window.location.hash;
-              navigate(pathForLang(window.location.pathname, lang) + hash);
-              if (hash) {
-                requestAnimationFrame(() =>
-                  document.querySelector(hash)?.scrollIntoView({ behavior: "auto" }),
-                );
-              }
+              go(lang);
             }}
             hrefLang={lang}
             aria-label={LANG_NAMES[lang]}

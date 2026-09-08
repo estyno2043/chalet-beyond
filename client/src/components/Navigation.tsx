@@ -13,18 +13,15 @@ import { Mail, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScrollThreshold } from '@/components/ui/use-scroll';
-import { useLang, useT } from "@/i18n/LanguageProvider";
+import { useT } from "@/i18n/LanguageProvider";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { FLAGS } from "@/i18n/flags";
-import { LANG_NAMES } from "@shared/i18n";
+import { LanguageDropdown } from "@/components/LanguageDropdown";
 import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 
 const HREFS = ['#chalet', '#priestory', '#okolie', '#cennik', '#rezervacia'] as const;
 
 export function Navigation() {
   const t = useT();
-  const lang = useLang();
-  const ActiveFlag = FLAGS[lang];
   const links = [
     { label: t.nav.chalet, href: HREFS[0] },
     { label: t.nav.priestory, href: HREFS[1] },
@@ -222,19 +219,11 @@ export function Navigation() {
             {t.nav.book}
           </a>
 
-          {/* Active language. Opens the menu, where the full switcher lives —
-              four flags in the header is exactly the width we just reclaimed. */}
-          <button
-            onClick={() => setOpen(!open)}
-            aria-label={LANG_NAMES[lang]}
-            className="flex items-center justify-center w-11 h-11 rounded-sm"
-            style={{
-              border: '1px solid rgba(180,120,40,0.25)',
-              transition: 'border-color var(--motion-ui) var(--ease-ui)',
-            }}
-          >
-            <ActiveFlag />
-          </button>
+          {/* Active language, with its own short menu underneath. Switching
+              language is not a navigation task, so it does not go through the
+              burger — a guest who only wants German should not have to open
+              the whole menu to find it. */}
+          <LanguageDropdown />
 
           <button
             aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
@@ -254,8 +243,8 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Menu overlay — carries the links and the full language switcher for
-          every width below xl, not just phones. */}
+      {/* Menu overlay — links only. The language switcher moved out to the
+          flag in the bar, which now carries its own menu. */}
       <div
         className={cn(
           'fixed right-0 bottom-0 left-0 z-50 flex flex-col overflow-y-auto xl:hidden',
@@ -311,9 +300,6 @@ export function Navigation() {
           </div>
 
           <div className="flex flex-col gap-3 pb-8">
-            <div className="pb-2">
-              <LanguageSwitcher compact />
-            </div>
             <a
               href="#rezervacia"
               onClick={(e) => {

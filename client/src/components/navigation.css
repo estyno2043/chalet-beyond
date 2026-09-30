@@ -1,0 +1,56 @@
+/* Header height as one token: the menu overlay and anchor offsets read it, so
+   the contact strip (md and up) cannot push content under the bar unnoticed. */
+:root {
+  --nav-height: 72px;
+}
+@media (min-width: 768px) {
+  :root {
+    --nav-height: 100px;
+  }
+}
+.chalet-navigation__contact {
+  width: min(100%, 1600px);
+  height: 28px;
+  padding-inline: 24px;
+}
+.chalet-navigation__inner {
+  width: min(100%, 1600px);
+  height: 72px;
+  padding-inline: 24px;
+}
+.chalet-navigation__book {
+  border-radius: 2px;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+.chalet-navigation__book:active {
+  transform: scale(0.98);
+}
+.chalet-navigation :is(a, button):focus-visible {
+  outline: 2px solid oklch(0.92 0.008 75);
+  outline-offset: 4px;
+}
+@media (min-width: 640px) {
+  .chalet-navigation__inner,
+  .chalet-navigation__contact {
+    padding-inline: 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .chalet-navigation__inner,
+  .chalet-navigation__contact {
+    padding-inline: 64px;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .chalet-navigation__book:hover {
+    opacity: 0.88;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chalet-navigation *,
+  .chalet-navigation {
+    transition: none !important;
+  }
+}

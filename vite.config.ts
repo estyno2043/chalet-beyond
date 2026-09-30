@@ -203,7 +203,15 @@ function vitePluginStorageProxy(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginStorageProxy()];
+// Editor instrumentation belongs to the dev server, not a guest's page load.
+const plugins = [
+  react(),
+  tailwindcss(),
+  { ...jsxLocPlugin(), apply: "serve" as const },
+  { ...vitePluginManusRuntime(), apply: "serve" as const },
+  { ...vitePluginManusDebugCollector(), apply: "serve" as const },
+  vitePluginStorageProxy(),
+];
 
 export default defineConfig({
   plugins,

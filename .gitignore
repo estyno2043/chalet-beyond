@@ -123,3 +123,6 @@ deno.lock
 # restores the same set with `npx skills install`.
 .agents/
 .claude/skills/
+
+# Local visual QA captures and browser measurements
+.impeccable/review/

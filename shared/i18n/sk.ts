@@ -24,6 +24,15 @@ export const sk = {
   },
 
   hero: {
+    description:
+      "Súkromný chalet vo Veľkej Lomnici. Celý priestor len pre vás.",
+    factsLabel: "Parametre chaletu",
+    bedrooms: "3 spálne",
+    guests: "Do 8 hostí",
+    availability: "Overiť dostupnosť",
+    explore: "Prezrieť priestory",
+    playVideo: "Prehrať video",
+    pauseVideo: "Pozastaviť video",
     tagline: "Vysoké Tatry · Black Stork Golf · Slovakia",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
     proof: "na Booking.com",
@@ -31,9 +40,18 @@ export const sk = {
     ctaSecondary: "Objaviť chalet",
     capacity: "Celý objekt · až {max} hostí · súkromná sauna a vírivka",
     chapters: [
-      { title: "GOLFOVÉ IHRISKO BLACK STORK", subtitle: "úder, ktorý všetko začal" },
-      { title: "ZA KAŽDÝM HORIZONTOM", subtitle: "27 jamiek · jediné PGA ihrisko na Slovensku" },
-      { title: "VAŠE SÚKROMNÉ ÚTOČISKO", subtitle: "štyri ročné obdobia · jedna adresa" },
+      {
+        title: "GOLFOVÉ IHRISKO BLACK STORK",
+        subtitle: "úder, ktorý všetko začal",
+      },
+      {
+        title: "ZA KAŽDÝM HORIZONTOM",
+        subtitle: "27 jamiek · jediné PGA ihrisko na Slovensku",
+      },
+      {
+        title: "VAŠE SÚKROMNÉ ÚTOČISKO",
+        subtitle: "štyri ročné obdobia · jedna adresa",
+      },
     ],
   },
 
@@ -180,10 +198,12 @@ export const sk = {
     eyebrow: "Rezervácia",
     headlineA: "PREKONÁVA VAŠE",
     headlineB: "OČAKÁVANIA",
-    intro: "Iba priama rezervácia – žiadne poplatky za platformu, žiadni sprostredkovatelia.",
+    intro:
+      "Iba priama rezervácia – žiadne poplatky za platformu, žiadni sprostredkovatelia.",
     pickDates: "Vyberte dátumy",
     availabilityLoading: "Načítavam obsadené termíny…",
-    availabilityFailed: "Obsadenosť sa nepodarilo načítať — dostupnosť overíme e-mailom.",
+    availabilityFailed:
+      "Obsadenosť sa nepodarilo načítať — dostupnosť overíme e-mailom.",
     checkIn: "Check-in",
     checkOut: "Check-out",
     propertyName: "Chalet Beyond",

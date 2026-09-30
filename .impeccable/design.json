@@ -1,0 +1,332 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-30T13:51:42.055789Z",
+  "title": "Design System: Chalet Beyond",
+  "extensions": {
+    "scope": "Inherited global tokens and CSS utilities; implemented hero/navigation only. Other page components were not audited. Component snippets are visual extracts without application runtime.",
+    "sourceFiles": [
+      "client/src/index.css",
+      "client/src/fonts.css",
+      "client/src/components/Hero.tsx",
+      "client/src/components/HeroPointer.tsx",
+      "client/src/components/hero.css",
+      "client/src/components/Navigation.tsx",
+      "client/src/components/navigation.css",
+      "client/src/components/LanguageSwitcher.tsx"
+    ],
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Amber",
+        "tonalRamp": [
+          "oklch(0.15 0.12 65)",
+          "oklch(0.25 0.12 65)",
+          "oklch(0.35 0.12 65)",
+          "oklch(0.45 0.12 65)",
+          "oklch(0.6 0.12 65)",
+          "oklch(0.75 0.12 65)",
+          "oklch(0.85 0.12 65)",
+          "oklch(0.95 0.12 65)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Dark timber",
+        "tonalRamp": [
+          "oklch(0.15 0.012 55)",
+          "oklch(0.25 0.012 55)",
+          "oklch(0.35 0.012 55)",
+          "oklch(0.45 0.012 55)",
+          "oklch(0.6 0.012 55)",
+          "oklch(0.75 0.012 55)",
+          "oklch(0.85 0.012 55)",
+          "oklch(0.95 0.012 55)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Pale text",
+        "tonalRamp": [
+          "oklch(0.15 0.008 75)",
+          "oklch(0.25 0.008 75)",
+          "oklch(0.35 0.008 75)",
+          "oklch(0.45 0.008 75)",
+          "oklch(0.6 0.008 75)",
+          "oklch(0.75 0.008 75)",
+          "oklch(0.85 0.008 75)",
+          "oklch(0.95 0.008 75)"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Raised timber",
+        "tonalRamp": [
+          "oklch(0.15 0.012 55)",
+          "oklch(0.25 0.012 55)",
+          "oklch(0.35 0.012 55)",
+          "oklch(0.45 0.012 55)",
+          "oklch(0.6 0.012 55)",
+          "oklch(0.75 0.012 55)",
+          "oklch(0.85 0.012 55)",
+          "oklch(0.95 0.012 55)"
+        ]
+      },
+      "secondary": {
+        "role": "neutral",
+        "displayName": "Secondary timber",
+        "tonalRamp": [
+          "oklch(0.15 0.012 55)",
+          "oklch(0.25 0.012 55)",
+          "oklch(0.35 0.012 55)",
+          "oklch(0.45 0.012 55)",
+          "oklch(0.6 0.012 55)",
+          "oklch(0.75 0.012 55)",
+          "oklch(0.85 0.012 55)",
+          "oklch(0.95 0.012 55)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Muted text",
+        "tonalRamp": [
+          "oklch(0.15 0.02 65)",
+          "oklch(0.25 0.02 65)",
+          "oklch(0.35 0.02 65)",
+          "oklch(0.45 0.02 65)",
+          "oklch(0.6 0.02 65)",
+          "oklch(0.75 0.02 65)",
+          "oklch(0.85 0.02 65)",
+          "oklch(0.95 0.02 65)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Amber edge",
+        "tonalRamp": [
+          "oklch(0.15 0.12 65 / 0.18)",
+          "oklch(0.25 0.12 65 / 0.18)",
+          "oklch(0.35 0.12 65 / 0.18)",
+          "oklch(0.45 0.12 65 / 0.18)",
+          "oklch(0.6 0.12 65 / 0.18)",
+          "oklch(0.75 0.12 65 / 0.18)",
+          "oklch(0.85 0.12 65 / 0.18)",
+          "oklch(0.95 0.12 65 / 0.18)"
+        ]
+      },
+      "hero-ink": {
+        "role": "neutral",
+        "displayName": "Hero ink",
+        "tonalRamp": [
+          "oklch(0.15 0.007 75)",
+          "oklch(0.25 0.007 75)",
+          "oklch(0.35 0.007 75)",
+          "oklch(0.45 0.007 75)",
+          "oklch(0.6 0.007 75)",
+          "oklch(0.75 0.007 75)",
+          "oklch(0.85 0.007 75)",
+          "oklch(0.95 0.007 75)"
+        ]
+      },
+      "hero-dark": {
+        "role": "neutral",
+        "displayName": "Hero dark",
+        "tonalRamp": [
+          "oklch(0.15 0.01 55)",
+          "oklch(0.25 0.01 55)",
+          "oklch(0.35 0.01 55)",
+          "oklch(0.45 0.01 55)",
+          "oklch(0.6 0.01 55)",
+          "oklch(0.75 0.01 55)",
+          "oklch(0.85 0.01 55)",
+          "oklch(0.95 0.01 55)"
+        ]
+      },
+      "hero-hover": {
+        "role": "primary",
+        "displayName": "Hero hover",
+        "tonalRamp": [
+          "oklch(0.15 0.075 75)",
+          "oklch(0.25 0.075 75)",
+          "oklch(0.35 0.075 75)",
+          "oklch(0.45 0.075 75)",
+          "oklch(0.6 0.075 75)",
+          "oklch(0.75 0.075 75)",
+          "oklch(0.85 0.075 75)",
+          "oklch(0.95 0.075 75)"
+        ]
+      }
+    },
+    "tonalRampNote": "Synthesized OKLCH preview ramps only, retaining source hue/chroma and alpha. These ramps are not implemented palette tokens or approved additional brand colors.",
+    "typographyMeta": {
+      "display": {
+        "displayName": "Hero display",
+        "purpose": "Scoped two-line hero title; 6rem at desktop."
+      },
+      "headline": {
+        "displayName": "Inherited section heading",
+        "purpose": "Existing global section-heading utility; not a page-wide audit."
+      },
+      "body": {
+        "displayName": "Inherited body",
+        "purpose": "Existing document body family, weight and leading."
+      },
+      "hero-body": {
+        "displayName": "Hero description",
+        "purpose": "Hero-only short prose; increases to 1.25rem on desktop."
+      },
+      "hero-action": {
+        "displayName": "Hero primary action",
+        "purpose": "Karla semibold inquiry action."
+      },
+      "label": {
+        "displayName": "Inherited data label",
+        "purpose": "Existing mono data utility."
+      },
+      "navigation": {
+        "displayName": "Desktop navigation",
+        "purpose": "Karla medium desktop links."
+      }
+    },
+    "shadows": [
+      {
+        "name": "inherited-amber-button-hover",
+        "value": "0 0 32px oklch(0.72 0.12 65 / 0.35)",
+        "purpose": "Inherited global amber utility only."
+      },
+      {
+        "name": "inherited-ghost-button-hover",
+        "value": "0 0 20px oklch(0.72 0.12 65 / 0.15)",
+        "purpose": "Inherited global ghost utility only."
+      },
+      {
+        "name": "inherited-mobile-menu-cta",
+        "value": "0 0 0 1px rgba(180,120,40,0.3), 0 4px 16px rgba(180,120,40,0.3)",
+        "purpose": "Existing mobile menu action; not the hero CTA."
+      }
+    ],
+    "motion": [
+      {
+        "name": "inherited-ease-out-expo",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Existing global utility transitions."
+      },
+      {
+        "name": "hero-entrance-ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Hero title 700ms, second line delay 80ms; copy 650ms, description/facts delays 100/150ms. Omitted for reduced motion."
+      },
+      {
+        "name": "hero-control",
+        "value": "180ms ease",
+        "purpose": "Hero state changes; transitions removed for reduced motion."
+      },
+      {
+        "name": "hero-video-reveal",
+        "value": "320ms ease-out",
+        "purpose": "Reveal decoded video over the poster."
+      },
+      {
+        "name": "hero-pointer-content",
+        "value": "160ms ease-out",
+        "purpose": "Inner content only, at most 4px horizontal and 3px vertical; desktop fine mouse only and no reduced motion. Event-driven, no idle loop."
+      },
+      {
+        "name": "navigation-menu",
+        "value": "250ms ease",
+        "purpose": "Compact menu fade and 8px lift; suppressed for reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "medium-gutter",
+        "value": "640px"
+      },
+      {
+        "name": "desktop-hero",
+        "value": "1024px"
+      },
+      {
+        "name": "full-navigation",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Amber button — inherited utility",
+      "kind": "button",
+      "refersTo": "button-amber-inherited",
+      "description": "Existing global display-font button; preserves its inherited glow and browser focus geometry. Not the new hero primary action.",
+      "html": "<button type=\"button\" class=\"ds-amber\">Overiť dostupnosť</button>",
+      "css": ".ds-amber { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary, oklch(0.72 0.12 65)); color: var(--background, oklch(0.1 0.012 55)); font-family: var(--font-display-family, \"Bebas Neue\", sans-serif); font-size: 1.1rem; font-weight: 300; line-height: 1.65; letter-spacing: 0.05em; padding: 0.75rem 2rem; border: none; cursor: pointer; transition: background 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), transform 0.16s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), box-shadow 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)); } .ds-amber:hover { background: oklch(0.78 0.13 65); box-shadow: 0 0 32px oklch(0.72 0.12 65 / 0.35); } .ds-amber:active { transform: scale(0.97); } .ds-amber:focus-visible { outline-color: color-mix(in oklab, var(--ring, oklch(0.72 0.12 65 / 0.5)) 50%, transparent); } @media (prefers-reduced-motion: reduce) { .ds-amber { transition-duration: 0.01ms; } }"
+    },
+    {
+      "name": "Ghost button — inherited utility",
+      "kind": "button",
+      "refersTo": "button-ghost-inherited",
+      "description": "Existing global outlined display-font button; amber glow is inherited, not a hero treatment.",
+      "html": "<button type=\"button\" class=\"ds-ghost\">Pozrieť priestory</button>",
+      "css": ".ds-ghost { display: inline-flex; align-items: center; gap: 0.5rem; background: transparent; color: var(--foreground, oklch(0.92 0.008 75)); font-family: var(--font-display-family, \"Bebas Neue\", sans-serif); font-size: 1.1rem; font-weight: 300; line-height: 1.65; letter-spacing: 0.05em; padding: 0.75rem 2rem; border: 1px solid oklch(0.72 0.12 65 / 0.4); cursor: pointer; transition: border-color 0.2s, color 0.2s, box-shadow 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), transform 0.16s; } .ds-ghost:hover { border-color: oklch(0.72 0.12 65 / 0.8); color: var(--primary, oklch(0.72 0.12 65)); box-shadow: 0 0 20px oklch(0.72 0.12 65 / 0.15); } .ds-ghost:active { transform: scale(0.97); } .ds-ghost:focus-visible { outline-color: color-mix(in oklab, var(--ring, oklch(0.72 0.12 65 / 0.5)) 50%, transparent); } @media (prefers-reduced-motion: reduce) { .ds-ghost { transition-duration: 0.01ms; } }"
+    },
+    {
+      "name": "Hero primary action",
+      "kind": "button",
+      "refersTo": "hero-primary",
+      "description": "Pale, high-contrast inquiry anchor. Cursor-driven content translation is runtime behavior documented in DESIGN.md, not simulated here.",
+      "html": "<a href=\"#rezervacia\" class=\"ds-hero-primary\"><span class=\"ds-hero-primary-content\">Overiť dostupnosť<svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></span></a>",
+      "css": ".ds-hero-primary { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 56px; padding: 14px 20px; border-radius: 2px; background: var(--hero-ink, oklch(0.97 0.007 75)); color: var(--hero-dark, oklch(0.12 0.01 55)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 1rem; font-weight: 600; line-height: 1.4; text-decoration: none; white-space: nowrap; transition: background-color 180ms ease, transform 180ms ease; } .ds-hero-primary-content { display: inline-flex; flex: 1; align-items: center; justify-content: space-between; gap: inherit; } .ds-hero-primary svg { flex: none; transition: transform 180ms ease; } .ds-hero-primary:active { transform: scale(0.98); } .ds-hero-primary:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (min-width: 1024px) { .ds-hero-primary { min-width: 224px; } } @media (hover: hover) and (pointer: fine) { .ds-hero-primary:hover { background: oklch(0.84 0.075 75); } .ds-hero-primary:hover svg { transform: translateX(3px); } } @media (prefers-reduced-motion: reduce) { .ds-hero-primary, .ds-hero-primary svg { transition: none; } .ds-hero-primary:active { transform: none; } }"
+    },
+    {
+      "name": "Hero gallery action",
+      "kind": "button",
+      "refersTo": "hero-secondary",
+      "description": "Underlined secondary anchor with a 48px minimum target height.",
+      "html": "<a href=\"#priestory\" class=\"ds-hero-secondary\">Pozrieť priestory</a>",
+      "css": ".ds-hero-secondary { display: inline-flex; align-items: center; min-height: 48px; color: var(--hero-ink, oklch(0.97 0.007 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.9375rem; font-weight: 500; line-height: 1.4; text-decoration: underline; text-decoration-color: rgb(245 244 239 / 0.5); text-underline-offset: 6px; transition: text-decoration-color 180ms ease; } .ds-hero-secondary:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (hover: hover) and (pointer: fine) { .ds-hero-secondary:hover { text-decoration-color: currentColor; } } @media (prefers-reduced-motion: reduce) { .ds-hero-secondary { transition: none; } }"
+    },
+    {
+      "name": "Hero playback control",
+      "kind": "button",
+      "refersTo": "hero-playback",
+      "description": "Visual play-state sample. The application supplies play/pause state and accessible localized labels.",
+      "html": "<button type=\"button\" class=\"ds-hero-playback\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polygon points=\"6 3 20 12 6 21 6 3\"/></svg><span>Prehrať video</span></button>",
+      "css": ".ds-hero-playback { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 10px 14px; border: 1px solid rgb(245 244 239 / 0.38); border-radius: 2px; background: rgb(12 14 12 / 0.6); color: var(--hero-ink, oklch(0.97 0.007 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.8125rem; font-weight: 400; line-height: 1.4; cursor: pointer; transition: background-color 180ms ease; } .ds-hero-playback:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (hover: hover) and (pointer: fine) { .ds-hero-playback:hover { background: rgb(12 14 12 / 0.85); } } @media (prefers-reduced-motion: reduce) { .ds-hero-playback { transition: none; } }"
+    },
+    {
+      "name": "Desktop navigation link",
+      "kind": "nav",
+      "refersTo": "navigation-link",
+      "description": "Desktop navigation item with the existing amber underline reveal. Full desktop navigation appears from 1280px.",
+      "html": "<nav aria-label=\"Navigation sample\"><a href=\"#priestory\" class=\"ds-nav-link\">Priestory</a></nav>",
+      "css": ".ds-nav-link { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 6px 12px; color: var(--foreground, oklch(0.92 0.008 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.875rem; font-weight: 500; line-height: 1.25rem; text-decoration: none; transition: color 200ms; } .ds-nav-link::after { content: \"\"; position: absolute; bottom: 0; left: 12px; right: 12px; height: 1px; background: var(--primary, oklch(0.72 0.12 65)); transform: scaleX(0); transform-origin: left; transition: transform 300ms ease-out; } .ds-nav-link:hover { color: oklch(0.82 0.08 75); } .ds-nav-link:hover::after { transform: scaleX(1); } .ds-nav-link:focus-visible { outline: 2px solid var(--foreground, oklch(0.92 0.008 75)); outline-offset: 4px; } @media (prefers-reduced-motion: reduce) { .ds-nav-link, .ds-nav-link::after { transition: none; } }"
+    },
+    {
+      "name": "Desktop navigation action",
+      "kind": "button",
+      "refersTo": "navigation-book",
+      "description": "Amber navigation inquiry anchor with Karla text and a 44px minimum target height.",
+      "html": "<a href=\"#rezervacia\" class=\"ds-nav-book\">Rezervovať</a>",
+      "css": ".ds-nav-book { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 20px; border-radius: 2px; background: var(--primary, oklch(0.72 0.12 65)); color: oklch(0.10 0.010 55); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.875rem; font-weight: 600; line-height: 1.25rem; text-decoration: none; transition: opacity 180ms ease, transform 180ms ease; } .ds-nav-book:active { transform: scale(0.98); } .ds-nav-book:focus-visible { outline: 2px solid var(--foreground, oklch(0.92 0.008 75)); outline-offset: 4px; } @media (hover: hover) and (pointer: fine) { .ds-nav-book:hover { opacity: 0.88; } } @media (prefers-reduced-motion: reduce) { .ds-nav-book { transition: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Dark Timber",
+    "overview": "The inherited identity pairs deep charcoal, warm amber and pale type with the\nexisting chalet logo. Its source describes arrival at dusk: a warm chalet against\ndark pine forest. Condensed display lettering gives the identity weight; lighter\nbody text keeps information readable.\n\nThe implemented hero is a scoped expression of that identity: supplied exterior\nfootage, a compact two-line property name and a clear availability action. Its\nminimal composition and restrained response to input apply to this hero, not to\nevery future page layout.",
+    "keyCharacteristics": [
+      "Inherited dark surfaces, amber accents and the existing logo.",
+      "Bebas Neue display type, Karla prose and JetBrains Mono data labels.",
+      "Hero-specific pale controls, static contrast shading and brief entrance motion."
+    ],
+    "rules": [],
+    "dos": [
+      "Do retain the inherited logo, Dark Timber palette and three font families.",
+      "Do keep hero copy and actions legible over both the poster and moving footage.",
+      "Do preserve visible keyboard focus, stationary action hit areas and reduced-motion behavior in the hero and navigation."
+    ],
+    "donts": [
+      "Don't promote the hero's two-line title, lower-left composition or 1600px container into a mandatory site-wide layout.",
+      "Don't add invented ratings, prices or instant-booking promises to the hero.",
+      "Don't replace poster-first compact playback with automatic video loading."
+    ]
+  }
+}

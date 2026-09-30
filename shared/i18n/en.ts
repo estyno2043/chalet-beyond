@@ -23,6 +23,15 @@ export const en: Dict = {
   },
 
   hero: {
+    description:
+      "A private chalet in Veľká Lomnica. The whole place, just for you.",
+    factsLabel: "Chalet details",
+    bedrooms: "3 bedrooms",
+    guests: "Up to 8 guests",
+    availability: "Check availability",
+    explore: "Explore the chalet",
+    playVideo: "Play video",
+    pauseVideo: "Pause video",
     tagline: "High Tatras · Black Stork Golf · Slovakia",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
     proof: "on Booking.com",
@@ -30,8 +39,14 @@ export const en: Dict = {
     ctaSecondary: "Explore the chalet",
     capacity: "Whole property · up to {max} guests · private sauna and hot tub",
     chapters: [
-      { title: "BLACK STORK GOLF COURSE", subtitle: "the shot that started it all" },
-      { title: "BEYOND EVERY HORIZON", subtitle: "27 holes · the only PGA course in Slovakia" },
+      {
+        title: "BLACK STORK GOLF COURSE",
+        subtitle: "the shot that started it all",
+      },
+      {
+        title: "BEYOND EVERY HORIZON",
+        subtitle: "27 holes · the only PGA course in Slovakia",
+      },
       { title: "YOUR PRIVATE RETREAT", subtitle: "four seasons · one address" },
     ],
   },
@@ -182,7 +197,8 @@ export const en: Dict = {
     intro: "Direct booking only – no platform fees, no intermediaries.",
     pickDates: "Choose your dates",
     availabilityLoading: "Loading availability…",
-    availabilityFailed: "Availability could not be loaded — we will confirm it by email.",
+    availabilityFailed:
+      "Availability could not be loaded — we will confirm it by email.",
     checkIn: "Check-in",
     checkOut: "Check-out",
     propertyName: "Chalet Beyond",

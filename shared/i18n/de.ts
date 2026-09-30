@@ -29,6 +29,15 @@ export const de: Dict = {
   },
 
   hero: {
+    description:
+      "Ihr privates Chalet in Veľká Lomnica. Das ganze Haus nur für Sie.",
+    factsLabel: "Chalet im Überblick",
+    bedrooms: "3 Schlafzimmer",
+    guests: "Bis zu 8 Gäste",
+    availability: "Verfügbarkeit prüfen",
+    explore: "Räume entdecken",
+    playVideo: "Video abspielen",
+    pauseVideo: "Video pausieren",
     tagline: "Hohe Tatra · Black Stork Golf · Slowakei",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
     proof: "auf Booking.com",
@@ -36,9 +45,18 @@ export const de: Dict = {
     ctaSecondary: "Chalet entdecken",
     capacity: "Ganzes Objekt · bis zu {max} Gäste · private Sauna und Whirlpool",
     chapters: [
-      { title: "GOLFPLATZ BLACK STORK", subtitle: "der Schlag, mit dem alles begann" },
-      { title: "HINTER JEDEM HORIZONT", subtitle: "27 Löcher · der einzige PGA-Platz der Slowakei" },
-      { title: "IHR PRIVATER RÜCKZUGSORT", subtitle: "vier Jahreszeiten · eine Adresse" },
+      {
+        title: "GOLFPLATZ BLACK STORK",
+        subtitle: "der Schlag, mit dem alles begann",
+      },
+      {
+        title: "HINTER JEDEM HORIZONT",
+        subtitle: "27 Löcher · der einzige PGA-Platz der Slowakei",
+      },
+      {
+        title: "IHR PRIVATER RÜCKZUGSORT",
+        subtitle: "vier Jahreszeiten · eine Adresse",
+      },
     ],
   },
 
@@ -188,7 +206,8 @@ export const de: Dict = {
     intro: "Nur Direktbuchung – keine Plattformgebühren, keine Vermittler.",
     pickDates: "Zeitraum wählen",
     availabilityLoading: "Belegte Termine werden geladen …",
-    availabilityFailed: "Die Belegung konnte nicht geladen werden — wir bestätigen die Verfügbarkeit per E-Mail.",
+    availabilityFailed:
+      "Die Belegung konnte nicht geladen werden — wir bestätigen die Verfügbarkeit per E-Mail.",
     checkIn: "Check-in",
     checkOut: "Check-out",
     propertyName: "Chalet Beyond",
@@ -205,11 +224,13 @@ export const de: Dict = {
     submit: "Unverbindlich anfragen",
     sending: "Wird gesendet…",
     sentTitle: "Anfrage gesendet",
-    sentBody: "Wir melden uns innerhalb von 24 Stunden. Eine Bestätigung ging an",
+    sentBody:
+      "Wir melden uns innerhalb von 24 Stunden. Eine Bestätigung ging an",
     sentBodyNoEmail: "Wir melden uns innerhalb von 24 Stunden.",
     needTwoNights: "Wählen Sie einen Zeitraum von mindestens 2 Nächten",
     sendFailed: "Senden fehlgeschlagen",
-    datesTaken: "Dieser Zeitraum ist inzwischen belegt. Bitte wählen Sie einen anderen.",
+    datesTaken:
+      "Dieser Zeitraum ist inzwischen belegt. Bitte wählen Sie einen anderen.",
     guestsDecrease: "Weniger Gäste",
     guestsIncrease: "Mehr Gäste",
     adults: "Erwachsene",

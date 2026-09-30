@@ -3,7 +3,7 @@
   --hero-ink: oklch(0.97 0.007 75);
   --hero-dark: oklch(0.12 0.01 55);
   --hero-amber: oklch(0.72 0.12 65);
-  --hero-line: rgb(245 244 239 / 0.42);
+  --hero-sand: oklch(0.85 0.06 74);
   --hero-ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   isolation: isolate;
@@ -71,22 +71,24 @@
   transform: scale(1);
 }
 
+/* Editorial layout after the owner's reference: the copy sits indented from
+   the bar's gutter, the action and a direct line share one row, and the facts
+   run along the bottom under a hairline. */
 .chalet-hero__layout {
+  --hero-inset: 24px;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
-  gap: 24px;
   width: min(100%, 1600px);
   min-height: 100svh;
   margin-inline: auto;
-  padding: 104px 24px 24px;
+  padding: 104px 24px 28px var(--hero-inset);
 }
 
 .chalet-hero__content {
   width: 100%;
-  max-width: 640px;
+  max-width: 720px;
 }
 
 /* Thunder is extremely condensed: at the same width it needs about 1.7x the
@@ -94,7 +96,7 @@
 .chalet-hero__title {
   margin: 0 0 0 -0.02em;
   font-family: "Thunder", var(--font-display-family);
-  font-size: clamp(6.25rem, 31vw, 10.5rem);
+  font-size: clamp(5.5rem, min(30vw, 17svh), 9.5rem);
   font-weight: 600;
   line-height: 0.84;
   letter-spacing: 0.004em;
@@ -103,6 +105,11 @@
 .chalet-hero__line {
   display: block;
   white-space: nowrap;
+}
+/* Two tones, as in the reference: the name in pale ink, its second word in
+   warm sand drawn from the brand amber. */
+.chalet-hero__line + .chalet-hero__line {
+  color: var(--hero-sand);
 }
 .chalet-hero__letter {
   display: inline-block;
@@ -118,214 +125,121 @@
 }
 
 .chalet-hero__description {
-  max-width: 34ch;
-  margin: 22px 0 0;
+  max-width: 36ch;
+  margin: 28px 0 0;
   font: 400 1.0625rem/1.5 var(--font-body-family);
+  color: oklch(0.93 0.008 75);
   text-wrap: pretty;
 }
-.chalet-hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  padding: 0;
-  margin: 12px 0 0;
-  list-style: none;
-  font: 400 0.875rem/1.5 var(--font-body-family);
-  color: oklch(0.88 0.01 75);
-  font-variant-numeric: tabular-nums;
-}
 
-/* Offer: the action and everything a guest weighs before taking it. */
-.chalet-hero__offer {
-  margin-top: 28px;
-}
 .chalet-hero__actions {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 10px;
+  gap: 22px;
+  margin-top: 32px;
 }
-/* Stacked on phones: separators at the start of a wrapped line read as noise. */
-.chalet-hero__proof {
+.chalet-hero__direct {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+}
+.chalet-hero__direct-label {
+  font: 700 0.6875rem/1 var(--font-body-family);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hero-sand);
+}
+.chalet-hero__direct-phone {
+  align-self: flex-start;
+  font: 600 1.1875rem/1.2 var(--font-body-family);
+  font-variant-numeric: tabular-nums;
+  color: var(--hero-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(245 244 239 / 0.55);
+  text-underline-offset: 7px;
+  transition: text-decoration-color 240ms ease-out;
+}
+
+/* Facts along the bottom. */
+.chalet-hero__footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 24px;
+}
+.chalet-hero__footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgb(245 244 239 / 0.18);
+  transform-origin: left;
+}
+.chalet-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  width: 100%;
+  margin: 0;
+}
+.chalet-hero__stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
   gap: 6px;
-  padding: 0;
-  margin: 16px 0 0;
-  list-style: none;
-  font: 400 0.8125rem/1.4 var(--font-body-family);
+}
+.chalet-hero__stat dd {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+  font: 600 2.25rem/0.9 "Thunder", var(--font-display-family);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.chalet-hero__stat dd small {
+  font: 600 0.8125rem/1 var(--font-body-family);
+  letter-spacing: 0.02em;
   color: oklch(0.86 0.01 75);
 }
-.chalet-hero__proof li {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.chalet-hero__stat dt {
+  font: 500 0.8125rem/1.35 var(--font-body-family);
+  color: oklch(0.8 0.012 75);
 }
-.chalet-hero__proof li::before {
-  content: "";
-  flex: none;
-  width: 13px;
-  height: 1px;
-  background: rgb(245 244 239 / 0.45);
-}
-.chalet-hero__proof li:first-child::before {
-  display: none;
+.chalet-hero__stat dt a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgb(245 244 239 / 0.4);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 240ms ease-out;
 }
 .chalet-hero__star {
+  align-self: center;
   color: var(--hero-amber);
   fill: var(--hero-amber);
 }
-
-/* ——— Buttons ———————————————————————————————————————————————————————————
-   The anchor is the hit area and never moves. Its surface follows the cursor
-   (HeroPointer) and carries a fill that grows from the entry point. The fill
-   holds its own copy of the face, so the colour change travels with its edge. */
-.hero-btn {
-  --fx: 50%;
-  --fy: 50%;
-  position: relative;
-  display: inline-flex;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 160ms ease-out;
-}
-/* Magnetic field: the pull starts a little before the edge. */
-.hero-btn::before {
-  content: "";
-  position: absolute;
-  inset: -12px;
-}
-.hero-btn:active {
-  transform: scale(0.98);
-}
-.hero-btn__surface {
-  position: relative;
-  display: flex;
-  flex: 1;
-  overflow: hidden;
-  border-radius: 2px;
-}
-.hero-btn__face {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
-.hero-btn__fill {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  clip-path: circle(0% at var(--fx) var(--fy));
-  transition: clip-path 420ms var(--hero-ease);
-  pointer-events: none;
-}
-.chalet-hero:not([data-pointer="on"]) .hero-btn:hover .hero-btn__fill,
-.hero-btn[data-hot="true"] .hero-btn__fill,
-.hero-btn:focus-visible .hero-btn__fill {
-  clip-path: circle(150% at var(--fx) var(--fy));
-  transition-duration: 640ms;
-}
-.hero-btn__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
-}
-.hero-btn__title {
-  font: 600 1rem/1.3 var(--font-body-family);
-  white-space: nowrap;
-}
-.hero-btn__meta {
-  font: 400 0.8125rem/1.3 var(--font-body-family);
-  font-variant-numeric: tabular-nums;
-  opacity: 0.74;
-  white-space: nowrap;
-}
-.hero-btn__icon {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 2px;
-}
-
-/* Primary: pale by default, fills amber. */
-.hero-btn--primary .hero-btn__surface {
-  background: var(--hero-ink);
-  color: var(--hero-dark);
-}
-.hero-btn--primary .hero-btn__face {
-  min-height: 64px;
-  padding: 10px 10px 10px 20px;
-}
-.hero-btn--primary .hero-btn__icon {
-  background: rgb(20 18 15 / 0.07);
-}
-.hero-btn--primary .hero-btn__fill {
-  background: var(--hero-amber);
-  color: var(--hero-dark);
-}
-.hero-btn--primary .hero-btn__fill .hero-btn__icon {
-  background: var(--hero-dark);
-  color: var(--hero-amber);
-}
-
-/* Secondary and playback: outlined, fill pale. */
-.hero-btn--secondary .hero-btn__surface,
-.hero-btn--ghost .hero-btn__surface {
-  box-shadow: inset 0 0 0 1px var(--hero-line);
-  color: var(--hero-ink);
-}
-.hero-btn--secondary .hero-btn__face {
-  justify-content: center;
-  min-height: 56px;
-  padding: 10px 24px;
-}
-.hero-btn--secondary .hero-btn__title {
-  font-weight: 500;
-  font-size: 0.9375rem;
-}
-.hero-btn--secondary .hero-btn__fill,
-.hero-btn--ghost .hero-btn__fill {
-  background: var(--hero-ink);
-  color: var(--hero-dark);
-}
-.hero-btn--ghost .hero-btn__surface {
-  background: rgb(12 14 12 / 0.35);
-}
-.hero-btn--ghost .hero-btn__face {
-  justify-content: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 10px 16px;
-}
-.hero-btn--ghost .hero-btn__title {
-  font-weight: 400;
-  font-size: 0.8125rem;
-}
 .chalet-hero__playback {
-  align-self: flex-start;
+  flex: none;
 }
 
-.hero-btn:focus-visible {
+.chalet-hero :is(a, button):focus-visible {
   outline: 2px solid var(--hero-ink);
-  outline-offset: 5px;
+  outline-offset: 4px;
 }
 .chalet-hero ::selection {
   background: var(--hero-amber);
   color: var(--hero-dark);
 }
 
-/* Cursor ring. Over a button it dissolves into the fill: the button itself
-   becomes the cursor's feedback. */
+/* Cursor ring: trails the pointer and gives way over a control. */
 .chalet-hero__cursor {
   display: none;
 }
@@ -359,38 +273,35 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.4);
   }
+  .chalet-hero__direct-phone:hover,
+  .chalet-hero__stat dt a:hover {
+    text-decoration-color: var(--hero-amber);
+  }
 }
 
 @media (min-width: 640px) {
   .chalet-hero__layout {
-    padding: 112px 40px 40px;
+    --hero-inset: 40px;
+    padding: 112px 40px 36px var(--hero-inset);
   }
   .chalet-hero__actions {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 20px 36px;
   }
-  .hero-btn--secondary .hero-btn__face {
-    min-height: 64px;
-  }
-  .chalet-hero__proof {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 0;
-  }
-  .chalet-hero__proof li + li::before {
-    width: 1px;
-    height: 12px;
-    margin-inline: 12px 6px;
-    background: rgb(245 244 239 / 0.3);
+  .chalet-hero__stats {
+    grid-template-columns: repeat(4, minmax(0, auto));
+    justify-content: start;
+    gap: 20px clamp(28px, 5vw, 88px);
   }
 }
 @media (min-width: 1024px) {
   .chalet-hero__layout {
+    /* Indented past the bar's 64px gutter, like the reference. */
+    --hero-inset: clamp(64px, 10vw, 176px);
     min-height: max(700px, 100svh);
-    padding: 112px 64px 56px;
+    padding: 112px 64px 44px var(--hero-inset);
   }
   .chalet-hero__poster,
   .chalet-hero__video {
@@ -401,61 +312,84 @@
       linear-gradient(
         180deg,
         rgb(12 14 12 / 0.62) 0%,
-        transparent 26%,
-        rgb(12 14 12 / 0.18) 62%,
-        rgb(12 14 12 / 0.62) 100%
+        transparent 24%,
+        rgb(12 14 12 / 0.16) 55%,
+        rgb(12 14 12 / 0.72) 100%
       ),
       linear-gradient(
         90deg,
-        rgb(12 14 12 / 0.8) 0%,
-        rgb(12 14 12 / 0.58) 30%,
-        rgb(12 14 12 / 0.12) 60%,
-        transparent 80%
+        rgb(12 14 12 / 0.78) 0%,
+        rgb(12 14 12 / 0.55) 32%,
+        rgb(12 14 12 / 0.1) 62%,
+        transparent 82%
       );
   }
   .chalet-hero__description {
     font-size: 1.1875rem;
   }
-  .chalet-hero__facts {
-    font-size: 0.9375rem;
-    gap: 28px;
+  .chalet-hero__actions {
+    margin-top: 40px;
   }
-  .chalet-hero__offer {
-    margin-top: 32px;
+  .chalet-hero__footer {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-top: 56px;
+    padding-top: 28px;
   }
-  .hero-btn--primary .hero-btn__face {
-    min-width: 320px;
+  .chalet-hero__stats {
+    width: auto;
   }
-  .chalet-hero__playback {
-    position: absolute;
-    right: 64px;
-    bottom: 56px;
+  .chalet-hero__stat dd {
+    font-size: 2.5rem;
   }
 }
 
 /* Entrance of everything but the title: one rise, staged behind the letters. */
 @media (prefers-reduced-motion: no-preference) {
   .chalet-hero[data-intro="on"] [data-reveal] {
-    animation: hero-rise 760ms var(--hero-ease) both;
+    animation: hero-rise 820ms var(--hero-ease) both;
   }
   .chalet-hero[data-intro="on"] [data-reveal="1"] {
-    animation-delay: 560ms;
+    animation-delay: 620ms;
   }
   .chalet-hero[data-intro="on"] [data-reveal="2"] {
-    animation-delay: 640ms;
-  }
-  .chalet-hero[data-intro="on"] [data-reveal="3"] {
     animation-delay: 720ms;
   }
+  .chalet-hero[data-intro="on"] [data-reveal="3"] {
+    animation-delay: 880ms;
+  }
   .chalet-hero[data-intro="on"] [data-reveal="4"] {
+    animation-delay: 940ms;
+  }
+  .chalet-hero[data-intro="on"] [data-reveal="5"] {
     animation-delay: 1000ms;
+  }
+  .chalet-hero[data-intro="on"] [data-reveal="6"] {
+    animation-delay: 1060ms;
+  }
+  .chalet-hero[data-intro="on"] [data-reveal="7"] {
+    animation-delay: 1120ms;
+  }
+  /* The hairline draws in from the left above the facts. */
+  .chalet-hero[data-intro="on"] .chalet-hero__footer::before {
+    animation: hero-rule 1200ms var(--hero-ease) 800ms both;
+  }
+}
+@keyframes hero-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 @keyframes hero-rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
-    filter: blur(6px);
+    transform: translate3d(0, 14px, 0);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
@@ -468,8 +402,5 @@
   .chalet-hero *,
   .chalet-hero *::after {
     transition: none;
-  }
-  .hero-btn:active {
-    transform: none;
   }
 }

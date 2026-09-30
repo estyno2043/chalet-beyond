@@ -1,9 +1,15 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowRight, Pause, Play, Star } from "lucide-react";
+import { CalendarDays, Pause, Play, Star } from "lucide-react";
 import { useT } from "@/i18n/LanguageProvider";
-import { BOOKING_RATING } from "@shared/contact";
+import {
+  BOOKING_LISTING_URL,
+  BOOKING_RATING,
+  PHONE,
+  PHONE_DISPLAY,
+} from "@shared/contact";
 import { PRICE_PER_NIGHT } from "@shared/pricing";
 import { HeroPointer } from "./HeroPointer";
+import { RollButton, RollLink } from "./RollButton";
 import "./hero.css";
 
 const POSTER = "/media/hero/exterior-poster-v1.webp";
@@ -107,14 +113,14 @@ export function Hero() {
                 // Born at the centre: fades up almost in place…
                 {
                   opacity: 0,
-                  transform: `translate3d(${dx}px, 0, 0) scale(1.14)`,
-                  filter: "blur(12px)",
+                  transform: `translate3d(${dx}px, 0, 0) scale(1.06)`,
+                  filter: "blur(8px)",
                   easing: "ease-out",
                 },
                 {
                   opacity: 1,
-                  transform: `translate3d(${dx * 0.94}px, 0, 0) scale(1.08)`,
-                  filter: "blur(5px)",
+                  transform: `translate3d(${dx * 0.94}px, 0, 0) scale(1.04)`,
+                  filter: "blur(3px)",
                   offset: APPEAR_AT,
                   easing: EASE_GLIDE,
                 },
@@ -257,6 +263,38 @@ export function Hero() {
   const playbackLabel = playing ? t.hero.pauseVideo : t.hero.playVideo;
   const PlaybackIcon = playing ? Pause : Play;
 
+  const stats = [
+    {
+      value: (
+        <>
+          {BOOKING_RATING}/10
+          <Star
+            size={20}
+            strokeWidth={1.4}
+            className="chalet-hero__star"
+            aria-hidden="true"
+          />
+        </>
+      ),
+      label: (
+        <a href={BOOKING_LISTING_URL} target="_blank" rel="noreferrer">
+          {t.hero.statRating}
+        </a>
+      ),
+    },
+    {
+      value: (
+        <>
+          <small>{t.hero.statPriceFrom}</small>
+          {t.hero.statPriceValue.replace("{price}", String(PRICE_FROM))}
+        </>
+      ),
+      label: t.hero.statPrice,
+    },
+    { value: "250 m²", label: t.hero.statSize },
+    { value: t.hero.statCancelValue, label: t.hero.statCancel },
+  ];
+
   return (
     <section
       id="hero"
@@ -329,115 +367,60 @@ export function Hero() {
           <p className="chalet-hero__description" data-reveal="1">
             {t.hero.description}
           </p>
-          <ul
-            className="chalet-hero__facts"
-            aria-label={t.hero.factsLabel}
-            data-reveal="2"
-          >
-            <li>250 m²</li>
-            <li>{t.hero.bedrooms}</li>
-            <li>{t.hero.guests}</li>
-          </ul>
 
-          <div className="chalet-hero__offer" data-reveal="3">
-            <div className="chalet-hero__actions">
+          <div className="chalet-hero__actions" data-reveal="2">
+            <RollLink
+              href="#rezervacia"
+              icon={
+                <CalendarDays size={16} strokeWidth={1.5} aria-hidden="true" />
+              }
+            >
+              {t.hero.offerCta}
+            </RollLink>
+            <div className="chalet-hero__direct">
+              <span className="chalet-hero__direct-label">
+                {t.hero.directLabel}
+              </span>
               <a
-                href="#rezervacia"
-                className="hero-btn hero-btn--primary"
-                data-hero-magnetic
+                href={`tel:${PHONE}`}
+                className="chalet-hero__direct-phone"
+                aria-label={`${t.contact.callAria} ${PHONE_DISPLAY}`}
               >
-                <span className="hero-btn__surface">
-                  <HeroButtonFace
-                    title={t.hero.offerCta}
-                    meta={t.hero.offerPrice.replace("{price}", String(PRICE_FROM))}
-                  />
-                  <span className="hero-btn__fill" aria-hidden="true">
-                    <HeroButtonFace
-                      title={t.hero.offerCta}
-                      meta={t.hero.offerPrice.replace(
-                        "{price}",
-                        String(PRICE_FROM)
-                      )}
-                    />
-                  </span>
-                </span>
-              </a>
-              <a
-                href="#priestory"
-                className="hero-btn hero-btn--secondary"
-                data-hero-magnetic
-              >
-                <span className="hero-btn__surface">
-                  <span className="hero-btn__face">
-                    <span className="hero-btn__title">{t.hero.explore}</span>
-                  </span>
-                  <span className="hero-btn__fill" aria-hidden="true">
-                    <span className="hero-btn__face">
-                      <span className="hero-btn__title">{t.hero.explore}</span>
-                    </span>
-                  </span>
-                </span>
+                {PHONE_DISPLAY}
               </a>
             </div>
-
-            <ul className="chalet-hero__proof">
-              <li>
-                <Star
-                  size={13}
-                  strokeWidth={1.5}
-                  className="chalet-hero__star"
-                  aria-hidden="true"
-                />
-                {t.hero.offerRating.replace("{rating}", BOOKING_RATING)}
-              </li>
-              <li>{t.hero.offerDirect}</li>
-              <li>{t.hero.offerCancel}</li>
-            </ul>
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={togglePlayback}
-          className="hero-btn hero-btn--ghost chalet-hero__playback"
-          data-hero-magnetic
-          aria-label={playbackLabel}
-          data-reveal="4"
-        >
-          <span className="hero-btn__surface">
-            <span className="hero-btn__face">
-              <PlaybackIcon size={15} strokeWidth={1.6} aria-hidden="true" />
-              <span className="hero-btn__title">{playbackLabel}</span>
-            </span>
-            <span className="hero-btn__fill" aria-hidden="true">
-              <span className="hero-btn__face">
-                <PlaybackIcon size={15} strokeWidth={1.6} />
-                <span className="hero-btn__title">{playbackLabel}</span>
-              </span>
-            </span>
-          </span>
-        </button>
+        <div className="chalet-hero__footer">
+          <dl className="chalet-hero__stats" aria-label={t.hero.statsLabel}>
+            {stats.map((stat, i) => (
+              <div
+                key={i}
+                className="chalet-hero__stat"
+                data-reveal={String(3 + i)}
+              >
+                <dt>{stat.label}</dt>
+                <dd>{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <RollButton
+            tone="ghost"
+            size="sm"
+            onClick={togglePlayback}
+            aria-label={playbackLabel}
+            className="chalet-hero__playback"
+            data-reveal="7"
+            icon={
+              <PlaybackIcon size={13} strokeWidth={1.8} aria-hidden="true" />
+            }
+          >
+            {playbackLabel}
+          </RollButton>
+        </div>
       </div>
       <HeroPointer surface={sectionRef} />
     </section>
-  );
-}
-
-/**
- * The CTA's face is drawn twice: once on the button, once inside the fill.
- * The fill's copy is clipped with it, so the colour change travels with the
- * fill's edge instead of the whole label switching at once.
- */
-function HeroButtonFace({ title, meta }: { title: string; meta: string }) {
-  return (
-    <span className="hero-btn__face">
-      <span className="hero-btn__text">
-        <span className="hero-btn__title">{title}</span>
-        <span className="hero-btn__meta">{meta}</span>
-      </span>
-      <span className="hero-btn__icon">
-        <ArrowRight size={18} strokeWidth={1.6} aria-hidden="true" />
-      </span>
-    </span>
   );
 }

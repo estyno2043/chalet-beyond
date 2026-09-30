@@ -17,10 +17,12 @@ colors:
   nav-book-hover: "oklch(0.88 0.035 75)"
   nav-book-amber-hover: "oklch(0.79 0.11 70)"
   menu-link-muted: "oklch(0.78 0.015 70)"
+  hero-sand: "oklch(0.85 0.06 74)"
+  hero-stat-label: "oklch(0.8 0.012 75)"
 typography:
   display:
     fontFamily: "Thunder, Bebas Neue, sans-serif"
-    fontSize: "clamp(6.25rem, 31vw, 10.5rem)"
+    fontSize: "clamp(5.5rem, min(30vw, 17svh), 9.5rem)"
     fontWeight: 600
     lineHeight: 0.84
     letterSpacing: "0.004em"
@@ -64,6 +66,7 @@ typography:
     fontWeight: 500
 rounded:
   base: "0.25rem"
+  pill: "999px"
   hero-control: "2px"
 spacing:
   hero-gutter-compact: "24px"
@@ -168,8 +171,9 @@ Body and hero actions: **Karla**. Data labels: **JetBrains Mono**. All are
 locally served with `font-display: swap`; retain their declared fallback families.
 
 - `display` is the hero title only. Thunder is extremely condensed, so it runs
-  past the usual 6rem display ceiling (10.5rem from ~540px) to read at the same
-  visual weight. Two lines, 0.84 leading; letters are split into spans for the
+  past the usual 6rem display ceiling (up to 9.5rem, capped at 17% of the
+  viewport height so short laptops keep air under the bar). BEYOND is set in
+  `hero-sand`, the reference's two-tone name. Two lines, 0.84 leading; letters are split into spans for the
   entrance, which drops kerning pairs — acceptable at this size.
 - `headline` captures the inherited section-heading utility. General headings
   use the same display family with 1.05 leading.
@@ -221,20 +225,22 @@ not a general pill-shaped component language.
 warm hover feedback and a small pressed scale. These are existing global CSS
 utilities; the sidecar preserves their styles without treating them as hero CTAs.
 
-**Hero offer:** the primary action carries the offer — "check available dates",
-the lowest nightly rate from `shared/pricing` and "whole chalet" — with the arrow
-in its own 44px cell. Under the actions sits one proof line: Booking.com rating
-(`shared/contact`), the direct-booking saving and free cancellation (both from
-the pricing copy). The secondary action is outlined and leads to the gallery.
+**Hero layout (owner's reference, 2026-09-30):** the copy is indented past the
+bar's gutter (10vw, 64–176px from 1024px). Title, one line of description, then
+one row: the pill CTA "check available dates" and a direct line (tracked sand
+label + underlined phone). A hairline runs along the bottom with four facts —
+Booking.com rating (link), lowest nightly rate with the −10 % note, 250 m² with
+bedrooms and guests, 14-day free cancellation — values in Thunder, labels in
+Karla. Playback is a small ghost pill at the end of that row. Below 640px the
+facts become a 2×2 grid and the CTA spans the width.
 
-**Hero buttons:** the anchor is the stationary hit area (plus a 12px magnetic
-field); its inner surface follows the cursor on a damped spring, at most 10px
-sideways and 7px vertically, the arrow cell 4px further. A fill grows as a
-circle from the cursor's entry point (640ms, exponential ease-out) and recedes
-towards the exit point. The fill holds its own copy of the face, so the text
-colour changes exactly at the fill's edge. Primary fills amber, outlined ones
-fill pale. Keyboard focus shows the full fill plus a 2px pale outline; pressed
-scale 0.98. Without a fine pointer, plain `:hover` shows the fill.
+**RollButton** (`components/RollButton.tsx`, from Animata Swipe Button + Magic
+UI Interactive Hover Button): a pill in Karla 700 caps, 0.16em tracking. On
+hover or keyboard focus an ellipse rises from below as a dome and fills the
+pill (560ms, quint ease-out) while the label rolls up and its filled-state copy
+rolls in. The button never moves. Tones: outline (hero CTA, fills amber), solid
+(header, pale; amber once the hero is behind, then fills pale), ghost
+(playback). Pressed scale 0.98.
 
 **Hero media and entrance:** poster and video cover the frame, with a 56% horizontal
 crop below desktop and centered crop from 1024px. Video starts on its own at every
@@ -245,24 +251,26 @@ seamless. Scroll never seeks the video.
 
 The entrance is the hero's one authored moment. A dark curtain covers the
 footage while the title plays; each letter is born at the hero's centre (16% of
-its 680ms: fade, blur 12→5px, scale 1.14→1.08) and glides left into its slot
+its 680ms: fade, blur 8→3px, scale 1.06→1.04) and glides left into its slot
 (quint ease-out), 34ms apart. BEYOND starts when CHALET's last letter is halfway
 in; the whole title takes ~1.3s. The curtain lifts on the first decoded frame,
 never before 650ms and never after 1.6s, while the footage settles from 1.07 to
-1 over 2.4s. Copy, offer and playback rise in behind (760ms, 560–1000ms delays).
+1 over 2.4s. Copy, CTA row and each fact rise in behind (820ms, 620–1120ms delays) while the hairline draws in from the left.
 The bar arrives at 280ms. Reduced motion skips all of it.
 
 **Hero pointer response:** any width with hover, a fine mouse pointer and no
-reduced motion. A 30px ring trails the pointer (0.32 follow per frame) and
-dissolves over a button, which becomes the feedback. One rAF loop runs only while
+reduced motion. A 30px ring trails the pointer (0.3 follow per frame) and
+dissolves over any link or button, whose own hover takes over. Nothing moves
+with the cursor. One rAF loop runs only while
 the ring or a spring is moving; no React renders. Tab, leaving, scrolling,
 resizing, losing focus or hiding the page clears the effect.
 
 **Navigation:** the logo is the brand mark recoloured for a dark ground
 (`logo-light-v1.png`, tagline dropped at 46px). Links draw an amber underline
-from the left on hover and retract it to the right. Language is one dropdown
-(flag + code) at every width. The reserve action is pale while the hero is
-under the bar and turns amber once it has scrolled away (480ms). Focus is a 2px pale outline with
+from the left on hover and retract it to the right. Language is one pill dropdown
+(flag + code) at every width; the menu toggle is a circle. The reserve action
+is a small RollButton, pale while the hero is under the bar and amber once it
+has scrolled away (480ms). Focus is a 2px pale outline with
 4px offset. The compact menu uses a brief 250ms fade and 8px lift, suppressed for
 reduced motion. Closed menu contents are inert and hidden from accessibility
 navigation. Language choices combine flags with text and mark the selected

@@ -58,7 +58,7 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`${LANG_NAMES[current]} — ${LANGS.length} jazykov`}
-        className="h-11 flex items-center justify-center gap-2 rounded-sm px-3"
+        className="h-11 flex items-center justify-center gap-2 rounded-full px-4"
         style={{
           boxShadow: "inset 0 0 0 1px rgb(245 244 239 / 0.24)",
           background: open ? "rgb(245 244 239 / 0.08)" : "transparent",
@@ -87,7 +87,7 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
         role="menu"
         aria-label="Language"
         hidden={!open}
-        className="absolute right-0 top-full mt-2 overflow-hidden rounded-sm"
+        className="absolute right-0 top-full mt-2 overflow-hidden rounded-xl"
         style={{
           minWidth: "11rem",
           zIndex: 60,

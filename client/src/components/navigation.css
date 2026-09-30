@@ -109,28 +109,24 @@
   background: var(--nav-line);
 }
 
-/* Reserve: pale over the hero, amber once the hero is behind. Display comes
-   from the call site (inline-flex / hidden sm:inline-flex). */
+/* Reserve: a RollButton, pale over the hero and amber once the hero is
+   behind; its fill is always the other of the two. */
 .chalet-navigation__book {
-  align-items: center;
-  min-height: 44px;
-  padding: 0 20px;
-  border-radius: 2px;
-  background: var(--nav-ink);
-  color: var(--nav-dark);
-  font: 600 0.875rem/1 var(--font-body-family);
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  white-space: nowrap;
-  transition:
-    background-color 480ms var(--nav-ease),
-    transform 160ms ease-out;
+  --roll-fill: var(--nav-amber);
 }
 .chalet-navigation[data-past-hero="true"] .chalet-navigation__book {
-  background: var(--nav-amber);
+  --roll-bg: var(--nav-amber);
+  --roll-fill: var(--nav-ink);
 }
-.chalet-navigation__book:active {
-  transform: scale(0.97);
+/* Below 640px the hero's own CTA is on screen; the bar keeps to language and
+   menu so the row never crowds the logo. */
+.chalet-navigation .chalet-navigation__book--compact {
+  display: none;
+}
+@media (min-width: 640px) {
+  .chalet-navigation .chalet-navigation__book--compact {
+    display: inline-flex;
+  }
 }
 
 .chalet-navigation__burger {
@@ -138,7 +134,7 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border-radius: 2px;
+  border-radius: 999px;
   box-shadow: inset 0 0 0 1px var(--nav-line);
   color: var(--nav-ink);
   transition:
@@ -210,8 +206,10 @@
   justify-content: center;
   gap: 8px;
   min-height: 56px;
-  border-radius: 2px;
-  font: 600 1rem/1 var(--font-body-family);
+  border-radius: 999px;
+  font: 700 0.8125rem/1 var(--font-body-family);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   text-decoration: none;
 }
 .chalet-navigation__menu-primary {
@@ -246,12 +244,6 @@
   .chalet-navigation__link:hover::after {
     transform: scaleX(1);
     transform-origin: left;
-  }
-  .chalet-navigation__book:hover {
-    background: oklch(0.88 0.035 75);
-  }
-  .chalet-navigation[data-past-hero="true"] .chalet-navigation__book:hover {
-    background: oklch(0.79 0.11 70);
   }
   .chalet-navigation__burger:hover {
     background: rgb(245 244 239 / 0.08);

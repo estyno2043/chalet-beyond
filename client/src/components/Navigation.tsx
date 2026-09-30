@@ -14,6 +14,7 @@ import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { useScrollThreshold } from "@/components/ui/use-scroll";
 import { useT } from "@/i18n/LanguageProvider";
 import { LanguageDropdown } from "@/components/LanguageDropdown";
+import { RollLink } from "@/components/RollButton";
 import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 import "./navigation.css";
 
@@ -77,16 +78,18 @@ export function Navigation() {
   };
 
   const bookButton = (className: string) => (
-    <a
+    <RollLink
       href="#rezervacia"
       onClick={e => {
         e.preventDefault();
         scrollToHref("#rezervacia");
       }}
+      tone="solid"
+      size="sm"
       className={cn("chalet-navigation__book", className)}
     >
       {t.nav.book}
-    </a>
+    </RollLink>
   );
 
   return (
@@ -162,12 +165,12 @@ export function Navigation() {
           </div>
           <span className="chalet-navigation__divider" aria-hidden="true" />
           <LanguageDropdown />
-          {bookButton("ml-3 inline-flex")}
+          {bookButton("ml-3")}
         </nav>
 
         {/* Compact cluster — everything below xl. */}
         <div className="flex items-center gap-2 xl:hidden">
-          {bookButton("hidden sm:inline-flex")}
+          {bookButton("chalet-navigation__book--compact")}
           <LanguageDropdown />
           <button
             type="button"

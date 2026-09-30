@@ -4,7 +4,7 @@
  * Physical scene: Arriving at dusk, amber chalet glow against dark pine forest and Lomnický štít silhouette
  *
  * Sections:
- * 0. HeroSCV — scroll-controlled video hero (3 chapters + brand reveal)
+ * 0. Hero — native exterior video, property details and availability CTA
  * 1. ChaletIntroSection — "Zážitok": what Chalet Beyond is + 4 feature tiles
  * 2. TextRevealSection — scroll-driven word-by-word text reveal (Framer Motion)
  * 3. GallerySection — 5 photos, asymmetric grid
@@ -14,12 +14,10 @@
  * 7. BookingSection — date range calendar + booking summary
  * 8. Footer
  */
-import { useState, useEffect } from "react";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
-import { HeroSCV } from "@/components/HeroSCV";
-import { HeroMobile } from "@/components/HeroMobile";
+import { Hero } from "@/components/Hero";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -34,28 +32,17 @@ import { StickyContactBar } from "@/components/StickyContactBar";
 export default function Home() {
   useSmoothScroll();
 
-  // Initializer reads the real viewport before first paint so the mobile
-  // hero never mounts the SCV (and never preloads its 3 chapter videos).
-  const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 767px)").matches,
-  );
-  useEffect(() => {
-    const mql = window.matchMedia("(max-width: 767px)");
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
   return (
     <div
       className="min-h-screen"
-      style={{ background: "oklch(0.06 0.008 55)", color: "oklch(0.92 0.008 75)" }}
+      style={{
+        background: "oklch(0.06 0.008 55)",
+        color: "oklch(0.92 0.008 75)",
+      }}
     >
       <ScrollProgressBar />
       <Navigation />
-      {/* Hero: mobile = looping interior walkthrough + animated brand reveal;
-          desktop = scroll-controlled SCV (3 chapters). id="hero" inside both. */}
-      {isMobile ? <HeroMobile /> : <HeroSCV />}
+      <Hero />
       {/* Rest of the landing page below the hero */}
       <ChaletIntroSection />
       {/* Scroll-driven word-by-word text reveal */}

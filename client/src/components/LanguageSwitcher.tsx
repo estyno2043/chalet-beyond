@@ -23,7 +23,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
       role="group"
       aria-label="Language"
     >
-      {LANGS.map((lang) => {
+      {LANGS.map(lang => {
         const Flag = FLAGS[lang];
         const active = lang === current;
         // href carries the plain path for crawlers; the hash is read at click
@@ -35,7 +35,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
           <a
             key={lang}
             href={href}
-            onClick={(event) => {
+            onClick={event => {
               event.preventDefault();
               // Captured before navigating: navigate() rewrites the URL and the
               // hash is gone by the time the new page settles.
@@ -43,23 +43,31 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
               navigate(pathForLang(window.location.pathname, lang) + hash);
               if (hash) {
                 requestAnimationFrame(() =>
-                  document.querySelector(hash)?.scrollIntoView({ behavior: "auto" }),
+                  document
+                    .querySelector(hash)
+                    ?.scrollIntoView({ behavior: "auto" })
                 );
               }
             }}
             hrefLang={lang}
-            aria-label={LANG_NAMES[lang]}
+            aria-label={
+              compact
+                ? LANG_NAMES[lang]
+                : `${lang.toUpperCase()} — ${LANG_NAMES[lang]}`
+            }
             aria-current={active ? "true" : undefined}
-            className="flex items-center gap-1.5 px-2 py-1.5 rounded-sm transition-colors duration-200"
+            className="flex min-h-11 items-center gap-1.5 px-2 py-1.5 rounded-sm transition-colors duration-200"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
-              fontSize: compact ? "0.8rem" : "0.62rem",
+              fontSize: compact ? "0.8rem" : "0.6875rem",
               letterSpacing: "0.1em",
               textTransform: "uppercase",
               textDecoration: "none",
-              color: active ? "oklch(0.92 0.008 75)" : "oklch(0.58 0.020 65)",
-              background: active ? "oklch(0.72 0.12 65 / 0.12)" : "transparent",
-              border: `1px solid ${active ? "oklch(0.72 0.12 65 / 0.35)" : "transparent"}`,
+              color: "oklch(0.92 0.008 75)",
+              background: active
+                ? "oklch(0.92 0.008 75 / 0.12)"
+                : "transparent",
+              border: `1px solid ${active ? "oklch(0.92 0.008 75 / 0.5)" : "transparent"}`,
             }}
           >
             <Flag />

@@ -26,12 +26,29 @@ export const pl: Dict = {
   },
 
   hero: {
+    description: "Prywatny chalet w Wielkiej Łomnicy. Cały dom tylko dla Was.",
+    factsLabel: "Informacje o obiekcie",
+    bedrooms: "3 sypialnie",
+    guests: "Do 8 gości",
+    availability: "Sprawdź dostępność",
+    explore: "Zobacz wnętrza",
+    playVideo: "Odtwórz film",
+    pauseVideo: "Wstrzymaj film",
     tagline: "Tatry Wysokie · Black Stork Golf · Słowacja",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
     chapters: [
-      { title: "POLE GOLFOWE BLACK STORK", subtitle: "uderzenie, od którego się zaczęło" },
-      { title: "ZA KAŻDYM HORYZONTEM", subtitle: "27 dołków · jedyne pole PGA na Słowacji" },
-      { title: "TWOJE PRYWATNE SCHRONIENIE", subtitle: "cztery pory roku · jeden adres" },
+      {
+        title: "POLE GOLFOWE BLACK STORK",
+        subtitle: "uderzenie, od którego się zaczęło",
+      },
+      {
+        title: "ZA KAŻDYM HORYZONTEM",
+        subtitle: "27 dołków · jedyne pole PGA na Słowacji",
+      },
+      {
+        title: "TWOJE PRYWATNE SCHRONIENIE",
+        subtitle: "cztery pory roku · jeden adres",
+      },
     ],
   },
 
@@ -177,10 +194,12 @@ export const pl: Dict = {
     eyebrow: "Rezerwacja",
     headlineA: "PRZEKRACZA TWOJE",
     headlineB: "OCZEKIWANIA",
-    intro: "Tylko rezerwacja bezpośrednia – bez opłat platformy, bez pośredników.",
+    intro:
+      "Tylko rezerwacja bezpośrednia – bez opłat platformy, bez pośredników.",
     pickDates: "Wybierz terminy",
     availabilityLoading: "Wczytuję zajęte terminy…",
-    availabilityFailed: "Nie udało się wczytać dostępności — potwierdzimy ją e-mailem.",
+    availabilityFailed:
+      "Nie udało się wczytać dostępności — potwierdzimy ją e-mailem.",
     checkIn: "Zameldowanie",
     checkOut: "Wymeldowanie",
     propertyName: "Chalet Beyond",

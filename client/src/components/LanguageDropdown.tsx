@@ -1,12 +1,10 @@
 /*
- * CHALET BEYOND — language dropdown for the mobile bar.
+ * CHALET BEYOND — language dropdown.
  *
- * The flag of the current language sits next to the burger; tapping it opens a
- * short menu underneath with the other three. This is its own menu, separate
- * from the burger — a guest who only wants to switch language should not have
- * to open the whole navigation to find it.
- *
- * The inline row of four flags stays on desktop, where there is room for it.
+ * The current language (flag + code) opens a short menu with the other three.
+ * It is its own menu, separate from the burger — a guest who only wants to
+ * switch language should not have to open the whole navigation to find it.
+ * Desktop uses it too: one control reads calmer than a row of four flags.
  */
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
@@ -60,15 +58,20 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`${LANG_NAMES[current]} — ${LANGS.length} jazykov`}
-        className="w-11 h-11 flex items-center justify-center gap-1 rounded-sm"
+        className="h-11 flex items-center justify-center gap-2 rounded-sm px-3"
         style={{
-          border: "1px solid rgba(180,120,40,0.25)",
-          background: open ? "rgba(180,120,40,0.10)" : "transparent",
-          color: "oklch(0.72 0.12 65)",
+          boxShadow: "inset 0 0 0 1px rgb(245 244 239 / 0.24)",
+          background: open ? "rgb(245 244 239 / 0.08)" : "transparent",
+          color: "oklch(0.97 0.007 75)",
+          fontFamily: "var(--font-body-family)",
+          fontSize: "0.75rem",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
           transition: "background var(--motion-ui) var(--ease-ui)",
         }}
       >
         <CurrentFlag />
+        <span aria-hidden="true">{current.toUpperCase()}</span>
         <ChevronDown
           size={11}
           style={{
@@ -89,8 +92,8 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
           minWidth: "11rem",
           zIndex: 60,
           background: "oklch(0.08 0.010 55 / 0.98)",
-          border: "1px solid rgba(180,120,40,0.25)",
-          boxShadow: "0 8px 28px rgba(0,0,0,0.5)",
+          border: "1px solid rgb(245 244 239 / 0.14)",
+          boxShadow: "0 12px 32px rgb(0 0 0 / 0.45)",
         }}
       >
         {LANGS.map((lang) => {
@@ -105,14 +108,13 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
               className="w-full flex items-center gap-2.5 px-3"
               style={{
                 minHeight: "2.75rem",
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: "0.72rem",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
+                fontFamily: "var(--font-body-family)",
+                fontSize: "0.875rem",
+                fontWeight: active ? 600 : 400,
                 textAlign: "left",
-                color: active ? "oklch(0.92 0.008 75)" : "oklch(0.62 0.020 65)",
-                background: active ? "rgba(180,120,40,0.12)" : "transparent",
-                borderBottom: "1px solid rgba(180,120,40,0.08)",
+                color: active ? "oklch(0.97 0.007 75)" : "oklch(0.78 0.015 70)",
+                background: active ? "rgb(245 244 239 / 0.08)" : "transparent",
+                borderBottom: "1px solid rgb(245 244 239 / 0.06)",
               }}
             >
               <Flag />

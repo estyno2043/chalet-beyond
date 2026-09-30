@@ -1,12 +1,11 @@
 /**
  * Navigation — Chalet Beyond
- * Based on header-2 pattern (sshahaider/header-2)
  * Design: Nordic Brutalism / Dark Timber
- * - Fixed height, transparent over hero → solid dark on scroll
+ * - Transparent over the hero → solid dark once the page scrolls
  * - Shares the hero's responsive gutters
- * - Amber accent on active/hover links with underline reveal
- * - Animated hamburger icon (MenuToggleIcon) for mobile
- * - Mobile menu: full-screen overlay with zoom-in/out animation
+ * - The reserve action is pale over the hero (it sits on footage next to the
+ *   hero's pale CTA) and turns brand amber once the hero is behind the guest
+ * - Below xl: reserve, language and a menu; the links live in the menu
  */
 import React from "react";
 import { Mail, Phone } from "lucide-react";
@@ -14,7 +13,6 @@ import { cn } from "@/lib/utils";
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { useScrollThreshold } from "@/components/ui/use-scroll";
 import { useT } from "@/i18n/LanguageProvider";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { LanguageDropdown } from "@/components/LanguageDropdown";
 import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 import "./navigation.css";
@@ -27,6 +25,30 @@ const HREFS = [
   "#rezervacia",
 ] as const;
 
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/** True once the hero has scrolled up behind the bar. No hero → true. */
+function usePastHero() {
+  const [past, setPast] = React.useState(false);
+  React.useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) {
+      setPast(true);
+      return;
+    }
+    // The bar is ~100px tall: the hero counts as gone once less than that
+    // of it is left under the bar.
+    const observer = new IntersectionObserver(
+      ([entry]) => setPast(!entry.isIntersecting),
+      { rootMargin: "-100px 0px 0px 0px" }
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
+  }, []);
+  return past;
+}
+
 export function Navigation() {
   const t = useT();
   const links = [
@@ -38,280 +60,160 @@ export function Navigation() {
   ];
   const [open, setOpen] = React.useState(false);
   const scrolled = useScrollThreshold(10);
+  const pastHero = usePastHero();
 
   React.useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [open]);
 
-  const handleLinkClick = (href: string) => {
+  const scrollToHref = (href: string) => {
     setOpen(false);
-    const el = document.querySelector(href);
-    if (el)
-      el.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-      });
+    document
+      .querySelector(href)
+      ?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
   };
+
+  const bookButton = (className: string) => (
+    <a
+      href="#rezervacia"
+      onClick={e => {
+        e.preventDefault();
+        scrollToHref("#rezervacia");
+      }}
+      className={cn("chalet-navigation__book", className)}
+    >
+      {t.nav.book}
+    </a>
+  );
 
   return (
     <header
-      className={cn(
-        "chalet-navigation fixed top-0 left-0 right-0 z-[100] mx-auto w-full transition-colors duration-200",
-        {
-          // Scrolled: solid contrast without a backdrop blur
-          "bg-[oklch(0.08_0.010_55/0.97)] border-b border-[rgba(180,120,40,0.15)]":
-            scrolled && !open,
-          // Mobile menu open: solid dark
-          "bg-[oklch(0.06_0.008_55/0.98)]": open,
-          // Default: fully transparent
-          "bg-transparent border-b border-transparent": !scrolled && !open,
-        }
-      )}
+      className="chalet-navigation"
+      data-scrolled={scrolled && !open}
+      data-open={open}
+      data-past-hero={pastHero}
     >
-      {/* Contact strip — phone + email, visible on load and through scroll.
-          A separate row from the nav cluster below on purpose: that row is
-          already tight at 768–940px (the CTA runs past the edge there), so
-          two more text items can't share its space without breaking it further. */}
-      <div className="chalet-navigation__contact mx-auto hidden items-center justify-end gap-5 md:flex">
+      {/* Contact strip — phone + email, visible on load and through scroll. */}
+      <div className="chalet-navigation__contact mx-auto hidden items-center justify-end md:flex">
         {[
-          { href: `tel:${PHONE}`, label: PHONE_DISPLAY, Icon: Phone, aria: `${t.contact.callAria} ${PHONE_DISPLAY}` },
-          { href: `mailto:${EMAIL}`, label: EMAIL, Icon: Mail, aria: t.contact.emailAria },
+          {
+            href: `tel:${PHONE}`,
+            label: PHONE_DISPLAY,
+            Icon: Phone,
+            aria: `${t.contact.callAria} ${PHONE_DISPLAY}`,
+          },
+          {
+            href: `mailto:${EMAIL}`,
+            label: EMAIL,
+            Icon: Mail,
+            aria: t.contact.emailAria,
+          },
         ].map(({ href, label, Icon, aria }) => (
-          <a
-            key={href}
-            href={href}
-            aria-label={aria}
-            className="flex items-center gap-1.5 transition-colors duration-200"
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: '0.68rem',
-              letterSpacing: '0.05em',
-              color: 'oklch(0.80 0.02 75)',
-              textShadow: '0 1px 6px rgba(0,0,0,0.7)',
-            }}
-          >
-            <Icon size={11} style={{ color: 'oklch(0.72 0.12 65)' }} />
+          <a key={href} href={href} aria-label={aria}>
+            <Icon size={12} strokeWidth={1.6} aria-hidden="true" />
             {label}
           </a>
         ))}
       </div>
 
-      <div
-        className={cn(
-          "chalet-navigation__inner mx-auto flex items-center justify-between"
-        )}
-      >
-        {/* Logo / SVG Mark */}
+      <div className="chalet-navigation__inner mx-auto flex items-center justify-between">
         <a
           href="#"
           onClick={e => {
             e.preventDefault();
             window.scrollTo({
               top: 0,
-              behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-                .matches
-                ? "auto"
-                : "smooth",
+              behavior: prefersReducedMotion() ? "auto" : "smooth",
             });
             setOpen(false);
           }}
-          className="flex items-center gap-2.5 select-none group"
+          className="chalet-navigation__logo"
           aria-label={t.nav.home}
         >
-          {/* Brand logo. Explicit width and height plus flex-none: with only a
-              height set it was the element the flex row squeezed when the nav
-              ran out of space. */}
+          {/* The house and wordmark from the brand logo, recoloured for a dark
+              ground; the tagline is dropped at this size, it would not read. */}
           <img
-            src="/logo-nav.png"
+            src="/logo-light-v1.png"
             alt="Chalet Beyond"
-            width={44}
-            height={44}
-            className="flex-none select-none"
-            style={{ width: "44px", height: "44px", objectFit: "contain" }}
+            width={195}
+            height={144}
           />
         </a>
 
-        {/* Full navigation — only where it actually fits.
-            It used to appear from 768px, where the row needs ~852px and the
-            viewport gives ~728px: the CTA ended up 52px past the right edge,
-            unreachable, because a fixed header does not scroll. Below xl the
-            compact cluster takes over and the links live in the menu. */}
-        <div className="hidden items-center gap-1 xl:flex">
-          {links.map(link => (
-            <a
-              key={link.label}
-              href={link.href}
-              onClick={e => {
-                e.preventDefault();
-                handleLinkClick(link.href);
-              }}
-              className={cn(
-                "relative inline-flex min-h-11 items-center px-3 py-1.5 text-sm font-medium",
-                "text-[oklch(0.92_0.008_75)] hover:text-[oklch(0.82_0.08_75)]",
-                "transition-colors duration-200",
-                "after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px",
-                "after:bg-[oklch(0.72_0.12_65)] after:scale-x-0 after:origin-left",
-                "after:transition-transform after:duration-300 after:ease-out",
-                "hover:after:scale-x-100"
-              )}
-              style={{ fontFamily: "'Karla', sans-serif" }}
-            >
-              {link.label}
-            </a>
-          ))}
-
-          <div className="ml-2 mr-1">
-            <LanguageSwitcher />
+        {/* Full navigation — only where it fits (xl). */}
+        <nav className="hidden items-center xl:flex">
+          <div className="chalet-navigation__links">
+            {links.map(link => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={e => {
+                  e.preventDefault();
+                  scrollToHref(link.href);
+                }}
+                className="chalet-navigation__link"
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
-
-          {/* CTA button */}
-          <a
-            href="#rezervacia"
-            onClick={e => {
-              e.preventDefault();
-              handleLinkClick("#rezervacia");
-            }}
-            className={cn(
-              "chalet-navigation__book ml-3 inline-flex min-h-11 items-center px-5 py-2 text-sm font-semibold"
-            )}
-            style={{
-              fontFamily: "'Karla', sans-serif",
-              background: "oklch(0.72 0.12 65)",
-              color: "oklch(0.10 0.010 55)",
-            }}
-          >
-            {t.nav.book}
-          </a>
-        </div>
-
-        {/* Compact cluster — everything below xl: reserve CTA, the active
-            language, and the menu. The links and the other languages are one
-            tap away inside the menu rather than fighting for the same row. */}
-        <div className="flex items-center gap-2 xl:hidden">
-          <a
-            href="#rezervacia"
-            onClick={e => {
-              e.preventDefault();
-              handleLinkClick("#rezervacia");
-            }}
-            className="chalet-navigation__book hidden sm:inline-flex min-h-11 items-center px-4 py-2 text-sm font-semibold"
-            style={{
-              fontFamily: "'Karla', sans-serif",
-              background: "oklch(0.72 0.12 65)",
-              color: "oklch(0.10 0.010 55)",
-            }}
-          >
-            {t.nav.book}
-          </a>
-
-          {/* Active language, with its own short menu underneath. Switching
-              language is not a navigation task, so it does not go through the
-              burger — a guest who only wants German should not have to open
-              the whole menu to find it. */}
+          <span className="chalet-navigation__divider" aria-hidden="true" />
           <LanguageDropdown />
+          {bookButton("ml-3 inline-flex")}
+        </nav>
 
+        {/* Compact cluster — everything below xl. */}
+        <div className="flex items-center gap-2 xl:hidden">
+          {bookButton("hidden sm:inline-flex")}
+          <LanguageDropdown />
           <button
+            type="button"
             aria-label={open ? t.nav.menuClose : t.nav.menuOpen}
             aria-expanded={open}
             onClick={() => setOpen(!open)}
-            className={cn(
-              "flex items-center justify-center w-11 h-11 rounded-sm",
-              "border border-[rgba(180,120,40,0.25)] bg-transparent",
-              "text-[oklch(0.92_0.008_75)]",
-              "transition-colors duration-200",
-              "hover:border-[rgba(180,120,40,0.5)] hover:bg-[rgba(180,120,40,0.08)]",
-              "active:scale-95"
-            )}
+            className="chalet-navigation__burger"
           >
             <MenuToggleIcon open={open} className="size-5" duration={300} />
           </button>
         </div>
       </div>
 
-      {/* Menu overlay — links only. The language switcher moved out to the
-          flag in the bar, which now carries its own menu. */}
+      {/* Menu overlay — links, then the ways to reach the owners. */}
       <div
         inert={!open}
         aria-hidden={!open}
-        className={cn(
-          "fixed right-0 bottom-0 left-0 z-50 flex flex-col overflow-y-auto xl:hidden",
-          "border-t border-[rgba(180,120,40,0.15)]",
-          "bg-[oklch(0.06_0.008_55/0.98)]",
-          open ? "pointer-events-auto" : "pointer-events-none"
-        )}
-        style={{
-          top: "var(--nav-height)",
-          opacity: open ? 1 : 0,
-          transform: open ? "translateY(0)" : "translateY(-8px)",
-          transition: "opacity 0.25s ease, transform 0.25s ease",
-        }}
+        className="chalet-navigation__menu xl:hidden"
+        data-open={open}
       >
         <div className="flex h-full w-full flex-col justify-between gap-y-2 p-6">
-          <div className="grid gap-y-1 pt-4">
+          <div className="grid pt-4">
             {links.map((link, i) => (
               <a
-                key={link.label}
+                key={link.href}
                 href={link.href}
                 onClick={e => {
                   e.preventDefault();
-                  handleLinkClick(link.href);
+                  scrollToHref(link.href);
                 }}
-                className={cn(
-                  "flex items-center px-4 py-4 text-left",
-                  "border-b border-[rgba(180,120,40,0.08)]",
-                  "text-[oklch(0.75_0.015_65)] hover:text-[oklch(0.92_0.008_75)]",
-                  "transition-colors duration-200"
-                )}
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "2rem",
-                  letterSpacing: "0.1em",
-                  animationDelay: `${i * 60}ms`,
-                }}
+                className="chalet-navigation__menu-link"
+                style={{ transitionDelay: open ? `${60 + i * 40}ms` : "0ms" }}
               >
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
-                    color: "oklch(0.62 0.10 65)",
-                    letterSpacing: "0.2em",
-                    marginRight: "1rem",
-                    opacity: 0.7,
-                  }}
-                >
-                  0{i + 1}
-                </span>
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div className="flex flex-col gap-3 pb-8">
+          <div className="chalet-navigation__menu-actions">
             <a
               href="#rezervacia"
               onClick={e => {
                 e.preventDefault();
-                handleLinkClick("#rezervacia");
+                scrollToHref("#rezervacia");
               }}
-              className="w-full flex items-center justify-center py-4 rounded-sm text-center"
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.2rem",
-                letterSpacing: "0.12em",
-                background:
-                  "linear-gradient(180deg, oklch(0.72 0.12 65) 0%, oklch(0.60 0.10 60) 100%)",
-                color: "oklch(0.10 0.010 55)",
-                boxShadow:
-                  "0 0 0 1px rgba(180,120,40,0.3), 0 4px 16px rgba(180,120,40,0.3)",
-              }}
+              className="chalet-navigation__menu-primary"
             >
               {t.nav.bookStay}
             </a>
@@ -319,30 +221,16 @@ export function Navigation() {
               href={`tel:${PHONE}`}
               aria-label={`${t.contact.callAria} ${PHONE_DISPLAY}`}
               onClick={() => setOpen(false)}
-              className="w-full flex items-center justify-center gap-2 py-4 rounded-sm text-center"
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: '1.2rem',
-                letterSpacing: '0.12em',
-                color: 'oklch(0.72 0.12 65)',
-                border: '1px solid rgba(180,120,40,0.3)',
-              }}
+              className="chalet-navigation__menu-secondary"
             >
-              <Phone size={16} />
+              <Phone size={16} strokeWidth={1.6} aria-hidden="true" />
               {PHONE_DISPLAY}
             </a>
             <a
               href={`mailto:${EMAIL}`}
               aria-label={t.contact.emailAria}
               onClick={() => setOpen(false)}
-              className="w-full flex items-center justify-center py-4 rounded-sm text-center"
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.2rem",
-                letterSpacing: "0.12em",
-                color: "oklch(0.72 0.12 65)",
-                border: "1px solid rgba(180,120,40,0.3)",
-              }}
+              className="chalet-navigation__menu-secondary"
             >
               {t.nav.writeUs}
             </a>

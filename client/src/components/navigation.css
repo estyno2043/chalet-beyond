@@ -8,49 +8,284 @@
     --nav-height: 100px;
   }
 }
-.chalet-navigation__contact {
-  width: min(100%, 1600px);
-  height: 28px;
-  padding-inline: 24px;
+
+.chalet-navigation {
+  --nav-ink: oklch(0.97 0.007 75);
+  --nav-dark: oklch(0.1 0.01 55);
+  --nav-amber: oklch(0.72 0.12 65);
+  --nav-line: rgb(245 244 239 / 0.24);
+  --nav-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  width: 100%;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: var(--nav-ink);
+  transition:
+    background-color 280ms ease-out,
+    border-color 280ms ease-out;
 }
+.chalet-navigation[data-scrolled="true"] {
+  background: oklch(0.08 0.01 55 / 0.97);
+  border-bottom-color: oklch(0.72 0.12 65 / 0.18);
+}
+.chalet-navigation[data-open="true"] {
+  background: oklch(0.06 0.008 55 / 0.98);
+}
+
+.chalet-navigation__contact,
 .chalet-navigation__inner {
   width: min(100%, 1600px);
-  height: 72px;
   padding-inline: 24px;
 }
+.chalet-navigation__contact {
+  gap: 24px;
+  height: 28px;
+}
+.chalet-navigation__contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 400 0.75rem/1 var(--font-body-family);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: rgb(245 244 239 / 0.74);
+  text-decoration: none;
+  transition: color 180ms ease-out;
+}
+.chalet-navigation__contact svg {
+  color: var(--nav-amber);
+}
+.chalet-navigation__inner {
+  height: 72px;
+}
+
+.chalet-navigation__logo {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  user-select: none;
+}
+.chalet-navigation__logo img {
+  width: auto;
+  height: 46px;
+}
+
+.chalet-navigation__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chalet-navigation__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  font: 500 0.875rem/1 var(--font-body-family);
+  letter-spacing: 0.01em;
+  color: rgb(245 244 239 / 0.82);
+  text-decoration: none;
+  transition: color 180ms ease-out;
+}
+/* Underline draws from the left on hover and retracts to the right on leave. */
+.chalet-navigation__link::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  height: 1px;
+  background: var(--nav-amber);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 320ms var(--nav-ease);
+}
+.chalet-navigation__divider {
+  width: 1px;
+  height: 20px;
+  margin-inline: 16px 12px;
+  background: var(--nav-line);
+}
+
+/* Reserve: pale over the hero, amber once the hero is behind. Display comes
+   from the call site (inline-flex / hidden sm:inline-flex). */
 .chalet-navigation__book {
+  align-items: center;
+  min-height: 44px;
+  padding: 0 20px;
   border-radius: 2px;
+  background: var(--nav-ink);
+  color: var(--nav-dark);
+  font: 600 0.875rem/1 var(--font-body-family);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
   transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+    background-color 480ms var(--nav-ease),
+    transform 160ms ease-out;
+}
+.chalet-navigation[data-past-hero="true"] .chalet-navigation__book {
+  background: var(--nav-amber);
 }
 .chalet-navigation__book:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
+
+.chalet-navigation__burger {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px var(--nav-line);
+  color: var(--nav-ink);
+  transition:
+    background-color 180ms ease-out,
+    transform 160ms ease-out;
+}
+.chalet-navigation__burger:active {
+  transform: scale(0.95);
+}
+
 .chalet-navigation :is(a, button):focus-visible {
-  outline: 2px solid oklch(0.92 0.008 75);
+  outline: 2px solid var(--nav-ink);
   outline-offset: 4px;
 }
+
+/* ——— Menu overlay (below xl) ——— */
+.chalet-navigation__menu {
+  position: fixed;
+  top: var(--nav-height);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border-top: 1px solid oklch(0.72 0.12 65 / 0.18);
+  background: oklch(0.06 0.008 55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease-out;
+}
+.chalet-navigation__menu[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.chalet-navigation__menu-link {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 8px 4px;
+  border-bottom: 1px solid oklch(0.72 0.12 65 / 0.18);
+  font: 600 2.25rem/1 "Thunder", var(--font-display-family);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgb(245 244 239 / 0.86);
+  text-decoration: none;
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition:
+    opacity 360ms var(--nav-ease),
+    transform 480ms var(--nav-ease),
+    color 180ms ease-out;
+}
+.chalet-navigation__menu[data-open="true"] .chalet-navigation__menu-link {
+  opacity: 1;
+  transform: none;
+}
+.chalet-navigation__menu-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 24px;
+}
+.chalet-navigation__menu-primary,
+.chalet-navigation__menu-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+  border-radius: 2px;
+  font: 600 1rem/1 var(--font-body-family);
+  text-decoration: none;
+}
+.chalet-navigation__menu-primary {
+  background: var(--nav-amber);
+  color: var(--nav-dark);
+}
+.chalet-navigation__menu-secondary {
+  box-shadow: inset 0 0 0 1px var(--nav-line);
+  color: var(--nav-ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (min-width: 640px) {
-  .chalet-navigation__inner,
-  .chalet-navigation__contact {
+  .chalet-navigation__contact,
+  .chalet-navigation__inner {
     padding-inline: 40px;
   }
 }
 @media (min-width: 1024px) {
-  .chalet-navigation__inner,
-  .chalet-navigation__contact {
+  .chalet-navigation__contact,
+  .chalet-navigation__inner {
     padding-inline: 64px;
   }
 }
+
 @media (hover: hover) and (pointer: fine) {
+  .chalet-navigation__contact a:hover,
+  .chalet-navigation__link:hover {
+    color: var(--nav-ink);
+  }
+  .chalet-navigation__link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
   .chalet-navigation__book:hover {
-    opacity: 0.88;
+    background: oklch(0.88 0.035 75);
+  }
+  .chalet-navigation[data-past-hero="true"] .chalet-navigation__book:hover {
+    background: oklch(0.79 0.11 70);
+  }
+  .chalet-navigation__burger:hover {
+    background: rgb(245 244 239 / 0.08);
+  }
+  .chalet-navigation__menu-link:hover {
+    color: var(--nav-ink);
   }
 }
+
+/* The bar arrives with the hero title, a beat after it starts. */
+@media (prefers-reduced-motion: no-preference) {
+  .chalet-navigation__contact,
+  .chalet-navigation__inner {
+    animation: nav-arrive 900ms var(--nav-ease) 280ms both;
+  }
+}
+@keyframes nav-arrive {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chalet-navigation *,
   .chalet-navigation {
     transition: none !important;
+  }
+  .chalet-navigation__menu-link {
+    opacity: 1;
+    transform: none;
   }
 }

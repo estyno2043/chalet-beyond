@@ -12,13 +12,18 @@ colors:
   hero-ink: "oklch(0.97 0.007 75)"
   hero-dark: "oklch(0.12 0.01 55)"
   hero-hover: "oklch(0.84 0.075 75)"
+  hero-soft: "oklch(0.88 0.01 75)"
+  hero-proof: "oklch(0.86 0.01 75)"
+  nav-book-hover: "oklch(0.88 0.035 75)"
+  nav-book-amber-hover: "oklch(0.79 0.11 70)"
+  menu-link-muted: "oklch(0.78 0.015 70)"
 typography:
   display:
-    fontFamily: "Bebas Neue, sans-serif"
-    fontSize: "clamp(4.5rem, 17vw, 6rem)"
-    fontWeight: 400
-    lineHeight: 0.92
-    letterSpacing: "-0.025em"
+    fontFamily: "Thunder, Bebas Neue, sans-serif"
+    fontSize: "clamp(6.25rem, 31vw, 10.5rem)"
+    fontWeight: 600
+    lineHeight: 0.84
+    letterSpacing: "0.004em"
   headline:
     fontFamily: "Bebas Neue, sans-serif"
     fontSize: "clamp(2.5rem, 5vw, 5rem)"
@@ -33,11 +38,22 @@ typography:
     fontSize: "1.125rem"
     fontWeight: 400
     lineHeight: 1.45
+  hero-body-desktop:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1.1875rem"
   hero-action:
     fontFamily: "Karla, sans-serif"
     fontSize: "1rem"
     fontWeight: 600
     lineHeight: 1.4
+  hero-action-secondary:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "0.9375rem"
+    fontWeight: 500
+  hero-meta:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 400
   label:
     fontFamily: "JetBrains Mono, monospace"
     fontSize: "0.75rem"
@@ -69,25 +85,34 @@ components:
     textColor: "{colors.hero-dark}"
     typography: "{typography.hero-action}"
     rounded: "{rounded.hero-control}"
-    padding: "14px 20px"
+    padding: "10px 10px 10px 20px"
   hero-primary-hover:
-    backgroundColor: "{colors.hero-hover}"
+    backgroundColor: "{colors.primary}"
   hero-secondary:
     textColor: "{colors.hero-ink}"
+    typography: "{typography.hero-action-secondary}"
+    rounded: "{rounded.hero-control}"
+    padding: "10px 24px"
+  hero-secondary-hover:
+    backgroundColor: "{colors.hero-ink}"
+    textColor: "{colors.hero-dark}"
   hero-playback:
-    backgroundColor: "rgb(12 14 12 / 0.6)"
+    backgroundColor: "rgb(12 14 12 / 0.35)"
     textColor: "{colors.hero-ink}"
     rounded: "{rounded.hero-control}"
-    padding: "10px 14px"
+    padding: "10px 16px"
   navigation-link:
     textColor: "{colors.foreground}"
     typography: "{typography.navigation}"
     padding: "6px 12px"
   navigation-book:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "{colors.hero-ink}"
     textColor: "oklch(0.10 0.010 55)"
     rounded: "{rounded.hero-control}"
-    padding: "8px 20px"
+    padding: "0 20px"
+  navigation-book-past-hero:
+    backgroundColor: "{colors.primary}"
+    textColor: "oklch(0.10 0.010 55)"
 ---
 
 # Design System: Chalet Beyond
@@ -137,12 +162,15 @@ values; hero-local colors do not replace global tokens.
 
 ## Typography
 
-Display: **Bebas Neue**. Body and hero actions: **Karla**. Data and language
-labels: **JetBrains Mono**. All are locally served with Latin and Latin Extended
-coverage and `font-display: swap`; retain their declared fallback families.
+Hero title: **Thunder** SemiBold LC (supplied by the owner, freeware for
+commercial use; licence note beside the file). Section display: **Bebas Neue**.
+Body and hero actions: **Karla**. Data labels: **JetBrains Mono**. All are
+locally served with `font-display: swap`; retain their declared fallback families.
 
-- `display` is the hero title only; it settles at 6rem from 1024px. Its two lines
-  and tight leading are local composition decisions.
+- `display` is the hero title only. Thunder is extremely condensed, so it runs
+  past the usual 6rem display ceiling (10.5rem from ~540px) to read at the same
+  visual weight. Two lines, 0.84 leading; letters are split into spans for the
+  entrance, which drops kerning pairs — acceptable at this size.
 - `headline` captures the inherited section-heading utility. General headings
   use the same display family with 1.05 leading.
 - `body` is inherited base text; paragraphs cap at 68ch.
@@ -193,32 +221,48 @@ not a general pill-shaped component language.
 warm hover feedback and a small pressed scale. These are existing global CSS
 utilities; the sidecar preserves their styles without treating them as hero CTAs.
 
-**Hero actions:** the pale primary action leads to the inquiry section, and the
-underlined secondary action leads to the gallery. Primary hover warms the fill
-and moves the arrow 3px; pressed scale is 0.98. The playback control is a bordered,
-translucent dark button. All hero actions receive a 2px pale focus outline with
-5px offset. Transition duration is 180ms; reduced motion removes transitions and
-the primary pressed transform.
+**Hero offer:** the primary action carries the offer — "check available dates",
+the lowest nightly rate from `shared/pricing` and "whole chalet" — with the arrow
+in its own 44px cell. Under the actions sits one proof line: Booking.com rating
+(`shared/contact`), the direct-booking saving and free cancellation (both from
+the pricing copy). The secondary action is outlined and leads to the gallery.
+
+**Hero buttons:** the anchor is the stationary hit area (plus a 12px magnetic
+field); its inner surface follows the cursor on a damped spring, at most 10px
+sideways and 7px vertically, the arrow cell 4px further. A fill grows as a
+circle from the cursor's entry point (640ms, exponential ease-out) and recedes
+towards the exit point. The fill holds its own copy of the face, so the text
+colour changes exactly at the fill's edge. Primary fills amber, outlined ones
+fill pale. Keyboard focus shows the full fill plus a 2px pale outline; pressed
+scale 0.98. Without a fine pointer, plain `:hover` shows the fill.
 
 **Hero media and entrance:** poster and video cover the frame, with a 56% horizontal
-crop below desktop and centered crop from 1024px. The poster remains until a
-decoded video frame is ready. Native muted looping 720p60 playback is requested
-only from 1024px without reduced motion, Save-Data or a reported slow connection
-(slow-2g, 2g, 3g). Compact playback is explicit and uses 720p30. Playback pauses
-offscreen or when hidden and preserves a manual pause. Footage contains cuts;
-the loop is not seamless. Title entrance lasts 700ms with an 80ms second-line
-delay; supporting copy lasts 650ms with 100/150ms delays. Both use opacity and
-translation, and are omitted for reduced motion. Scroll never seeks the video.
+crop below desktop and centered crop from 1024px. Video starts on its own at every
+width (owner's direction, 2026-09-30): 720p60 from 1024px, 720p30 below. Only
+reduced motion and Save-Data keep the poster. Playback pauses offscreen or when
+hidden and preserves a manual pause. Footage contains cuts; the loop is not
+seamless. Scroll never seeks the video.
 
-**Hero pointer response:** only from 1024px with hover, a fine mouse pointer and
-no reduced motion. A 28px ring follows pointer events and expands to 1.45 times
-its size over hero actions. Inner action contents translate at most 4px sideways
-and 3px vertically; hit areas and the native cursor stay intact. Updates are
-coalesced to a frame, with no idle loop. Tab, leaving, scrolling, resizing, losing
-focus or hiding the page clears the effect.
+The entrance is the hero's one authored moment. A dark curtain covers the
+footage while the title plays; each letter is born at the hero's centre (16% of
+its 680ms: fade, blur 12→5px, scale 1.14→1.08) and glides left into its slot
+(quint ease-out), 34ms apart. BEYOND starts when CHALET's last letter is halfway
+in; the whole title takes ~1.3s. The curtain lifts on the first decoded frame,
+never before 650ms and never after 1.6s, while the footage settles from 1.07 to
+1 over 2.4s. Copy, offer and playback rise in behind (760ms, 560–1000ms delays).
+The bar arrives at 280ms. Reduced motion skips all of it.
 
-**Navigation:** desktop links gain a warm color and an amber underline on hover;
-the amber CTA fades to 0.88 opacity on hover. Focus is a 2px pale outline with
+**Hero pointer response:** any width with hover, a fine mouse pointer and no
+reduced motion. A 30px ring trails the pointer (0.32 follow per frame) and
+dissolves over a button, which becomes the feedback. One rAF loop runs only while
+the ring or a spring is moving; no React renders. Tab, leaving, scrolling,
+resizing, losing focus or hiding the page clears the effect.
+
+**Navigation:** the logo is the brand mark recoloured for a dark ground
+(`logo-light-v1.png`, tagline dropped at 46px). Links draw an amber underline
+from the left on hover and retract it to the right. Language is one dropdown
+(flag + code) at every width. The reserve action is pale while the hero is
+under the bar and turns amber once it has scrolled away (480ms). Focus is a 2px pale outline with
 4px offset. The compact menu uses a brief 250ms fade and 8px lift, suppressed for
 reduced motion. Closed menu contents are inert and hidden from accessibility
 navigation. Language choices combine flags with text and mark the selected
@@ -234,5 +278,5 @@ form fields.
 - Do keep hero copy and actions legible over both the poster and moving footage.
 - Do preserve visible keyboard focus, stationary action hit areas and reduced-motion behavior in the hero and navigation.
 - Don't promote the hero's two-line title, lower-left composition or 1600px container into a mandatory site-wide layout.
-- Don't add invented ratings, prices or instant-booking promises to the hero.
-- Don't replace poster-first compact playback with automatic video loading.
+- Don't add invented ratings, prices or instant-booking promises to the hero; the rate, rating and cancellation terms come from `shared/pricing`, `shared/contact` and the pricing copy.
+- Don't gate autoplay on network guesses; Save-Data and reduced motion are the only opt-outs.

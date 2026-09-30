@@ -33,6 +33,12 @@ export const sk = {
     explore: "Prezrieť priestory",
     playVideo: "Prehrať video",
     pauseVideo: "Pozastaviť video",
+    /** Hero offer. {price} and {rating} come from shared/pricing and shared/contact. */
+    offerCta: "Overiť voľný termín",
+    offerPrice: "od {price} € / noc · celý chalet",
+    offerRating: "{rating}/10 na Booking.com",
+    offerDirect: "O 10 % lacnejšie ako na Bookingu",
+    offerCancel: "Storno zdarma do 14 dní",
     tagline: "Vysoké Tatry · Black Stork Golf · Slovakia",
     coords: "49°08'N 20°20'E — VEĽKÁ LOMNICA",
     proof: "na Booking.com",

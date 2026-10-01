@@ -43,3 +43,24 @@ guarantees.
 Inquiry delivery and production configuration are outside this hero change and
 are not validated by passing frontend tests. User-supplied footage has cuts and
 does not form a seamless loop.
+
+## Owner direction, 2026-10-01 — frontend below the hero
+
+The owner approved implementation of the supplied frontend premium plan,
+archived at `docs/source/frontend-premium-plan.md`. Its scope is the introduction,
+property gallery, amenities, surroundings, pricing, inquiry flow and footer.
+Preserve the completed hero/header composition and title choreography. The
+existing Dark Timber identity and owner photography remain authoritative.
+
+The visitor should inspect the real property, calculate the family price, choose
+dates and send a direct inquiry. Adult and child counts share one state between
+pricing and inquiry. Phone is optional. A successful inquiry is an acknowledgment,
+not a confirmed reservation. The Booking comparison uses repository rates rather
+than a live marketplace quote.
+
+Do not add unconfirmed bed types, travel distances, response-time guarantees or
+payment terms. The hero rating presentation remains a separate owner decision.
+Local availability currently has no configured iCal feed. Browser inquiry tests
+use mocked responses; physical iPhone behavior and live email delivery remain
+unverified. Implementation and local commits are authorized; no public deployment
+was performed in this frontend task.

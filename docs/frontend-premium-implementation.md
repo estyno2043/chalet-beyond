@@ -13,3 +13,9 @@ Truth: omit unconfirmed distances, bed types, payment conditions and response-ti
 Checkpoints: (0/1) safety, motion and foundation; (2) photo pipeline and editorial sections; (3) calculator, inquiry and contact; (4) gallery/motion polish; (5) visual, interaction, reduced-motion, performance and independent review. Local commits, local preview. Public deployment needs explicit authorization.
 
 Validation: section screenshots SK/DE at 1440, 1280×720, 900, 390 and 320; keyboard and emulated touch; pricing/date/API contracts; production Lighthouse and CPU trace; detector on changed surface. Physical iPhone and live email delivery remain separate checks unless actually performed.
+
+Delivered locally on 2026-10-01. Final production Lighthouse: mobile 92/92/92,
+desktop 100, accessibility 100 and CLS 0 throughout. Independent reviewer scored
+both material corrections resolved and returned `ship` for that fix list.
+Detailed evidence and remaining physical-device/live-delivery limits:
+[validation report](validation/frontend-premium.md).

@@ -8,7 +8,7 @@
  * Motion: Framer Motion fadeUp, clip-path wipes, stagger 0.08s, ease [0.23,1,0.32,1]
  */
 
-@import "tailwindcss";
+@import "tailwindcss" source("./");
 @import "tw-animate-css";
 @import "./fonts.css";
 

@@ -395,7 +395,7 @@ summary > span {
   --rdp-accent-color: var(--amber);
   --rdp-accent-background-color: oklch(0.72 0.12 65 / 0.18);
   --rdp-day-height: 48px;
-  --rdp-day-width: 48px;
+  --rdp-day-width: 44px;
   --rdp-day_button-height: 44px;
   --rdp-day_button-width: 44px;
   --rdp-months-gap: 32px;
@@ -1144,4 +1144,27 @@ html[data-gallery-open="true"] .mobile-book-bar {
   .booking-placeholder {
     min-height: 1160px;
   }
+}
+.inquiry-form input,
+.inquiry-form textarea {
+  caret-color: var(--amber);
+}
+.lightbox-navigation button:active {
+  transform: scale(0.95);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-navigation button:active {
+    transform: none;
+  }
+}
+/* Extra shade follows the text region; mountain detail stays open on the right. */
+.location-section .photo-shade {
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.38), transparent 78%),
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.3),
+      rgb(0 0 0 / 0.32) 35%,
+      rgb(0 0 0 / 0.72)
+    );
 }

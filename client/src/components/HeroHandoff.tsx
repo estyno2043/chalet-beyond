@@ -12,12 +12,7 @@
  * dependency), applied as transforms only. Reduced motion: plain flow.
  */
 import { useRef, type ReactNode } from "react";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { m, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import "./hero-handoff.css";
 
 export function HeroHandoff({
@@ -43,7 +38,7 @@ export function HeroHandoff({
 
   return (
     <>
-      <motion.div
+      <m.div
         ref={heroRef}
         className="hero-handoff__hero"
         style={
@@ -54,14 +49,14 @@ export function HeroHandoff({
       >
         {hero}
         {!reduce && (
-          <motion.div
+          <m.div
             className="hero-handoff__dim"
             style={{ opacity: heroDim }}
             aria-hidden="true"
           />
         )}
-      </motion.div>
-      <motion.div
+      </m.div>
+      <m.div
         id="page-sheet"
         className="hero-handoff__sheet"
         style={
@@ -74,7 +69,7 @@ export function HeroHandoff({
         }
       >
         {children}
-      </motion.div>
+      </m.div>
     </>
   );
 }

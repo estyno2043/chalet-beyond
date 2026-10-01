@@ -194,12 +194,13 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
       });
       const data = await response.json();
       if (!response.ok) {
-        if (data.code === "DATES_TAKEN") {
+        if (data.code === "dates_taken") {
           setStep("dates");
           setDateError(t.booking.datesTaken);
         }
         throw new Error("Inquiry rejected");
       }
+      if (data.ok !== true) throw new Error("Invalid inquiry response");
       setConfirmationSent(data.confirmationSent !== false);
       setStatus("sent");
     } catch {
@@ -312,7 +313,19 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
             {status === "sent" ? (
               <motion.div
                 key="success"
-                ref={successRef}
+                ref={node => {
+                  successRef.current = node;
+                  if (node)
+                    requestAnimationFrame(() => {
+                      node.focus({ preventScroll: true });
+                      const rect = node.getBoundingClientRect();
+                      if (rect.top < 90 || rect.bottom > innerHeight)
+                        node.scrollIntoView({
+                          behavior: reduce ? "auto" : "smooth",
+                          block: "center",
+                        });
+                    });
+                }}
                 tabIndex={-1}
                 role="status"
                 className="booking-success"

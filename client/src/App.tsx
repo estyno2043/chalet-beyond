@@ -1,11 +1,9 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./i18n/LanguageProvider";
-import { MotionConfig } from "framer-motion";
+import { LazyMotion, MotionConfig } from "framer-motion";
 import Home from "./pages/Home";
 import { LANGS, type Lang } from "@shared/i18n";
 
@@ -40,16 +38,18 @@ function Router() {
   );
 }
 
+const loadMotionFeatures = () =>
+  import("./lib/motion-features").then(module => module.default);
+
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
+        <LazyMotion features={loadMotionFeatures}>
           <MotionConfig reducedMotion="user">
             <Router />
           </MotionConfig>
-        </TooltipProvider>
+        </LazyMotion>
       </ThemeProvider>
     </ErrorBoundary>
   );

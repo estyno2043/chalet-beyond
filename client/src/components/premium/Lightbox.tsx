@@ -93,12 +93,12 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
         rect.left < innerWidth;
       if (!immediate && stage.current) {
         const target =
-          !reduce && visible && index === 0
+          !reduce && visible
             ? fromCover(cover, box)
             : { opacity: 0, transform: reduce ? "none" : "scale(.98)" };
         try {
           await stage.current.animate([resting, target], {
-            duration: reduce ? 240 : visible && index === 0 ? 240 : 160,
+            duration: reduce ? 240 : visible ? 240 : 160,
             easing: `cubic-bezier(${EASE.ui})`,
             fill: "forwards",
           }).finished;
@@ -300,7 +300,10 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
                 filter: reduce || instant ? "none" : "blur(2px)",
               }}
               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0 }}
+              exit={{
+                opacity: 0,
+                transition: { duration: instant ? 0 : DUR.ui },
+              }}
               transition={{ duration: instant ? 0 : DUR.state, ease: EASE.ui }}
             />
           </AnimatePresence>

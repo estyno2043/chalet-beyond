@@ -1,3 +1,4 @@
+import { RevealList } from "./premium/RevealList";
 import { useT } from "@/i18n/LanguageProvider";
 import { usePremiumCopy } from "./premium/copy";
 import { SectionHeader } from "./premium/SectionHeader";
@@ -25,7 +26,7 @@ export function AmenitiesSection() {
             </figure>
           ))}
         </div>
-        <ul className="amenities-list">
+        <RevealList>
           {[
             items.wifi,
             items.parking,
@@ -41,7 +42,7 @@ export function AmenitiesSection() {
           ].map(text => (
             <li key={text}>{text}</li>
           ))}
-        </ul>
+        </RevealList>
       </div>
     </section>
   );

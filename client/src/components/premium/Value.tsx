@@ -1,11 +1,11 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { EASE, DUR } from "@/lib/motion";
 export function Value({ value }: { value: string | number }) {
   const reduce = useReducedMotion();
   return (
     <span className="changing-value">
       <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
+        <m.span
           key={value}
           initial={{
             opacity: 0,
@@ -17,7 +17,7 @@ export function Value({ value }: { value: string | number }) {
           transition={{ duration: DUR.state, ease: EASE.ui }}
         >
           {value}
-        </motion.span>
+        </m.span>
       </AnimatePresence>
     </span>
   );

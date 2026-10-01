@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Phone } from "lucide-react";
 import { PHONE, PHONE_DISPLAY } from "@shared/contact";
 import { useT } from "@/i18n/LanguageProvider";
@@ -38,7 +38,7 @@ export function StickyContactBar() {
   return (
     <AnimatePresence>
       {past && !focused && (
-        <motion.div
+        <m.div
           className="mobile-book-bar"
           initial={{ y: reduce ? 0 : "100%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -59,7 +59,7 @@ export function StickyContactBar() {
           >
             <Phone size={20} aria-hidden="true" />
           </a>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

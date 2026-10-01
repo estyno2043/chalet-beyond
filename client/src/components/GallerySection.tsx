@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import { lazy, Suspense, useRef, useState } from "react";
 import { SectionHeader } from "./premium/SectionHeader";
 import { RevealPhoto } from "./premium/Photo";
@@ -35,7 +36,7 @@ export function GallerySection() {
               }}
               onClick={() => setActive(i)}
               aria-haspopup="dialog"
-              aria-label={`${c.albums[i]} — ${c.albumFacts[i]}`}
+              aria-labelledby={`album-${i}-title album-${i}-fact`}
             >
               <RevealPhoto
                 id={photos[0]}
@@ -48,11 +49,11 @@ export function GallerySection() {
               />
               <div className="gallery-cover__shade" />
               <div className="gallery-cover__caption">
-                <h3>{c.albums[i]}</h3>
-                <p>{c.albumFacts[i]}</p>
+                <h3 id={`album-${i}-title`}>{c.albums[i]}</h3>
+                <p id={`album-${i}-fact`}>{c.albumFacts[i]}</p>
               </div>
               <span className="gallery-cover__open" aria-hidden="true">
-                ↗
+                <ArrowUpRight size={20} strokeWidth={1.5} />
               </span>
             </button>
           ))}

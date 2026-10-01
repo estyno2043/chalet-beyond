@@ -52,11 +52,9 @@ export function Navigation() {
 
   const scrollToHref = (href: string) => {
     setOpen(false);
-    document
-      .querySelector(href)
-      ?.scrollIntoView({
-        behavior: prefersReducedMotion() ? "auto" : "smooth",
-      });
+    document.querySelector(href)?.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   };
 
   const bookButton = (className: string) => (
@@ -94,7 +92,7 @@ export function Navigation() {
             href: `mailto:${EMAIL}`,
             label: EMAIL,
             Icon: Mail,
-            aria: t.contact.emailAria,
+            aria: `${t.contact.emailAria} ${EMAIL}`,
           },
         ].map(({ href, label, Icon, aria }) => (
           <a key={href} href={href} aria-label={aria}>

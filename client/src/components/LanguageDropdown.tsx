@@ -54,10 +54,10 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
       <button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen((wasOpen) => !wasOpen)}
+        onClick={() => setOpen(wasOpen => !wasOpen)}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={`${LANG_NAMES[current]} — ${LANGS.length} jazykov`}
+        aria-label={`${current.toUpperCase()} — ${LANG_NAMES[current]}`}
         className="h-11 flex items-center justify-center gap-2 rounded-full px-4"
         style={{
           boxShadow: "inset 0 0 0 1px rgb(245 244 239 / 0.24)",
@@ -96,7 +96,7 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
           boxShadow: "0 12px 32px rgb(0 0 0 / 0.45)",
         }}
       >
-        {LANGS.map((lang) => {
+        {LANGS.map(lang => {
           const Flag = FLAGS[lang];
           const active = lang === current;
           return (

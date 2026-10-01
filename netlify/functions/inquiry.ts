@@ -34,7 +34,7 @@ async function withTimeout<T>(work: Promise<T>, label: string): Promise<T> {
   const expiry = new Promise<never>((_, reject) => {
     timer = setTimeout(
       () => reject(new Error(`${label} timed out after ${SEND_TIMEOUT_MS}ms`)),
-      SEND_TIMEOUT_MS,
+      SEND_TIMEOUT_MS
     );
   });
   try {
@@ -62,7 +62,7 @@ export default async (request: Request): Promise<Response> => {
   if (!parsed.success) {
     return Response.json(
       { error: parsed.error.issues[0]?.message ?? "Neplatný dopyt" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -84,13 +84,13 @@ export default async (request: Request): Promise<Response> => {
     exceedsLimit(
       `to:${email.toLowerCase()}`,
       PER_RECIPIENT.limit,
-      PER_RECIPIENT.windowMs,
+      PER_RECIPIENT.windowMs
     )
   ) {
     console.warn("inquiry: rate limited", clientIp(request), email);
     return Response.json(
       { error: "Priveľa dopytov. Skúste o chvíľu alebo nám zavolajte." },
-      { status: 429 },
+      { status: 429 }
     );
   }
 
@@ -106,10 +106,16 @@ export default async (request: Request): Promise<Response> => {
     const { blocked, failures } = await loadBlockedDates(urls);
     for (const failure of failures) {
       // Redacted upstream: the export token must not reach a log.
-      console.error(`inquiry: feed ${failure.reason}`, failure.url, failure.detail);
+      console.error(
+        `inquiry: feed ${failure.reason}`,
+        failure.url,
+        failure.detail
+      );
     }
     if (failures.length === urls.length) {
-      console.warn("inquiry: availability unverified, letting the inquiry through");
+      console.warn(
+        "inquiry: availability unverified, letting the inquiry through"
+      );
     } else if (!rangeIsFree(from, to, blocked)) {
       // A partial answer can only under-report occupied nights, so a collision
       // with what did load is real no matter which feeds stayed silent.
@@ -121,7 +127,7 @@ export default async (request: Request): Promise<Response> => {
           code: "dates_taken",
           error: "Tento termín je medzitým obsadený. Vyberte prosím iný.",
         },
-        { status: 409 },
+        { status: 409 }
       );
     }
   }
@@ -134,7 +140,7 @@ export default async (request: Request): Promise<Response> => {
     console.error("inquiry: RESEND_API_KEY or OWNER_EMAIL is not set");
     return Response.json(
       { error: "Dopyt sa nepodarilo odoslať." },
-      { status: 502 },
+      { status: 502 }
     );
   }
 
@@ -156,12 +162,12 @@ export default async (request: Request): Promise<Response> => {
           "",
           `Meno:       ${name}`,
           `E-mail:     ${email}`,
-          `Telefón:    ${phone}`,
+          `Telefón:    ${phone || "—"}`,
           "",
           message ? `Poznámka:\n${message}` : "Bez poznámky.",
         ].join("\n"),
       }),
-      "owner notification",
+      "owner notification"
     );
     // The SDK reports delivery failures in the payload rather than by throwing,
     // so a rejected send would otherwise look like success and the lead vanishes.
@@ -170,7 +176,7 @@ export default async (request: Request): Promise<Response> => {
     console.error("inquiry: owner notification failed", error);
     return Response.json(
       { error: "Dopyt sa nepodarilo odoslať." },
-      { status: 502 },
+      { status: 502 }
     );
   }
 
@@ -199,7 +205,7 @@ export default async (request: Request): Promise<Response> => {
           "Kamenná 2004/25A, 059 52 Veľká Lomnica",
         ].join("\n"),
       }),
-      "guest confirmation",
+      "guest confirmation"
     );
     if (error) throw new Error(`${error.name}: ${error.message}`);
   } catch (error) {

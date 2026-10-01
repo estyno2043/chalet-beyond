@@ -24,3 +24,13 @@
     0 -1px 0 oklch(0.72 0.12 65 / 0.18),
     0 -48px 96px -24px rgb(0 0 0 / 0.65);
 }
+
+@media (max-width: 767px) {
+  .hero-handoff__hero {
+    will-change: auto;
+  }
+
+  .hero-handoff__sheet {
+    box-shadow: 0 -1px 0 oklch(0.72 0.12 65 / 0.18);
+  }
+}

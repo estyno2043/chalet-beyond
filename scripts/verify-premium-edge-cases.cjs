@@ -47,7 +47,7 @@ const assert = require("assert");
     await p
       .locator(".booking-total strong")
       .innerText()
-      .then(t => t.includes("630"))
+      .then(t => t.replace(/\D/g, "") === "600")
   );
   await day(8).click();
   await day(14).click();

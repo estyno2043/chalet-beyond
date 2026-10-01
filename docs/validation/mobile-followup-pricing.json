@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-01T15:31:25.730Z",
+  "base": "http://localhost:4180",
+  "results": [
+    {
+      "engine": "chromium",
+      "lang": "de",
+      "width": 1280,
+      "height": 720,
+      "sixNightFamily": 2280,
+      "sevenNightFamily": 2128,
+      "sevenNightEightAdults": 3920,
+      "geometry": {
+        "top": 124,
+        "bottom": 682.9375,
+        "height": 558.9375,
+        "position": "sticky",
+        "overflow": false
+      },
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "lang": "sk",
+      "width": 390,
+      "height": 664,
+      "sixNightFamily": 2280,
+      "sevenNightFamily": 2128,
+      "sevenNightEightAdults": 3920,
+      "geometry": {
+        "top": 902.90625,
+        "bottom": 1521.84375,
+        "height": 618.9375,
+        "position": "static",
+        "overflow": false
+      },
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "de",
+      "width": 1280,
+      "height": 720,
+      "sixNightFamily": 2280,
+      "sevenNightFamily": 2128,
+      "sevenNightEightAdults": 3920,
+      "geometry": {
+        "top": 124,
+        "bottom": 682.9375,
+        "height": 558.9375,
+        "position": "sticky",
+        "overflow": false
+      },
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "sk",
+      "width": 390,
+      "height": 664,
+      "sixNightFamily": 2280,
+      "sevenNightFamily": 2128,
+      "sevenNightEightAdults": 3920,
+      "geometry": {
+        "top": 902.90625,
+        "bottom": 1521.84375,
+        "height": 618.9375,
+        "position": "static",
+        "overflow": false
+      },
+      "errors": []
+    }
+  ],
+  "mocks": "Availability only; no inquiry submission"
+}

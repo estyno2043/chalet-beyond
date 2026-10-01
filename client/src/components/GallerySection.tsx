@@ -40,7 +40,6 @@ export function GallerySection() {
             >
               <RevealPhoto
                 id={photos[0]}
-                delay={(i % 3) * 60}
                 sizes={
                   i === 0
                     ? "(min-width: 1024px) 45vw, 100vw"

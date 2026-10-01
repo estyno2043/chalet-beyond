@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { Phone } from "lucide-react";
 import { PHONE, PHONE_DISPLAY } from "@shared/contact";
+import { PRICE_PER_NIGHT } from "@shared/pricing";
 import { useT } from "@/i18n/LanguageProvider";
 import { usePastHero } from "@/hooks/usePastHero";
 import { usePremiumCopy } from "./premium/copy";
@@ -50,7 +51,10 @@ export function StickyContactBar() {
           transition={{ duration: DUR.state, ease: EASE.drawer }}
         >
           <RollLink href="#rezervacia" tone="solid">
-            {c.bar}
+            {c.bar.replace(
+              "{price}",
+              String(Math.min(...Object.values(PRICE_PER_NIGHT)))
+            )}
           </RollLink>
           <a
             href={`tel:${PHONE}`}

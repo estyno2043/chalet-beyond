@@ -1,8 +1,4 @@
-import {
-  PRICE_PER_NIGHT,
-  BOOKING_PRICE_PER_NIGHT,
-  CHILD_PRICE_PER_NIGHT,
-} from "@shared/pricing";
+import { PRICE_PER_NIGHT, CHILD_PRICE_PER_NIGHT } from "@shared/pricing";
 import { useGuests } from "@/contexts/GuestsContext";
 import { usePremiumCopy } from "./premium/copy";
 import { SectionHeader } from "./premium/SectionHeader";
@@ -14,9 +10,8 @@ export function PricingSection() {
   const c = usePremiumCopy();
   const t = useT();
   const { adults, children } = useGuests();
-  const direct = PRICE_PER_NIGHT[adults] + children * CHILD_PRICE_PER_NIGHT;
-  const booking =
-    BOOKING_PRICE_PER_NIGHT[adults] + children * CHILD_PRICE_PER_NIGHT;
+  const baseNight = PRICE_PER_NIGHT[adults] + children * CHILD_PRICE_PER_NIGHT;
+  const startingPrice = Math.min(...Object.values(PRICE_PER_NIGHT));
   return (
     <section id="cennik" className="premium-section pricing-section">
       <div className="container">
@@ -25,12 +20,9 @@ export function PricingSection() {
           <div className="price-story">
             <p className="price-context">{c.from}</p>
             <p className="starting-price">
-              315 €<span>{c.night}</span>
+              {startingPrice} €<span>{c.night}</span>
             </p>
             <p>{c.whole}</p>
-            <p className="price-comparison">
-              <s>353 €</s> {c.comparison}
-            </p>
             <RollLink href="#rezervacia" tone="solid">
               {t.nav.book}
             </RollLink>
@@ -42,21 +34,13 @@ export function PricingSection() {
               aria-live="polite"
               aria-atomic="true"
             >
-              <span>{c.direct}</span>
+              <span>{c.baseNight}</span>
               <strong>
-                <Value value={`${direct} €`} />
+                <Value value={`${baseNight} €`} />
               </strong>
               <span>{c.night}</span>
             </div>
-            <p className="price-comparison">
-              {c.comparison}:{" "}
-              <s>
-                <Value value={`${booking} €`} />
-              </s>
-            </p>
-            <p className="saving">
-              {c.save} <Value value={`${booking - direct} €`} /> {c.night}
-            </p>
+            <p className="price-offer-note">{c.weeklyNote}</p>
             <p>{c.childNote}</p>
           </div>
         </div>
@@ -70,8 +54,7 @@ export function PricingSection() {
               <thead>
                 <tr>
                   <th scope="col">{c.adults}</th>
-                  <th scope="col">{c.direct}</th>
-                  <th scope="col">Booking.com</th>
+                  <th scope="col">{c.baseNight}</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,7 +62,6 @@ export function PricingSection() {
                   <tr key={n}>
                     <th scope="row">{n === 2 ? "1–2" : n}</th>
                     <td>{PRICE_PER_NIGHT[n]} €</td>
-                    <td>{BOOKING_PRICE_PER_NIGHT[n]} €</td>
                   </tr>
                 ))}
               </tbody>

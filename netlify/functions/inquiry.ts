@@ -145,6 +145,24 @@ export default async (request: Request): Promise<Response> => {
   }
 
   const price = calcTotal(utc(from), utc(to), guests, children);
+  const priceLines = [
+    `Základná cena: ${price.perNight} €/noc · ${price.baseTotal} € za ${price.nights} nocí`,
+    ...(price.discountKind === "weekly"
+      ? [`Zľava za 7 a viac nocí (20 %): −${price.weeklyDiscount} €`]
+      : price.discountKind === "promotion"
+        ? [
+            `Akciová zľava: −${price.promotionDiscount} €`,
+            ...Array.from(
+              new Set(
+                price.nightlyBreakdown.flatMap(night =>
+                  night.promotionLabel ? [night.promotionLabel] : []
+                )
+              )
+            ).map(label => `Akcia: ${label}`),
+          ]
+        : []),
+    `Cena spolu: ${price.total} €`,
+  ];
   const resend = new Resend(apiKey);
 
   try {
@@ -157,8 +175,7 @@ export default async (request: Request): Promise<Response> => {
         text: [
           `Termín:     ${from} → ${to} (${price.nights} nocí)`,
           `Hostia:     ${guests} dospelí${children ? `, ${children} detí (0–15 r.)` : ""}`,
-          `Cena:       ${price.perNight} €/noc · spolu ${price.total} €`,
-          `Na Bookingu by zaplatil ${price.bookingTotal} € (ušetril ${price.savings} €)`,
+          ...priceLines,
           "",
           `Meno:       ${name}`,
           `E-mail:     ${email}`,
@@ -193,11 +210,11 @@ export default async (request: Request): Promise<Response> => {
         text: [
           `Dobrý deň, ${name},`,
           "",
-          "ďakujeme za dopyt. Ozveme sa do 24 hodín.",
+          "ďakujeme za dopyt. Dostupnosť a konečnú cenu vám potvrdíme osobne.",
           "",
           `Termín:  ${from} → ${to} (${price.nights} nocí)`,
           `Hostia:  ${guests} dospelí${children ? `, ${children} detí (0–15 r.)` : ""}`,
-          `Cena:    ${price.perNight} €/noc · spolu ${price.total} €`,
+          ...priceLines,
           "",
           "Toto je predbežná cena, nie záväzná rezervácia.",
           "",

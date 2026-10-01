@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { MAX_GUESTS, MIN_NIGHTS } from "../../../shared/pricing";
+import {
+  MAX_GUESTS,
+  MAX_QUOTE_NIGHTS,
+  MIN_NIGHTS,
+} from "../../../shared/pricing";
 
 const MS_PER_DAY = 86_400_000;
 
@@ -68,6 +72,11 @@ export const inquirySchema = z
   })
   .refine(value => nightsBetween(value.from, value.to) >= MIN_NIGHTS, {
     message: `Minimálna dĺžka pobytu je ${MIN_NIGHTS} noci`,
+    path: ["to"],
+  })
+  .refine(value => nightsBetween(value.from, value.to) <= MAX_QUOTE_NIGHTS, {
+    message:
+      "Tento pobyt si vyžaduje individuálnu cenovú ponuku. Kontaktujte nás.",
     path: ["to"],
   });
 

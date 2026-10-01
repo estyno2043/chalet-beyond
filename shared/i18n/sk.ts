@@ -16,7 +16,7 @@ export const sk = {
     statRating: "hodnotenie na Booking.com",
     statPriceFrom: "od",
     statPriceValue: "{price} €",
-    statPrice: "za noc · −10 % oproti Bookingu",
+    statPrice: "za noc · 7+ nocí −20 %",
     statSize: "3 spálne · do 8 hostí",
     statCancelValue: "14 dní",
     statCancel: "bezplatné storno",

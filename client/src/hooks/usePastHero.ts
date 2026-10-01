@@ -6,7 +6,9 @@ let frame = 0;
 function check() {
   frame = 0;
   const sheet = document.getElementById("page-sheet");
-  const next = !sheet || sheet.getBoundingClientRect().top <= 100;
+  // Missing sheet means the hero has not mounted yet. Never flash the mobile
+  // booking bar over a cold hero while the route is loading.
+  const next = Boolean(sheet && sheet.getBoundingClientRect().top <= 100);
   if (past !== next) {
     past = next;
     subscribers.forEach(notify => notify());
@@ -19,7 +21,7 @@ function subscribe(notify: () => void) {
   if (!subscribers.size) {
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
-    schedule();
+    check();
   }
   subscribers.add(notify);
   return () => {

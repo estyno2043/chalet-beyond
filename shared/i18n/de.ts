@@ -18,7 +18,7 @@ export const de: Dict = {
     statRating: "Bewertung auf Booking.com",
     statPriceFrom: "ab",
     statPriceValue: "{price} €",
-    statPrice: "pro Nacht · −10 % ggü. Booking",
+    statPrice: "pro Nacht · ab 7 Nächten −20 %",
     statSize: "3 Schlafzimmer · bis 8 Gäste",
     statCancelValue: "14 Tage",
     statCancel: "kostenlos stornierbar",

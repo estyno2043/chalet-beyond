@@ -1,0 +1,13 @@
+[
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/goat/Documents/ChatGPT/Chalet beyond/client/src/components/hero.css",
+    "line": 368,
+    "snippet": "font-size: 1.1875rem is off the DESIGN.md type ramp",
+    "ignoreValue": "1.1875rem"
+  }
+]

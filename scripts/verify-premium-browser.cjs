@@ -30,7 +30,7 @@ const assert = require("assert");
     await page
       .locator("#cennik .calculated-price")
       .innerText()
-      .then(t => t.includes("475 €"))
+      .then(t => t.includes("460 €"))
   );
   await page.locator("#rezervacia").scrollIntoViewIfNeeded();
   await page.waitForSelector(".rdp-day_button");
@@ -58,11 +58,16 @@ const assert = require("assert");
   await days.nth(13).click();
   await page.waitForFunction(
     () =>
-      document.querySelector(".booking-total strong")?.textContent === "1425 €"
+      document
+        .querySelector(".booking-total strong")
+        ?.textContent.replace(/\D/g, "") === "1380"
   );
   assert.equal(
-    await page.locator(".booking-total strong").innerText(),
-    "1425 €"
+    (await page.locator(".booking-total strong").innerText()).replace(
+      /\D/g,
+      ""
+    ),
+    "1380"
   );
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.locator("#inquiry-name").fill("Test Family");
@@ -169,8 +174,8 @@ const assert = require("assert");
     JSON.stringify({
       result: "PASS",
       checks: [
-        "2 adults + 4 children = 475/night; shared with booking",
-        "3 nights = 1425",
+        "2 adults + 4 children = 460/night; shared with booking",
+        "3 nights = 1380",
         "inline missing-date error",
         "optional phone POST; mocked success focus",
         "gallery portal, scroll lock, focus return, keyboard immediate",

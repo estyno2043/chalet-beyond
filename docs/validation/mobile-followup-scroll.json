@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-01T15:34:49.830Z",
+  "method": "Production preview, Chrome synthetic touch flings down/up, 390x664, 4x CPU. Three fresh contexts. Includes rAF geometry probe overhead. Not physical Safari or compositor FPS.",
+  "runs": [
+    {
+      "run": 1,
+      "frames": 253,
+      "rAFp95ms": 16.700000000000728,
+      "rAFover50ms": 0,
+      "longTasks": [],
+      "maxScroll": 1003,
+      "finalScroll": 1,
+      "heroWorldGeometryStable": true,
+      "paintEvents": 94,
+      "paintMs": 15.690000000000014
+    },
+    {
+      "run": 2,
+      "frames": 237,
+      "rAFp95ms": 16.799999999999272,
+      "rAFover50ms": 0,
+      "longTasks": [],
+      "maxScroll": 1008,
+      "finalScroll": 1,
+      "heroWorldGeometryStable": true,
+      "paintEvents": 100,
+      "paintMs": 9.850999999999996
+    },
+    {
+      "run": 3,
+      "frames": 255,
+      "rAFp95ms": 16.700000000000728,
+      "rAFover50ms": 0,
+      "longTasks": [],
+      "maxScroll": 1004,
+      "finalScroll": 0,
+      "heroWorldGeometryStable": true,
+      "paintEvents": 95,
+      "paintMs": 10.770000000000001
+    }
+  ]
+}

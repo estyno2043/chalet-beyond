@@ -5,7 +5,12 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLang, useT } from "@/i18n/LanguageProvider";
 import { useGuests } from "@/contexts/GuestsContext";
 import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
-import { checkoutOnlyDays, isoDay, rangeIsFree } from "@shared/availability";
+import {
+  checkoutOnlyDays,
+  isoDay,
+  nightsBetween,
+  rangeIsFree,
+} from "@shared/availability";
 import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
 import { SectionHeader } from "./premium/SectionHeader";
 import { GuestCounters } from "./premium/GuestCounters";
@@ -97,7 +102,7 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
     .map(day => new Date(`${day}T00:00:00`));
   const nights =
     range?.from && range.to
-      ? Math.round((range.to.getTime() - range.from.getTime()) / 86400000)
+      ? nightsBetween(isoDay(range.from), isoDay(range.to)).length
       : 0;
   const valid = Boolean(
     range?.from &&
@@ -116,6 +121,13 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
           year: "numeric",
         }).format(date)
       : "—";
+  const money = (amount: number) =>
+    new Intl.NumberFormat(lang, {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(amount);
 
   const select = (next: DateRange | undefined, clicked: Date) => {
     setDateError("");
@@ -283,32 +295,34 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
               </dd>
             </div>
           </dl>
+          <dl className="summary-price-lines">
+            <div>
+              <dt>{c.baseStay}</dt>
+              <dd>
+                <Value value={price ? money(price.baseTotal) : "—"} />
+              </dd>
+            </div>
+            {price?.discountKind && (
+              <div className="summary-discount">
+                <dt>
+                  {price.discountKind === "weekly"
+                    ? c.weeklySaving
+                    : c.promotionSaving}
+                </dt>
+                <dd>
+                  <Value
+                    value={`−${money(price.discountKind === "weekly" ? price.weeklyDiscount : price.promotionDiscount)}`}
+                  />
+                </dd>
+              </div>
+            )}
+          </dl>
           <div className="booking-total">
             <span>{c.total}</span>
             <strong aria-live="polite">
-              <Value value={price ? `${price.total} €` : "—"} />
+              <Value value={price ? money(price.total) : "—"} />
             </strong>
           </div>
-          <p className="summary-comparison">
-            Booking.com{" "}
-            <s>
-              <Value value={price ? `${price.bookingTotal} €` : "—"} />
-            </s>
-          </p>
-          <p className="saving booking-saving">
-            {c.save} <Value value={price ? `${price.savings} €` : "—"} />
-            {price && (
-              <motion.span
-                className="saving-rule"
-                initial={{ scaleX: reduce ? 1 : 0, opacity: reduce ? 0 : 1 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                transition={{
-                  duration: reduce ? DUR.state : DUR.section,
-                  ease: EASE.enter,
-                }}
-              />
-            )}
-          </p>
           <AnimatePresence mode="wait" initial={false}>
             {status === "sent" ? (
               <motion.div

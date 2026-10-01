@@ -32,6 +32,7 @@ export function Photo({
         height={meta.height}
         alt={props.alt ?? c.photoAlt[PHOTO_IDS.indexOf(id)]}
         loading={eager ? "eager" : "lazy"}
+        fetchPriority="low"
         decoding="async"
       />
     </picture>

@@ -37,6 +37,7 @@
       href="/fonts/thunder-semibold-lc-v1.woff2"
       type="font/woff2"
       crossorigin
+      fetchpriority="high"
     />
     <link
       rel="preload"
@@ -48,7 +49,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     <script type="module">
       // Vite substitutes import.meta.env inside a module script. The %VAR% form
       // is only replaced when the variable is defined, so an unset one shipped

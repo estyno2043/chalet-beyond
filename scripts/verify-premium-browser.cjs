@@ -49,13 +49,17 @@ const assert = require("assert");
       .innerText()
       .then(t => t.includes("mindestens"))
   );
+  await page.locator(".rdp-button_next").click();
   const days = page
     .locator(".rdp-month")
     .first()
     .locator(".rdp-day_button:not(:disabled)");
   await days.nth(10).click();
   await days.nth(13).click();
-  await page.waitForTimeout(300);
+  await page.waitForFunction(
+    () =>
+      document.querySelector(".booking-total strong")?.textContent === "1425 €"
+  );
   assert.equal(
     await page.locator(".booking-total strong").innerText(),
     "1425 €"
@@ -68,7 +72,9 @@ const assert = require("assert");
     .fill("Synthetic browser test. Never delivered.");
   await page.locator('button[type="submit"]').click();
   await page.waitForSelector(".booking-success");
-  await page.waitForFunction(() => document.activeElement?.classList.contains("booking-success"));
+  await page.waitForFunction(() =>
+    document.activeElement?.classList.contains("booking-success")
+  );
   assert.equal(requests.length, 1);
   assert.equal(requests[0].children, 4);
   assert.equal(requests[0].phone, "");

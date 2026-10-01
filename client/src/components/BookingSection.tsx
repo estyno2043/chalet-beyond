@@ -55,7 +55,7 @@ function useCalendarMonths(ref: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     if (!ref.current) return;
     const observer = new ResizeObserver(entries =>
-      setMonths(entries[0].contentRect.width >= 680 ? 2 : 1)
+      setMonths(entries[0].contentRect.width >= 648 ? 2 : 1)
     );
     observer.observe(ref.current);
     return () => observer.disconnect();

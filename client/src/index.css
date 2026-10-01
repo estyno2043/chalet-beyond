@@ -5,10 +5,16 @@
  *
  * Color strategy: COMMITTED — deep charcoal body + amber accent
  * Typography: Thunder (display) + Karla (body) + JetBrains Mono (data)
- * Motion: Framer Motion fadeUp, clip-path wipes, stagger 0.08s, ease [0.23,1,0.32,1]
+ * Motion: masked lines, decoded photo wipes, 60ms stagger; shared motion tokens.
  */
 
-@import "tailwindcss" source("./");
+@import "tailwindcss" source(none);
+/* Only shipped surfaces generate utilities; the dormant UI catalogue does not. */
+@source "./App.tsx";
+@source "./pages";
+@source "./components/*.tsx";
+@source "./components/premium";
+@source "./components/ui/menu-toggle-icon.tsx";
 @import "tw-animate-css";
 @import "./fonts.css";
 

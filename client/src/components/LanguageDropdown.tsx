@@ -11,7 +11,7 @@ import { ChevronDown } from "lucide-react";
 import { LANGS, LANG_NAMES, type Lang } from "@shared/i18n";
 import { FLAGS } from "@/i18n/flags";
 import { useLang } from "@/i18n/LanguageProvider";
-import { useLanguageNavigate } from "@/components/LanguageSwitcher";
+import { useLanguageNavigate } from "@/hooks/useLanguageNavigate";
 
 export function LanguageDropdown({ className = "" }: { className?: string }) {
   const current = useLang();

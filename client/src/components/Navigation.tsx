@@ -8,6 +8,7 @@
  * - Below xl: reserve, language and a menu; the links live in the menu
  */
 import React from "react";
+import { usePastHero } from "@/hooks/usePastHero";
 import { Mail, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
@@ -28,39 +29,6 @@ const HREFS = [
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-/**
- * True once the page sheet has risen under the bar (the hero is covered).
- * Measured on the sheet, not the hero: the hero is transformed while it is
- * pushed back, so its box outlives what the guest can see of it.
- */
-function usePastHero() {
-  const [past, setPast] = React.useState(false);
-  React.useEffect(() => {
-    const sheet = document.getElementById("page-sheet");
-    if (!sheet) {
-      setPast(true);
-      return;
-    }
-    let frame = 0;
-    const check = () => {
-      frame = 0;
-      setPast(sheet.getBoundingClientRect().top <= 100);
-    };
-    const onScroll = () => {
-      if (!frame) frame = requestAnimationFrame(check);
-    };
-    check();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-  return past;
-}
 
 export function Navigation() {
   const t = useT();

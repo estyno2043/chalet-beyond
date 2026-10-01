@@ -41,8 +41,12 @@ describe("inquirySchema", () => {
     );
   });
 
-  it("rejects a missing phone number", () => {
-    expect(inquirySchema.safeParse({ ...valid, phone: "" }).success).toBe(false);
+  it("accepts an optional phone while validating supplied numbers", () => {
+    const { phone, ...withoutPhone } = valid;
+    expect(inquirySchema.safeParse(withoutPhone).success).toBe(true);
+    expect(inquirySchema.safeParse({ ...valid, phone: "" }).success).toBe(true);
+    expect(inquirySchema.safeParse({ ...valid, phone: "123" }).success).toBe(false);
+    expect(inquirySchema.safeParse({ ...valid, phone: "1".repeat(31) }).success).toBe(false);
   });
 
   it("rejects a malformed date", () => {

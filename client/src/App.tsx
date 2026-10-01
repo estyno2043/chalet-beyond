@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./i18n/LanguageProvider";
+import { MotionConfig } from "framer-motion";
 import Home from "./pages/Home";
 import { LANGS, type Lang } from "@shared/i18n";
 
@@ -45,7 +46,7 @@ function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <Router />
+          <MotionConfig reducedMotion="user"><Router /></MotionConfig>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

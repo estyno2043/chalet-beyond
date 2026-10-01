@@ -1,4 +1,5 @@
 import { useEffect, useRef, type RefObject } from "react";
+import { createPortal } from "react-dom";
 
 /*
  * Hero cursor ring. It trails the pointer slightly and gives way over any link
@@ -102,9 +103,12 @@ export function HeroPointer({
     };
   }, [surface]);
 
-  return (
+  // Portalled to <body>: the hero is transformed while it is pushed back, and
+  // a fixed element inside a transformed ancestor stops tracking the viewport.
+  return createPortal(
     <div ref={cursorRef} className="chalet-hero__cursor" aria-hidden="true">
       <span />
-    </div>
+    </div>,
+    document.body
   );
 }

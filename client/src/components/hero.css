@@ -226,9 +226,6 @@
   color: var(--hero-amber);
   fill: var(--hero-amber);
 }
-.chalet-hero__playback {
-  flex: none;
-}
 
 .chalet-hero :is(a, button):focus-visible {
   outline: 2px solid var(--hero-ink);
@@ -368,9 +365,6 @@
   }
   .chalet-hero[data-intro="on"] [data-reveal="6"] {
     animation-delay: 1060ms;
-  }
-  .chalet-hero[data-intro="on"] [data-reveal="7"] {
-    animation-delay: 1120ms;
   }
   /* The hairline draws in from the left above the facts. */
   .chalet-hero[data-intro="on"] .chalet-hero__footer::before {

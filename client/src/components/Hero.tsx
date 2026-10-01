@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { CalendarDays, Pause, Play, Star } from "lucide-react";
+import { CalendarDays, Star } from "lucide-react";
 import { useT } from "@/i18n/LanguageProvider";
 import {
   BOOKING_LISTING_URL,
@@ -9,7 +9,7 @@ import {
 } from "@shared/contact";
 import { PRICE_PER_NIGHT } from "@shared/pricing";
 import { HeroPointer } from "./HeroPointer";
-import { RollButton, RollLink } from "./RollButton";
+import { RollLink } from "./RollButton";
 import "./hero.css";
 
 const POSTER = "/media/hero/exterior-poster-v1.webp";
@@ -59,17 +59,14 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const userPaused = useRef(false);
   const mountedAt = useRef(performance.now());
   const [preferences, setPreferences] = useState(readMediaPreferences);
-  const [requested, setRequested] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [hasFrame, setHasFrame] = useState(false);
   const [failed, setFailed] = useState(false);
   // Reduced motion skips the whole entrance, curtain included.
   const [intro] = useState(() => !preferences.reduced);
   const [curtainUp, setCurtainUp] = useState(() => preferences.reduced);
-  const enabled = preferences.autoplay || requested;
+  const enabled = preferences.autoplay;
   const source = preferences.desktop ? DESKTOP_VIDEO : COMPACT_VIDEO;
 
   useEffect(() => {
@@ -177,7 +174,6 @@ export function Hero() {
     const video = videoRef.current;
     const section = sectionRef.current;
     setHasFrame(false);
-    setPlaying(false);
     setFailed(false);
     if (!video || !section || !enabled) return;
 
@@ -187,17 +183,15 @@ export function Hero() {
     let frameRequest: number | undefined;
 
     const syncPlayback = () => {
-      if (!inView || document.hidden || userPaused.current) {
+      if (!inView || document.hidden) {
         video.pause();
         return;
       }
       // Muted is set as a property as well: autoplay policies check the
       // property, and React only reflects `muted` that way after mount.
       video.muted = true;
-      void video.play().catch(() => {
-        // Autoplay is a request. Poster and an explicit play control remain.
-        if (!disposed) setPlaying(false);
-      });
+      // Autoplay is a request; if the browser refuses, the poster stays.
+      void video.play().catch(() => {});
     };
     const revealFrame = () => {
       if ("requestVideoFrameCallback" in video) {
@@ -209,14 +203,11 @@ export function Hero() {
       } else {
         setHasFrame(true);
       }
-      setPlaying(true);
       setFailed(false);
     };
-    const paused = () => setPlaying(false);
     const error = () => {
       setFailed(true);
       setHasFrame(false);
-      setPlaying(false);
     };
     const observer = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting;
@@ -225,7 +216,6 @@ export function Hero() {
     observer.observe(section);
     document.addEventListener("visibilitychange", syncPlayback);
     video.addEventListener("playing", revealFrame);
-    video.addEventListener("pause", paused);
     video.addEventListener("error", error);
     syncPlayback();
 
@@ -234,7 +224,6 @@ export function Hero() {
       observer.disconnect();
       document.removeEventListener("visibilitychange", syncPlayback);
       video.removeEventListener("playing", revealFrame);
-      video.removeEventListener("pause", paused);
       video.removeEventListener("error", error);
       if (frameRequest !== undefined)
         video.cancelVideoFrameCallback(frameRequest);
@@ -242,26 +231,6 @@ export function Hero() {
     };
   }, [enabled, source]);
 
-  const togglePlayback = () => {
-    const video = videoRef.current;
-    if (!enabled) {
-      userPaused.current = false;
-      setRequested(true);
-      return;
-    }
-    if (!video) return;
-    if (!video.paused) {
-      userPaused.current = true;
-      video.pause();
-    } else {
-      userPaused.current = false;
-      if (failed) video.load();
-      void video.play().catch(() => setPlaying(false));
-    }
-  };
-
-  const playbackLabel = playing ? t.hero.pauseVideo : t.hero.playVideo;
-  const PlaybackIcon = playing ? Pause : Play;
 
   const stats = [
     {
@@ -405,19 +374,6 @@ export function Hero() {
               </div>
             ))}
           </dl>
-          <RollButton
-            tone="ghost"
-            size="sm"
-            onClick={togglePlayback}
-            aria-label={playbackLabel}
-            className="chalet-hero__playback"
-            data-reveal="7"
-            icon={
-              <PlaybackIcon size={13} strokeWidth={1.8} aria-hidden="true" />
-            }
-          >
-            {playbackLabel}
-          </RollButton>
         </div>
       </div>
       <HeroPointer surface={sectionRef} />

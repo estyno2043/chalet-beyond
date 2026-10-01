@@ -29,23 +29,35 @@ const HREFS = [
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** True once the hero has scrolled up behind the bar. No hero → true. */
+/**
+ * True once the page sheet has risen under the bar (the hero is covered).
+ * Measured on the sheet, not the hero: the hero is transformed while it is
+ * pushed back, so its box outlives what the guest can see of it.
+ */
 function usePastHero() {
   const [past, setPast] = React.useState(false);
   React.useEffect(() => {
-    const hero = document.getElementById("hero");
-    if (!hero) {
+    const sheet = document.getElementById("page-sheet");
+    if (!sheet) {
       setPast(true);
       return;
     }
-    // The bar is ~100px tall: the hero counts as gone once less than that
-    // of it is left under the bar.
-    const observer = new IntersectionObserver(
-      ([entry]) => setPast(!entry.isIntersecting),
-      { rootMargin: "-100px 0px 0px 0px" }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
+    let frame = 0;
+    const check = () => {
+      frame = 0;
+      setPast(sheet.getBoundingClientRect().top <= 100);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
   return past;
 }

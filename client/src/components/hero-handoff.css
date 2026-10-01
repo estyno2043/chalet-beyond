@@ -1,0 +1,26 @@
+/* HeroHandoff — see HeroHandoff.tsx. */
+.hero-handoff__hero {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  /* Shrinks towards its top edge: pushed up and back, not into the centre. */
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+.hero-handoff__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: oklch(0.06 0.008 55);
+  pointer-events: none;
+}
+.hero-handoff__sheet {
+  position: relative;
+  z-index: 1;
+  background: oklch(0.06 0.008 55);
+  /* A hairline of brand amber on the lip, then a long soft shadow cast up
+     onto the hero — the sheet sits physically above it. */
+  box-shadow:
+    0 -1px 0 oklch(0.72 0.12 65 / 0.18),
+    0 -48px 96px -24px rgb(0 0 0 / 0.65);
+}

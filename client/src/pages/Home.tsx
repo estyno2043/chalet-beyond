@@ -18,6 +18,7 @@ import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { Navigation } from "@/components/Navigation";
 import { ScrollProgressBar } from "@/components/ScrollProgressBar";
 import { Hero } from "@/components/Hero";
+import { HeroHandoff } from "@/components/HeroHandoff";
 import { ChaletIntroSection } from "@/components/ChaletIntroSection";
 import { TextRevealSection } from "@/components/TextRevealSection";
 import { GallerySection } from "@/components/GallerySection";
@@ -42,19 +43,20 @@ export default function Home() {
     >
       <ScrollProgressBar />
       <Navigation />
-      <Hero />
-      {/* Rest of the landing page below the hero */}
-      <ChaletIntroSection />
-      {/* Scroll-driven word-by-word text reveal */}
-      <TextRevealSection />
-      <GallerySection />
-      <QuoteSection />
-      <AmenitiesSection />
-      <LocationSection />
-      {/* Price before the form: the guest should read the rate, then act on it */}
-      <PricingSection />
-      <BookingSection />
-      <Footer />
+      {/* The rest of the page rises over the hero as one sheet. */}
+      <HeroHandoff hero={<Hero />}>
+        <ChaletIntroSection />
+        {/* Scroll-driven word-by-word text reveal */}
+        <TextRevealSection />
+        <GallerySection />
+        <QuoteSection />
+        <AmenitiesSection />
+        <LocationSection />
+        {/* Price before the form: the guest should read the rate, then act on it */}
+        <PricingSection />
+        <BookingSection />
+        <Footer />
+      </HeroHandoff>
       {/* Last so it layers above everything */}
       <StickyContactBar />
     </div>

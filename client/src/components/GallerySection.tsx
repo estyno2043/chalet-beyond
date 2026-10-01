@@ -5,6 +5,7 @@
  * Mobile-first: single-column album covers, swipeable full-screen viewer.
  */
 import { useState, useEffect, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeUp } from "@/components/FadeUp";
 import { X, ChevronLeft, ChevronRight, Images } from "lucide-react";
@@ -179,7 +180,11 @@ function Lightbox({
       {/* Image stage */}
       <div
         className="relative flex-1 flex items-center justify-center px-2 sm:px-16 min-h-0"
-        onClick={(e) => e.stopPropagation()}
+        // A tap on the empty stage around the photo closes, like the scrim;
+        // the photo and the arrows are targets of their own.
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
         onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
         onTouchEnd={(e) => {
           if (touchX.current === null) return;
@@ -372,16 +377,22 @@ export function GallerySection() {
         </div>
       </div>
 
-      <AnimatePresence>
-        {openAlbum !== null && (
-          <Lightbox
-            album={ALBUMS[openAlbum]}
-            index={imgIndex}
-            onIndex={setImgIndex}
-            onClose={() => setOpenAlbum(null)}
-          />
-        )}
-      </AnimatePresence>
+      {/* Portalled to <body>: the page sheet that holds this section is its
+          own stacking context, so a fixed overlay inside it can never rise
+          above the navigation bar — its close button ended up under the bar. */}
+      {createPortal(
+        <AnimatePresence>
+          {openAlbum !== null && (
+            <Lightbox
+              album={ALBUMS[openAlbum]}
+              index={imgIndex}
+              onIndex={setImgIndex}
+              onClose={() => setOpenAlbum(null)}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   );
 }

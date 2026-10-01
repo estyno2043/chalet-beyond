@@ -1,138 +1,28 @@
-/*
- * CHALET BEYOND — "Zážitok" Section
- * What Chalet Beyond is (not a hotel, not an Airbnb) + 4 feature tiles.
- * Mobile-first: stacked layout, amber rule dividers, fade-up animations.
- */
-import { motion } from "framer-motion";
-import { FadeUp, StaggerContainer, staggerItem } from "@/components/FadeUp";
-import { useT } from "@/i18n/LanguageProvider";
-
-const features = [
-  {
-    emoji: "⛳",
-    featureIndex: 0,
-  },
-  {
-    emoji: "🌲",
-    featureIndex: 1,
-  },
-  {
-    emoji: "🧖",
-    featureIndex: 2,
-  },
-  {
-    emoji: "🏔",
-    featureIndex: 3,
-  },
-];
-
+import { SectionHeader } from "./premium/SectionHeader";
+import { RevealPhoto } from "./premium/Photo";
+import { usePremiumCopy } from "./premium/copy";
 export function ChaletIntroSection() {
-  const t = useT();
+  const c = usePremiumCopy();
   return (
-    <section id="chalet" className="py-16 md:py-36">
+    <section id="chalet" className="premium-section intro-section">
       <div className="container">
-        {/* Amber rule top */}
-        <FadeUp>
-          <div className="amber-rule mb-10 md:mb-16" />
-        </FadeUp>
-
-        {/* Asymmetric: heading left, body right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-20 items-start mb-12 md:mb-20">
-          <FadeUp delay={0.05}>
-            <div>
-              <p
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.15em",
-                  color: "oklch(0.72 0.12 65)",
-                  marginBottom: "1rem",
-                  textTransform: "uppercase",
-                }}
-              >
-                {t.intro.eyebrow}
-              </p>
-              <h2
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(2.8rem, 9vw, 5.5rem)",
-                  letterSpacing: "-0.01em",
-                  lineHeight: 1.0,
-                  color: "oklch(0.92 0.008 75)",
-                }}
-              >
-                {t.intro.headlineA}<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.intro.headlineB}</span>
-              </h2>
-            </div>
-          </FadeUp>
-
-          <FadeUp delay={0.15}>
-            <div style={{ paddingTop: "0.5rem" }}>
-              <p
-                style={{
-                  fontFamily: "'Karla', sans-serif",
-                  fontSize: "clamp(1.05rem, 2.5vw, 1.25rem)",
-                  fontWeight: 300,
-                  lineHeight: 1.75,
-                  color: "oklch(0.78 0.015 75)",
-                }}
-              >
-                {t.intro.body}
-              </p>
-            </div>
-          </FadeUp>
+        <div className="intro-split">
+          <SectionHeader lines={c.intro} description={c.introBody} />
+          <RevealPhoto
+            id={44}
+            eager
+            sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
+            className="intro-photo"
+          />
         </div>
-
-        {/* Four feature tiles */}
-        <StaggerContainer
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px"
-          staggerDelay={0.1}
-        >
-          {features.map((item) => (
-            <motion.div
-              key={item.featureIndex}
-              variants={staggerItem}
-              className="glow-hover p-7 md:p-9 group"
-              style={{
-                background: "oklch(0.14 0.012 55)",
-                borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)",
-                cursor: "default",
-              }}
-              whileHover={{ backgroundColor: "oklch(0.16 0.015 55)" }}
-            >
-              <div
-                className="mb-4"
-                style={{ fontSize: "1.9rem", lineHeight: 1 }}
-                aria-hidden="true"
-              >
-                {item.emoji}
-              </div>
-              <h3
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(1.3rem, 4vw, 1.6rem)",
-                  letterSpacing: "0.06em",
-                  color: "oklch(0.92 0.008 75)",
-                  marginBottom: "0.6rem",
-                }}
-              >
-                {t.intro.features[item.featureIndex].title}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "'Karla', sans-serif",
-                  fontSize: "0.95rem",
-                  fontWeight: 300,
-                  lineHeight: 1.65,
-                  color: "oklch(0.62 0.020 65)",
-                }}
-              >
-                {t.intro.features[item.featureIndex].desc}
-              </p>
-            </motion.div>
+        <dl className="intro-facts">
+          {c.facts.map(([title, text]) => (
+            <div key={title}>
+              <dt>{title}</dt>
+              <dd>{text}</dd>
+            </div>
           ))}
-        </StaggerContainer>
+        </dl>
       </div>
     </section>
   );

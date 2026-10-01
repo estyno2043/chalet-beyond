@@ -22,7 +22,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={() => <Localised lang="sk" />} />
-      {LANGS.filter((lang) => lang !== "sk").flatMap((lang) => [
+      {LANGS.filter(lang => lang !== "sk").flatMap(lang => [
         <Route
           key={lang}
           path={`/${lang}`}
@@ -46,7 +46,9 @@ function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
-          <MotionConfig reducedMotion="user"><Router /></MotionConfig>
+          <MotionConfig reducedMotion="user">
+            <Router />
+          </MotionConfig>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

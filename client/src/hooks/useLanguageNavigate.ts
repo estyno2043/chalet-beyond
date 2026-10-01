@@ -12,9 +12,8 @@ export function useLanguageNavigate() {
     navigate(pathForLang(window.location.pathname, lang) + hash);
     if (hash) {
       requestAnimationFrame(() =>
-        document.querySelector(hash)?.scrollIntoView({ behavior: "auto" }),
+        document.querySelector(hash)?.scrollIntoView({ behavior: "auto" })
       );
     }
   };
 }
-

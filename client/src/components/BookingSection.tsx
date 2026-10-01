@@ -1,270 +1,82 @@
-/*
- * CHALET BEYOND — Booking Section
- * Interactive date range calendar using react-day-picker (already in deps)
- * Check-in/check-out selection, guest count, inquiry form
- * Direct booking only — CTA opens an email inquiry to contact@chaletbeyond.sk
- */
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FadeUp } from "@/components/FadeUp";
-import { Calendar } from "@/components/ui/calendar";
-import { Users, CalendarDays, ArrowRight } from "lucide-react";
-import type { DateRange } from "react-day-picker";
-import { calcTotal, MAX_GUESTS, MIN_NIGHTS } from "@shared/pricing";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { DayPicker, type DateRange } from "react-day-picker";
+import { sk, de, enUS, pl } from "react-day-picker/locale";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLang, useT } from "@/i18n/LanguageProvider";
-import {
-  checkoutOnlyDays,
-  isoDay,
-  rangeIsFree,
-} from "@shared/availability";
-import {
-  BOOKING_LISTING_URL,
-  BOOKING_RATING,
-  EMAIL,
-  PHONE,
-  PHONE_DISPLAY,
-} from "@shared/contact";
+import { useGuests } from "@/contexts/GuestsContext";
+import { calcTotal, MIN_NIGHTS } from "@shared/pricing";
+import { checkoutOnlyDays, isoDay, rangeIsFree } from "@shared/availability";
+import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
+import { SectionHeader } from "./premium/SectionHeader";
+import { GuestCounters } from "./premium/GuestCounters";
+import { Value } from "./premium/Value";
+import { usePremiumCopy } from "./premium/copy";
+import { RollButton } from "./RollButton";
+import { EASE, DUR, SPRING_GESTURE } from "@/lib/motion";
+import "react-day-picker/style.css";
 
-function formatDate(date: Date | undefined, lang: string): string {
-  if (!date) return "—";
-  return date.toLocaleDateString(lang, {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+const locales = { sk, de, en: enUS, pl };
+function useAvailability() {
+  const [state, setState] = useState({
+    blocked: [] as string[],
+    failed: false,
+    loading: true,
   });
-}
-
-/** Micro-label above each field, in the same mono voice as the section's own labels. */
-const FIELD_LABEL: React.CSSProperties = {
-  fontFamily: "'JetBrains Mono', monospace",
-  fontSize: "0.65rem",
-  letterSpacing: "0.1em",
-  textTransform: "uppercase",
-  color: "oklch(0.58 0.020 65)",
-};
-
-function getNights(from: Date | undefined, to: Date | undefined): number {
-  if (!from || !to) return 0;
-  return Math.round((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24));
-}
-
-/**
- * Occupied nights from Booking and Airbnb. Empty when every feed is unreachable.
- * `failed` also covers a partial answer: the endpoint returns `degraded: true`
- * when some feeds did not respond, so the list is real but incomplete and the
- * guest still needs telling that availability could not be fully confirmed.
- *
- * `loading` exists because an empty list is indistinguishable from a free
- * calendar: without it the picker renders every night as available for as long
- * as the request is in flight, and a guest can pick a sold week in that gap.
- */
-function useBlockedDates(): {
-  blocked: string[];
-  failed: boolean;
-  loading: boolean;
-} {
-  const [blocked, setBlocked] = useState<string[]>([]);
-  const [failed, setFailed] = useState(false);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    let cancelled = false;
-    fetch("/api/availability")
-      .then((response) => {
-        if (!response.ok) throw new Error(String(response.status));
-        return response.json();
-      })
-      .then((data: { blocked: string[]; degraded?: boolean }) => {
-        if (cancelled) return;
-        setBlocked(data.blocked);
-        if (data.degraded) setFailed(true);
+    const controller = new AbortController();
+    fetch("/api/availability", { signal: controller.signal })
+      .then(async response => {
+        if (!response.ok) throw new Error("Availability unavailable");
+        const data = await response.json();
+        if (
+          !Array.isArray(data.blocked) ||
+          !data.blocked.every(
+            (day: unknown) =>
+              typeof day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(day)
+          )
+        )
+          throw new Error("Invalid availability");
+        setState({
+          blocked: data.blocked,
+          failed: Boolean(data.degraded),
+          loading: false,
+        });
       })
       .catch(() => {
-        if (!cancelled) setFailed(true);
-      })
-      .finally(() => {
-        // Runs on failure too: the picker must open rather than stay locked
-        // through an outage, and the banner then says availability is unconfirmed.
-        if (!cancelled) setLoading(false);
+        if (!controller.signal.aborted)
+          setState({ blocked: [], failed: true, loading: false });
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => controller.abort();
   }, []);
-
-  return { blocked, failed, loading };
+  return state;
+}
+function useCalendarMonths(ref: React.RefObject<HTMLDivElement | null>) {
+  const [months, setMonths] = useState(1);
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new ResizeObserver(entries =>
+      setMonths(entries[0].contentRect.width >= 680 ? 2 : 1)
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref]);
+  return months;
 }
 
-/**
- * One labelled counter row. Two of these replace the single guest stepper:
- * the adult count picks the price tier, children pay a flat rate.
- *
- * Targets are 44px because these are the smallest controls a guest has to hit
- * on a phone; the old 28px buttons were below every touch guideline.
- */
-function GuestCounter({
-  label,
-  hint,
-  value,
-  min,
-  max,
-  onChange,
-  decreaseLabel,
-  increaseLabel,
-}: {
-  label: string;
-  hint: string;
-  value: number;
-  min: number;
-  max: number;
-  onChange: (next: number) => void;
-  decreaseLabel: string;
-  increaseLabel: string;
-}) {
-  const step = (delta: number) =>
-    onChange(Math.min(max, Math.max(min, value + delta)));
-
-  const button = (delta: number, aria: string, glyph: string, disabled: boolean) => (
-    <button
-      type="button"
-      aria-label={aria}
-      disabled={disabled}
-      onClick={() => step(delta)}
-      className="w-11 h-11 flex items-center justify-center rounded-sm"
-      style={{
-        border: "1px solid oklch(0.72 0.12 65 / 0.3)",
-        color: "oklch(0.72 0.12 65)",
-        fontFamily: "'Karla', sans-serif",
-        fontSize: "1.1rem",
-        opacity: disabled ? 0.3 : 1,
-        cursor: disabled ? "not-allowed" : "pointer",
-        transition: "opacity var(--motion-ui) var(--ease-ui)",
-      }}
-    >
-      {glyph}
-    </button>
-  );
-
-  return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex items-center gap-2">
-        <Users size={14} style={{ color: "oklch(0.72 0.12 65)", flexShrink: 0 }} />
-        <div>
-          <p
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "0.65rem",
-              letterSpacing: "0.1em",
-              color: "oklch(0.58 0.020 65)",
-              textTransform: "uppercase",
-            }}
-          >
-            {label}
-          </p>
-          <p
-            style={{
-              fontFamily: "'Karla', sans-serif",
-              fontSize: "0.7rem",
-              fontWeight: 300,
-              color: "oklch(0.45 0.015 65)",
-              marginTop: "0.15rem",
-            }}
-          >
-            {hint}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-2 flex-shrink-0">
-        {button(-1, decreaseLabel, "\u2212", value <= min)}
-        <span
-          aria-live="polite"
-          style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: "1.3rem",
-            color: "oklch(0.92 0.008 75)",
-            minWidth: "1.5rem",
-            textAlign: "center",
-          }}
-        >
-          {value}
-        </span>
-        {button(1, increaseLabel, "+", value >= max)}
-      </div>
-    </div>
-  );
-}
-
-export function BookingSection() {
+export function BookingSection({ embedded = false }: { embedded?: boolean }) {
   const t = useT();
+  const c = usePremiumCopy();
   const lang = useLang();
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
-  const [step, setStep] = useState<"calendar" | "confirm">("calendar");
-  const {
-    blocked,
-    failed: availabilityFailed,
-    loading: availabilityLoading,
-  } = useBlockedDates();
-
-  // A sold night bars that day as an arrival, but the first night of a run is
-  // still a valid departure — the outgoing guest leaves in the morning, the next
-  // arrives in the afternoon. Only the rest of a run is unusable either way.
-  const checkoutOnly = checkoutOnlyDays(blocked);
-  const unselectable = blocked
-    .filter((day) => !checkoutOnly.has(day))
-    .map((day) => new Date(`${day}T00:00:00`));
-
-  const handleSelect = (range: DateRange | undefined, triggerDate: Date) => {
-    const clicked = isoDay(triggerDate);
-
-    if (!range?.from) {
-      setDateRange(undefined);
-      return;
-    }
-
-    // react-day-picker reports the first click as from === to, so a selection
-    // only counts as finished once the two differ. Reading the in-progress
-    // state as finished restarts the range on the guest's second click.
-    const finished =
-      dateRange?.from &&
-      dateRange?.to &&
-      isoDay(dateRange.from) !== isoDay(dateRange.to);
-
-    // Beginning a stay: a sold night can never be an arrival, so ignore the
-    // click rather than wiping what the guest already picked.
-    if (finished || !dateRange?.from) {
-      if (checkoutOnly.has(clicked)) return;
-      setDateRange({ from: triggerDate, to: undefined });
-      return;
-    }
-
-    // Completing one: refuse a span that would consume a night already sold,
-    // and treat the click as the start of a new attempt instead.
-    const spansSoldNight =
-      range.to &&
-      isoDay(range.to) !== isoDay(range.from) &&
-      !rangeIsFree(isoDay(range.from), isoDay(range.to), blocked);
-    if (spansSoldNight) {
-      if (checkoutOnly.has(clicked)) return;
-      setDateRange({ from: triggerDate, to: undefined });
-      return;
-    }
-
-    setDateRange(range);
-  };
-
-  const nights = getNights(dateRange?.from, dateRange?.to);
-  // Guarded on MIN_NIGHTS, not > 0: calcTotal throws below the minimum rather
-  // than returning a negative total, so a one-night selection would crash here.
-  const price =
-    dateRange?.from && dateRange?.to && nights >= MIN_NIGHTS
-      ? calcTotal(dateRange.from, dateRange.to, adults, children)
-      : null;
-  const canProceed = price !== null;
-
-  // `website` is the honeypot. /api/inquiry has always dropped submissions that
-  // fill it, but nothing rendered the field, so no bot could ever trip it.
+  const reduce = useReducedMotion();
+  const { adults, children } = useGuests();
+  const { blocked, failed, loading } = useAvailability();
+  const [range, setRange] = useState<DateRange>();
+  const [step, setStep] = useState<"dates" | "contact">("dates");
+  const [dateError, setDateError] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle"
+  );
+  const [confirmationSent, setConfirmationSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -272,495 +84,319 @@ export function BookingSection() {
     message: "",
     website: "",
   });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [error, setError] = useState("");
-  // The endpoint delivers the lead even when the guest's own copy fails, so
-  // success is not proof the confirmation was sent.
-  const [confirmationSent, setConfirmationSent] = useState(true);
+  const [formHeight, setFormHeight] = useState(440);
+  const calendarRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+  const months = useCalendarMonths(calendarRef);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const checkoutOnly = checkoutOnlyDays(blocked);
+  const fullyBlocked = blocked
+    .filter(day => !checkoutOnly.has(day))
+    .map(day => new Date(`${day}T00:00:00`));
+  const nights =
+    range?.from && range.to
+      ? Math.round((range.to.getTime() - range.from.getTime()) / 86400000)
+      : 0;
+  const valid = Boolean(
+    range?.from &&
+      range.to &&
+      nights >= MIN_NIGHTS &&
+      rangeIsFree(isoDay(range.from), isoDay(range.to), blocked)
+  );
+  const price = valid
+    ? calcTotal(range!.from!, range!.to!, adults, children)
+    : null;
+  const format = (date?: Date) =>
+    date
+      ? new Intl.DateTimeFormat(lang, {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }).format(date)
+      : "—";
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const select = (next: DateRange | undefined, clicked: Date) => {
+    setDateError("");
+    if (!next?.from) {
+      setRange(undefined);
+      return;
+    }
+    const finished =
+      range?.from && range?.to && isoDay(range.from) !== isoDay(range.to);
+    if (finished || !range?.from) {
+      if (checkoutOnly.has(isoDay(clicked))) return;
+      setRange({ from: clicked });
+      return;
+    }
+    if (
+      next.to &&
+      isoDay(next.to) !== isoDay(next.from) &&
+      !rangeIsFree(isoDay(next.from), isoDay(next.to), blocked)
+    ) {
+      setDateError(c.datesBusy);
+      if (!checkoutOnly.has(isoDay(clicked))) setRange({ from: clicked });
+      return;
+    }
+    setRange(next);
+  };
+  const proceed = () => {
+    if (!valid || loading) {
+      setDateError(c.dateError);
+      calendarRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+      calendarRef.current?.focus({ preventScroll: true });
+      return;
+    }
+    setStep("contact");
+  };
+  useEffect(() => {
+    if (step === "contact")
+      contactRef.current
+        ?.querySelector<HTMLInputElement>("input")
+        ?.focus({ preventScroll: true });
+  }, [step]);
+  useEffect(() => {
+    if (status !== "sent" || !successRef.current) return;
+    const node = successRef.current;
+    node.focus({ preventScroll: true });
+    const rect = node.getBoundingClientRect();
+    if (rect.top < 90 || rect.bottom > innerHeight)
+      node.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+  }, [status, reduce]);
+  async function submit(event: FormEvent) {
     event.preventDefault();
-    if (!dateRange?.from || !dateRange?.to) return;
-
+    if (!valid || loading) {
+      setStep("dates");
+      setDateError(c.dateError);
+      return;
+    }
+    setFormHeight(contactRef.current?.getBoundingClientRect().height ?? 440);
     setStatus("sending");
-    setError("");
-
     try {
       const response = await fetch("/api/inquiry", {
         method: "POST",
-        headers: { "content-type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: isoDay(dateRange.from),
-          to: isoDay(dateRange.to),
+          ...form,
+          from: isoDay(range!.from!),
+          to: isoDay(range!.to!),
           guests: adults,
           children,
-          ...form,
+          lang,
         }),
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(
-          data.code === "dates_taken"
-            ? t.booking.datesTaken
-            : (data.error ?? t.booking.sendFailed),
-        );
+        if (data.code === "DATES_TAKEN") {
+          setStep("dates");
+          setDateError(t.booking.datesTaken);
+        }
+        throw new Error("Inquiry rejected");
       }
       setConfirmationSent(data.confirmationSent !== false);
       setStatus("sent");
-    } catch (err) {
+    } catch {
       setStatus("error");
-      setError(err instanceof Error ? err.message : t.booking.sendFailed);
     }
-  };
-
-  return (
-    <section id="rezervacia" className="py-16 md:py-36" style={{ background: "oklch(0.08 0.010 55)" }}>
-      <div className="container">
-        <FadeUp className="mb-10 md:mb-16">
-          <div className="amber-rule mb-8 md:mb-12" />
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-              <p
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.15em",
-                  color: "oklch(0.72 0.12 65)",
-                  marginBottom: "0.75rem",
-                  textTransform: "uppercase",
-                }}
-              >
-                {t.booking.eyebrow}
-              </p>
-              <h2
-                style={{
-                  fontFamily: "'Bebas Neue', sans-serif",
-                  fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                  letterSpacing: "-0.01em",
-                  lineHeight: 1.0,
-                  color: "oklch(0.92 0.008 75)",
-                }}
-              >
-                {t.booking.headlineA}<br />
-                <span style={{ color: "oklch(0.72 0.12 65)" }}>{t.booking.headlineB}</span>
-              </h2>
-            </div>
-            <p
-              style={{
-                fontFamily: "'Karla', sans-serif",
-                fontSize: "0.95rem",
-                fontWeight: 300,
-                lineHeight: 1.7,
-                color: "oklch(0.62 0.020 65)",
-                maxWidth: "38ch",
+  }
+  const contents = (
+    <div className="container">
+      {!embedded && (
+        <SectionHeader lines={c.booking} description={c.bookingBody} />
+      )}
+      <div className="booking-layout">
+        <div className="booking-calendar-column">
+          <div
+            className="booking-calendar"
+            ref={calendarRef}
+            tabIndex={-1}
+            aria-describedby="availability-state date-validation"
+          >
+            <DayPicker
+              mode="range"
+              locale={locales[lang]}
+              weekStartsOn={1}
+              numberOfMonths={months}
+              selected={range}
+              onSelect={select}
+              disabled={[
+                { before: today },
+                ...fullyBlocked,
+                ...(loading ? [() => true] : []),
+              ]}
+              modifiers={{
+                checkoutOnly: blocked
+                  .filter(day => checkoutOnly.has(day))
+                  .map(day => new Date(`${day}T00:00:00`)),
               }}
-            >
-              {t.booking.intro}
-            </p>
+              modifiersClassNames={{ checkoutOnly: "checkout-only" }}
+              fixedWeeks
+              showOutsideDays={false}
+              startMonth={today}
+              endMonth={new Date(today.getFullYear() + 2, today.getMonth())}
+            />
           </div>
-        </FadeUp>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 md:gap-8 lg:gap-12">
-          {/* Calendar */}
-          <FadeUp delay={0.1}>
-            <div
-              className="p-4 md:p-8"
-              style={{
-                background: "oklch(0.12 0.012 55)",
-                border: "1px solid oklch(0.72 0.12 65 / 0.18)",
-                borderRadius: "2px",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-6">
-                <CalendarDays size={16} style={{ color: "oklch(0.72 0.12 65)" }} />
-                <span
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.7rem",
-                    letterSpacing: "0.12em",
-                    color: "oklch(0.58 0.020 65)",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {t.booking.pickDates}
-                </span>
-              </div>
-
-              <div
-                className="flex justify-center overflow-x-auto"
-                style={{
-                  opacity: availabilityLoading ? 0.45 : 1,
-                  transition: "opacity 0.2s ease",
-                }}
-              >
-                <Calendar
-                  mode="range"
-                  selected={dateRange}
-                  onSelect={handleSelect}
-                  numberOfMonths={1}
-                  disabled={
-                    availabilityLoading
-                      ? true
-                      : [{ before: new Date() }, ...unselectable]
-                  }
-                  className="rounded-none"
-                  style={{
-                    "--rdp-accent-color": "oklch(0.72 0.12 65)",
-                    "--rdp-background-color": "oklch(0.72 0.12 65 / 0.15)",
-                    color: "oklch(0.92 0.008 75)",
-                  } as React.CSSProperties}
-                />
-              </div>
-
-              {(availabilityLoading || availabilityFailed) && (
-                <p
-                  className="mt-4"
-                  style={{
-                    fontFamily: "'Karla', sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 300,
-                    color: "oklch(0.45 0.015 65)",
-                    textAlign: "center",
-                  }}
-                >
-                  {availabilityLoading
-                    ? t.booking.availabilityLoading
-                    : t.booking.availabilityFailed}
-                </p>
-              )}
-
-              {/* Selected range display */}
-              <AnimatePresence>
-                {dateRange?.from && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] as [number, number, number, number] }}
-                    className="mt-6 pt-6"
-                    style={{ borderTop: "1px solid oklch(0.72 0.12 65 / 0.18)" }}
-                  >
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <p
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: "0.65rem",
-                            letterSpacing: "0.12em",
-                            color: "oklch(0.58 0.020 65)",
-                            textTransform: "uppercase",
-                            marginBottom: "0.4rem",
-                          }}
-                        >
-                          {t.booking.checkIn}
-                        </p>
-                        <p
-                          style={{
-                            fontFamily: "'Karla', sans-serif",
-                            fontSize: "0.95rem",
-                            fontWeight: 400,
-                            color: "oklch(0.92 0.008 75)",
-                          }}
-                        >
-                          {formatDate(dateRange.from, lang)}
-                        </p>
-                      </div>
-                      <div>
-                        <p
-                          style={{
-                            fontFamily: "'JetBrains Mono', monospace",
-                            fontSize: "0.65rem",
-                            letterSpacing: "0.12em",
-                            color: "oklch(0.58 0.020 65)",
-                            textTransform: "uppercase",
-                            marginBottom: "0.4rem",
-                          }}
-                        >
-                          {t.booking.checkOut}
-                        </p>
-                        <p
-                          style={{
-                            fontFamily: "'Karla', sans-serif",
-                            fontSize: "0.95rem",
-                            fontWeight: 400,
-                            color: "oklch(0.92 0.008 75)",
-                          }}
-                        >
-                          {formatDate(dateRange.to, lang)}
-                        </p>
-                      </div>
-                    </div>
-                    {nights > 0 && (
-                      <p
-                        className="mt-3"
-                        style={{
-                          fontFamily: "'Bebas Neue', sans-serif",
-                          fontSize: "1.1rem",
-                          letterSpacing: "0.04em",
-                          color: "oklch(0.72 0.12 65)",
-                        }}
-                      >
-                        {nights} {nights === 1 ? t.booking.nights1 : nights < 5 ? t.booking.nightsFew : t.booking.nightsMany}
-                      </p>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+          <p
+            id="availability-state"
+            className="availability-state"
+            role="status"
+          >
+            {loading
+              ? t.booking.availabilityLoading
+              : failed
+                ? t.booking.availabilityFailed
+                : t.booking.pickDates}
+          </p>
+          <p id="date-validation" className="date-validation" role="alert">
+            {dateError || "\u00a0"}
+          </p>
+          <GuestCounters id="booking" />
+          <p className="guest-note">{c.childNote}</p>
+        </div>
+        <aside className="booking-summary">
+          <h3>{c.summary}</h3>
+          <dl className="summary-lines">
+            <div>
+              <dt>{t.booking.checkIn}</dt>
+              <dd>
+                <Value value={format(range?.from)} />
+              </dd>
             </div>
-          </FadeUp>
-
-          {/* Booking summary sidebar */}
-          <FadeUp delay={0.2}>
-            <div
-              className="p-4 md:p-8 flex flex-col gap-6"
-              style={{
-                background: "oklch(0.14 0.012 55)",
-                border: "1px solid oklch(0.72 0.12 65 / 0.25)",
-                borderRadius: "2px",
-                position: "sticky",
-                    top: "auto",
-              }}
-            >
-              <div>
-                <h3
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1.6rem",
-                    letterSpacing: "0.03em",
-                    color: "oklch(0.92 0.008 75)",
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  {t.booking.propertyName}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "'JetBrains Mono', monospace",
-                    fontSize: "0.65rem",
-                    letterSpacing: "0.12em",
-                    color: "oklch(0.58 0.020 65)",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {t.booking.propertyPlace}
-                </p>
-              </div>
-
-              {/* The score alone, attributed and linked. The property has one
-                  review, so a review section would advertise its own thinness. */}
-              <a
-                href={BOOKING_LISTING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2"
-                style={{ textDecoration: "none" }}
+            <div>
+              <dt>{t.booking.checkOut}</dt>
+              <dd>
+                <Value value={format(range?.to)} />
+              </dd>
+            </div>
+            <div>
+              <dt>{c.nights}</dt>
+              <dd>
+                <Value value={price?.nights ?? "—"} />
+              </dd>
+            </div>
+          </dl>
+          <div className="booking-total">
+            <span>{c.total}</span>
+            <strong aria-live="polite">
+              <Value value={price ? `${price.total} €` : "—"} />
+            </strong>
+          </div>
+          <p className="summary-comparison">
+            Booking.com{" "}
+            <s>
+              <Value value={price ? `${price.bookingTotal} €` : "—"} />
+            </s>
+          </p>
+          <p className="saving booking-saving">
+            {c.save} <Value value={price ? `${price.savings} €` : "—"} />
+            {price && (
+              <motion.span
+                className="saving-rule"
+                initial={{ scaleX: reduce ? 1 : 0, opacity: reduce ? 0 : 1 }}
+                animate={{ scaleX: 1, opacity: 1 }}
+                transition={{
+                  duration: reduce ? DUR.state : DUR.section,
+                  ease: EASE.enter,
+                }}
+              />
+            )}
+          </p>
+          <AnimatePresence mode="wait" initial={false}>
+            {status === "sent" ? (
+              <motion.div
+                key="success"
+                ref={successRef}
+                tabIndex={-1}
+                role="status"
+                className="booking-success"
+                style={{ minHeight: formHeight }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: DUR.state }}
               >
-                <span
-                  style={{
-                    fontFamily: "'Bebas Neue', sans-serif",
-                    fontSize: "1rem",
-                    color: "oklch(0.06 0.008 55)",
-                    background: "oklch(0.72 0.12 65)",
-                    padding: "0.15rem 0.5rem",
-                    borderRadius: "2px",
-                  }}
+                <motion.div
+                  className="success-ring"
+                  initial={{ scale: reduce ? 1 : 0.92, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={reduce ? { duration: DUR.state } : SPRING_GESTURE}
                 >
-                  {BOOKING_RATING}
-                </span>
-                <span
-                  style={{
-                    fontFamily: "'Karla', sans-serif",
-                    fontSize: "0.78rem",
-                    color: "oklch(0.62 0.020 65)",
-                  }}
-                >
-                  {t.booking.ratingLabel}
-                </span>
-              </a>
-
-              {/* Divider */}
-              <div className="amber-rule" />
-
-              {/* Dates summary */}
-              <div className="flex flex-col gap-3">
-                <div className="flex justify-between items-center">
-                  <span
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.1em",
-                      color: "oklch(0.58 0.020 65)",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {t.booking.checkIn}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "'Karla', sans-serif",
-                      fontSize: "0.875rem",
-                      color: "oklch(0.78 0.015 75)",
-                    }}
-                  >
-                    {dateRange?.from ? formatDate(dateRange.from, lang) : "—"}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.65rem",
-                      letterSpacing: "0.1em",
-                      color: "oklch(0.58 0.020 65)",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {t.booking.checkOut}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "'Karla', sans-serif",
-                      fontSize: "0.875rem",
-                      color: "oklch(0.78 0.015 75)",
-                    }}
-                  >
-                    {dateRange?.to ? formatDate(dateRange.to, lang) : "—"}
-                  </span>
-                </div>
-                {price && (
-                  <>
-                    <div className="flex justify-between items-center">
-                      <span
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: "0.65rem",
-                          letterSpacing: "0.1em",
-                          color: "oklch(0.58 0.020 65)",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {price.nights} × {price.perNight} €
-                      </span>
-                      <span
-                        style={{
-                          fontFamily: "'Bebas Neue', sans-serif",
-                          fontSize: "1.6rem",
-                          color: "oklch(0.92 0.008 75)",
-                        }}
-                      >
-                        {price.total} €
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span
-                        style={{
-                          fontFamily: "'JetBrains Mono', monospace",
-                          fontSize: "0.65rem",
-                          letterSpacing: "0.1em",
-                          color: "oklch(0.58 0.020 65)",
-                          textTransform: "uppercase",
-                        }}
-                      >
-                        {t.booking.onBooking}
-                      </span>
-                      <span
-                        style={{
-                          fontFamily: "'Karla', sans-serif",
-                          fontSize: "0.875rem",
-                          color: "oklch(0.58 0.020 65)",
-                          textDecoration: "line-through",
-                        }}
-                      >
-                        {price.bookingTotal} €
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "0.85rem",
-                        color: "oklch(0.72 0.12 65)",
+                  <svg viewBox="0 0 48 48" aria-hidden="true">
+                    <motion.path
+                      d="M13 25l8 8 15-18"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      initial={{ pathLength: reduce ? 1 : 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{
+                        duration: DUR.section,
+                        delay: 0.12,
+                        ease: EASE.enter,
                       }}
-                    >
-                      {t.booking.youSave} {price.savings} €
-                    </p>
-                  </>
-                )}
-              </div>
-
-              {/* Divider */}
-              <div className="amber-rule" />
-
-              {/* Guests. Two counters: the adult count picks the price tier,
-                  children pay a flat rate but still take a bed. */}
-              <div className="flex flex-col gap-4">
-                <GuestCounter
-                  label={t.booking.adults}
-                  hint={t.booking.adultsHint}
-                  value={adults}
-                  min={1}
-                  max={MAX_GUESTS - children}
-                  onChange={setAdults}
-                  decreaseLabel={t.booking.guestsDecrease}
-                  increaseLabel={t.booking.guestsIncrease}
-                />
-                <GuestCounter
-                  label={t.booking.children}
-                  hint={t.booking.childrenHint}
-                  value={children}
-                  min={0}
-                  max={MAX_GUESTS - adults}
-                  onChange={setChildren}
-                  decreaseLabel={t.booking.childrenDecrease}
-                  increaseLabel={t.booking.childrenIncrease}
-                />
-                <p
-                  style={{
-                    fontFamily: "'Karla', sans-serif",
-                    fontSize: "0.75rem",
-                    fontWeight: 300,
-                    color: "oklch(0.45 0.015 65)",
-                  }}
+                    />
+                  </svg>
+                </motion.div>
+                <motion.h4
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.18, duration: DUR.state }}
                 >
-                  {t.booking.maxGuests}
-                </p>
-              </div>
-
-
-              {status === "sent" ? (
-                <div
-                  role="status"
-                  style={{
-                    border: "1px solid oklch(0.72 0.12 65 / 0.4)",
-                    padding: "1.25rem",
-                    borderRadius: "2px",
-                  }}
+                  {t.booking.sentTitle}
+                </motion.h4>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.24, duration: DUR.state }}
                 >
-                  <p
-                    style={{
-                      fontFamily: "'Bebas Neue', sans-serif",
-                      fontSize: "1.3rem",
-                      color: "oklch(0.72 0.12 65)",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    {t.booking.sentTitle}
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: "'Karla', sans-serif",
-                      fontSize: "0.85rem",
-                      fontWeight: 300,
-                      color: "oklch(0.78 0.015 75)",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {confirmationSent
-                      ? `${t.booking.sentBody} ${form.email}.`
-                      : t.booking.sentBodyNoEmail}
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  {c.successBody}
+                  {confirmationSent && (
+                    <>
+                      {" "}
+                      {c.successEmail} <strong>{form.email}</strong>.
+                    </>
+                  )}
+                </motion.p>
+              </motion.div>
+            ) : step === "dates" ? (
+              <motion.div
+                key="dates"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.ui }}
+              >
+                <RollButton
+                  tone="solid"
+                  className="booking-action"
+                  onClick={proceed}
+                >
+                  {c.continue}
+                </RollButton>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="contact"
+                ref={contactRef}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: DUR.ui }}
+              >
+                <RollButton
+                  size="sm"
+                  className="edit-dates"
+                  onClick={() => setStep("dates")}
+                >
+                  {c.edit}
+                </RollButton>
+                <form className="inquiry-form" onSubmit={submit}>
                   {(
                     [
                       {
@@ -777,237 +413,123 @@ export function BookingSection() {
                       },
                       {
                         key: "phone",
-                        label: t.booking.phoneField,
+                        label: `${t.booking.phoneField} (${c.optional})`,
                         type: "tel",
                         autoComplete: "tel",
                       },
                     ] as const
-                  ).map((field) => (
-                    // The label replaces the placeholder rather than joining it:
-                    // a placeholder disappears the moment the guest types, so the
-                    // filled form gave no way to check which value went where.
-                    <div key={field.key} className="flex flex-col gap-1.5">
-                      <label htmlFor={`inquiry-${field.key}`} style={FIELD_LABEL}>
+                  ).map(field => (
+                    <div key={field.key}>
+                      <label htmlFor={`inquiry-${field.key}`}>
                         {field.label}
                       </label>
                       <input
                         id={`inquiry-${field.key}`}
                         type={field.type}
-                        required
                         autoComplete={field.autoComplete}
+                        required={field.key !== "phone"}
+                        minLength={
+                          field.key === "name"
+                            ? 2
+                            : field.key === "phone"
+                              ? 6
+                              : undefined
+                        }
+                        maxLength={
+                          field.key === "name"
+                            ? 100
+                            : field.key === "phone"
+                              ? 30
+                              : 254
+                        }
                         value={form[field.key]}
-                        onChange={(event) =>
+                        onChange={event =>
                           setForm({ ...form, [field.key]: event.target.value })
                         }
-                        style={{
-                          fontFamily: "'Karla', sans-serif",
-                          fontSize: "0.9rem",
-                          color: "oklch(0.92 0.008 75)",
-                          background: "oklch(0.10 0.012 55)",
-                          border: "1px solid oklch(0.72 0.12 65 / 0.25)",
-                          borderRadius: "2px",
-                          padding: "0.7rem 0.85rem",
-                          width: "100%",
-                        }}
                       />
                     </div>
                   ))}
-                  <div className="flex flex-col gap-1.5">
-                    <label htmlFor="inquiry-message" style={FIELD_LABEL}>
+                  <div>
+                    <label htmlFor="inquiry-message">
                       {t.booking.messageField}
                     </label>
                     <textarea
                       id="inquiry-message"
                       rows={3}
-                      autoComplete="off"
+                      maxLength={2000}
                       value={form.message}
-                      onChange={(event) =>
+                      onChange={event =>
                         setForm({ ...form, message: event.target.value })
                       }
-                      style={{
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "0.9rem",
-                        color: "oklch(0.92 0.008 75)",
-                        background: "oklch(0.10 0.012 55)",
-                        border: "1px solid oklch(0.72 0.12 65 / 0.25)",
-                        borderRadius: "2px",
-                        padding: "0.7rem 0.85rem",
-                        width: "100%",
-                        resize: "vertical",
-                      }}
                     />
                   </div>
-
-                  {/* The honeypot. Off-screen rather than display:none, because
-                      a bot that skips hidden fields is exactly the one to catch.
-                      aria-hidden and tabIndex keep it away from real guests. */}
-                  <div
-                    aria-hidden="true"
-                    style={{
-                      position: "absolute",
-                      left: "-9999px",
-                      width: "1px",
-                      height: "1px",
-                      overflow: "hidden",
-                    }}
-                  >
+                  <div aria-hidden="true" className="inquiry-honeypot">
                     <label htmlFor="inquiry-website">Website</label>
                     <input
                       id="inquiry-website"
                       name="website"
-                      type="text"
                       tabIndex={-1}
                       autoComplete="off"
                       value={form.website}
-                      onChange={(event) =>
+                      onChange={event =>
                         setForm({ ...form, website: event.target.value })
                       }
                     />
                   </div>
-
-                  <motion.button
+                  <RollButton
+                    tone="solid"
                     type="submit"
-                    disabled={!canProceed || status === "sending"}
-                    className="w-full btn-amber justify-center gap-3 mt-1"
-                    whileHover={{ scale: canProceed ? 1.01 : 1 }}
-                    whileTap={{ scale: canProceed ? 0.97 : 1 }}
-                    style={{
-                      opacity: canProceed && status !== "sending" ? 1 : 0.5,
-                      cursor: canProceed ? "pointer" : "not-allowed",
-                    }}
+                    className="booking-action"
+                    disabled={status === "sending"}
                   >
-                    <span>
-                      {status === "sending"
-                        ? t.booking.sending
-                        : t.booking.submit}
-                    </span>
-                    {status !== "sending" && <ArrowRight size={16} />}
-                  </motion.button>
-
-                  {!canProceed && (
-                    <p
-                      style={{
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "0.75rem",
-                        fontWeight: 300,
-                        color: "oklch(0.45 0.015 65)",
-                        textAlign: "center",
-                      }}
-                    >
-                      {t.booking.needTwoNights}
-                    </p>
-                  )}
-
-                  {status === "error" && (
-                    <p
-                      role="alert"
-                      style={{
-                        fontFamily: "'Karla', sans-serif",
-                        fontSize: "0.78rem",
-                        color: "oklch(0.65 0.15 25)",
-                        textAlign: "center",
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {error}
-                      <br />
-                      {t.booking.callUs}{" "}
-                      <a
-                        href={`tel:${PHONE}`}
-                        style={{ color: "oklch(0.72 0.12 65)" }}
-                      >
-                        {PHONE_DISPLAY}
-                      </a>{" "}
-                      {t.booking.orWrite}{" "}
-                      <a
-                        href={`mailto:${EMAIL}`}
-                        style={{ color: "oklch(0.72 0.12 65)" }}
-                      >
-                        {EMAIL}
-                      </a>
-                      .
-                    </p>
-                  )}
+                    {status === "sending"
+                      ? t.booking.sending
+                      : t.booking.submit}
+                  </RollButton>
                 </form>
-              )}
-
-              <p
-                style={{
-                  fontFamily: "'Karla', sans-serif",
-                  fontSize: "0.75rem",
-                  fontWeight: 300,
-                  color: "oklch(0.45 0.015 65)",
-                  textAlign: "center",
-                  lineHeight: 1.6,
-                }}
-              >
-                {t.booking.finePrint}
-              </p>
-            </div>
-          </FadeUp>
-        </div>
-
-        {/* House rules */}
-        <FadeUp delay={0.1} className="mt-12">
-          <div
-            className="p-6 md:p-8"
-            style={{
-              background: "oklch(0.12 0.012 55)",
-              border: "1px solid oklch(0.72 0.12 65 / 0.12)",
-              borderRadius: "2px",
-            }}
-          >
-            <h3
-              style={{
-                fontFamily: "'Bebas Neue', sans-serif",
-                fontSize: "1.3rem",
-                letterSpacing: "0.04em",
-                color: "oklch(0.92 0.008 75)",
-                marginBottom: "1rem",
-              }}
-            >
-              {t.rules.title}
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: t.rules.checkIn, value: "15:00 – 23:00" },
-                { label: t.rules.checkOut, value: "08:00 – 11:00" },
-                { label: t.rules.smoking, value: t.rules.smokingValue },
-                { label: t.rules.pets, value: t.rules.petsValue },
-                { label: t.rules.quiet, value: "23:00 – 05:00" },
-                { label: t.rules.children, value: t.rules.childrenValue },
-                { label: t.rules.cribs, value: t.rules.cribsValue },
-                { label: t.rules.capacity, value: t.rules.capacityValue },
-              ].map((rule) => (
-                <div key={rule.label}>
-                  <p
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: "0.62rem",
-                      letterSpacing: "0.1em",
-                      color: "oklch(0.58 0.020 65)",
-                      textTransform: "uppercase",
-                      marginBottom: "0.3rem",
-                    }}
-                  >
-                    {rule.label}
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: "'Karla', sans-serif",
-                      fontSize: "0.9rem",
-                      fontWeight: 400,
-                      color: "oklch(0.78 0.015 75)",
-                    }}
-                  >
-                    {rule.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </FadeUp>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {status === "error" && (
+            <p role="alert" className="inquiry-error">
+              {t.booking.sendFailed}{" "}
+              <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a> ·{" "}
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            </p>
+          )}
+          <p className="booking-assurances">{c.assurances}</p>
+        </aside>
       </div>
+      <details className="house-rules">
+        <summary>
+          {t.rules.title}
+          <span aria-hidden="true">+</span>
+        </summary>
+        <dl>
+          {[
+            { label: t.rules.checkIn, value: "15:00 – 23:00" },
+            { label: t.rules.checkOut, value: "08:00 – 11:00" },
+            { label: t.rules.smoking, value: t.rules.smokingValue },
+            { label: t.rules.pets, value: t.rules.petsValue },
+            { label: t.rules.quiet, value: "23:00 – 05:00" },
+            { label: t.rules.children, value: t.rules.childrenValue },
+            { label: t.rules.cribs, value: t.rules.cribsValue },
+            { label: t.rules.capacity, value: t.rules.capacityValue },
+          ].map(rule => (
+            <div key={rule.label}>
+              <dt>{rule.label}</dt>
+              <dd>{rule.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
+    </div>
+  );
+  return embedded ? (
+    contents
+  ) : (
+    <section id="rezervacia" className="premium-section booking-section">
+      {contents}
     </section>
   );
 }

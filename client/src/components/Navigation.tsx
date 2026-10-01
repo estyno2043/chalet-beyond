@@ -16,7 +16,7 @@ import { useScrollThreshold } from "@/components/ui/use-scroll";
 import { useT } from "@/i18n/LanguageProvider";
 import { LanguageDropdown } from "@/components/LanguageDropdown";
 import { RollLink } from "@/components/RollButton";
-import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
+import { EMAIL, PHONE, PHONE_DISPLAY, WHATSAPP_URL } from "@shared/contact";
 import "./navigation.css";
 
 const HREFS = [
@@ -54,7 +54,9 @@ export function Navigation() {
     setOpen(false);
     document
       .querySelector(href)
-      ?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth" });
+      ?.scrollIntoView({
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
   };
 
   const bookButton = (className: string) => (
@@ -208,6 +210,16 @@ export function Navigation() {
             >
               <Phone size={16} strokeWidth={1.6} aria-hidden="true" />
               {PHONE_DISPLAY}
+            </a>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="chalet-navigation__menu-secondary"
+              aria-label={t.contact.whatsappAria}
+            >
+              {t.contact.whatsapp}
             </a>
             <a
               href={`mailto:${EMAIL}`}

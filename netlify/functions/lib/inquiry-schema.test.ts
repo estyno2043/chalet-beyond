@@ -32,12 +32,14 @@ describe("inquirySchema", () => {
   });
 
   it("rejects more guests than the property sleeps", () => {
-    expect(inquirySchema.safeParse({ ...valid, guests: 9 }).success).toBe(false);
+    expect(inquirySchema.safeParse({ ...valid, guests: 9 }).success).toBe(
+      false
+    );
   });
 
   it("rejects a malformed email", () => {
     expect(inquirySchema.safeParse({ ...valid, email: "anna@" }).success).toBe(
-      false,
+      false
     );
   });
 
@@ -45,14 +47,18 @@ describe("inquirySchema", () => {
     const { phone, ...withoutPhone } = valid;
     expect(inquirySchema.safeParse(withoutPhone).success).toBe(true);
     expect(inquirySchema.safeParse({ ...valid, phone: "" }).success).toBe(true);
-    expect(inquirySchema.safeParse({ ...valid, phone: "123" }).success).toBe(false);
-    expect(inquirySchema.safeParse({ ...valid, phone: "1".repeat(31) }).success).toBe(false);
+    expect(inquirySchema.safeParse({ ...valid, phone: "123" }).success).toBe(
+      false
+    );
+    expect(
+      inquirySchema.safeParse({ ...valid, phone: "1".repeat(31) }).success
+    ).toBe(false);
   });
 
   it("rejects a malformed date", () => {
-    expect(inquirySchema.safeParse({ ...valid, from: "11.9.2026" }).success).toBe(
-      false,
-    );
+    expect(
+      inquirySchema.safeParse({ ...valid, from: "11.9.2026" }).success
+    ).toBe(false);
   });
 
   it("rejects a date that does not exist rather than rolling it forward", () => {

@@ -68,7 +68,6 @@ const sk = {
   children: "Deti (0–15)",
   childNote: "Deti 0–15 rokov: 40 € / noc za dieťa. Spolu najviac 8 hostí.",
   booking: ["Overte", "voľný termín."],
-  bookingBody: "Vyberte dátumy a pošlite dopyt priamo majiteľovi.",
   continue: "Pokračovať",
   edit: "Upraviť termín",
   optional: "voliteľné",
@@ -164,8 +163,6 @@ const de: Copy = {
   childNote:
     "Kinder 0–15 Jahre: 40 € / Nacht pro Kind. Insgesamt höchstens 8 Gäste.",
   booking: ["Freie Termine", "prüfen."],
-  bookingBody:
-    "Wählen Sie Ihren Aufenthalt und fragen Sie direkt beim Eigentümer an.",
   continue: "Weiter",
   edit: "Termin ändern",
   optional: "optional",
@@ -255,7 +252,6 @@ const en: Copy = {
   childNote:
     "Children aged 0–15: €40 / night per child. Maximum 8 guests in total.",
   booking: ["Check available", "dates."],
-  bookingBody: "Choose your dates and send an inquiry directly to the owner.",
   continue: "Continue",
   edit: "Edit dates",
   optional: "optional",
@@ -344,8 +340,6 @@ const pl: Copy = {
   childNote:
     "Dzieci 0–15 lat: 40 € / noc za dziecko. Łącznie maksymalnie 8 gości.",
   booking: ["Sprawdźcie", "wolny termin."],
-  bookingBody:
-    "Wybierzcie daty i wyślijcie zapytanie bezpośrednio właścicielowi.",
   continue: "Dalej",
   edit: "Zmień termin",
   optional: "opcjonalne",

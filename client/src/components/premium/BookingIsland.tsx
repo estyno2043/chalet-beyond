@@ -30,19 +30,21 @@ export function BookingIsland() {
       id="rezervacia"
       className="premium-section booking-section"
     >
-      <div className="container">
-        <SectionHeader lines={c.booking} description={c.bookingBody} />
-      </div>
-      <div className="booking-island">
-        <Suspense
-          fallback={<div className="booking-placeholder" aria-busy="true" />}
-        >
-          {ready ? (
-            <Booking embedded />
-          ) : (
-            <div className="booking-placeholder" />
-          )}
-        </Suspense>
+      {/* From 1280px the frame is one grid: the summary column starts level
+          with the heading and stays sticky beside the calendar. */}
+      <div className="container booking-frame">
+        <SectionHeader lines={c.booking} />
+        <div className="booking-island">
+          <Suspense
+            fallback={<div className="booking-placeholder" aria-busy="true" />}
+          >
+            {ready ? (
+              <Booking embedded />
+            ) : (
+              <div className="booking-placeholder" />
+            )}
+          </Suspense>
+        </div>
       </div>
     </section>
   );

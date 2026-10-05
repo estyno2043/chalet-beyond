@@ -17,6 +17,7 @@ import { GuestCounters } from "./premium/GuestCounters";
 import { Value } from "./premium/Value";
 import { usePremiumCopy } from "./premium/copy";
 import { RollButton } from "./RollButton";
+import { BlindDisclosure } from "./ui/blind-disclosure";
 import { EASE, DUR, SPRING_GESTURE } from "@/lib/motion";
 import "react-day-picker/style.css";
 
@@ -220,10 +221,8 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
     }
   }
   const contents = (
-    <div className="container">
-      {!embedded && (
-        <SectionHeader lines={c.booking} description={c.bookingBody} />
-      )}
+    <div className={embedded ? "booking-contents" : "container"}>
+      {!embedded && <SectionHeader lines={c.booking} />}
       <div className="booking-layout">
         <div className="booking-calendar-column">
           <div
@@ -527,11 +526,7 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
           <p className="booking-assurances">{c.assurances}</p>
         </aside>
       </div>
-      <details className="house-rules">
-        <summary>
-          {t.rules.title}
-          <span aria-hidden="true">+</span>
-        </summary>
+      <BlindDisclosure className="house-rules" summary={t.rules.title}>
         <dl>
           {[
             { label: t.rules.checkIn, value: "15:00 – 23:00" },
@@ -543,13 +538,13 @@ export function BookingSection({ embedded = false }: { embedded?: boolean }) {
             { label: t.rules.cribs, value: t.rules.cribsValue },
             { label: t.rules.capacity, value: t.rules.capacityValue },
           ].map(rule => (
-            <div key={rule.label}>
+            <div key={rule.label} data-slat>
               <dt>{rule.label}</dt>
               <dd>{rule.value}</dd>
             </div>
           ))}
         </dl>
-      </details>
+      </BlindDisclosure>
     </div>
   );
   return embedded ? (

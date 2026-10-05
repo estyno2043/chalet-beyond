@@ -411,25 +411,6 @@
   margin-top: 64px;
   border-block: 1px solid rgb(245 244 239 / 0.2);
 }
-.house-rules summary {
-  cursor: pointer;
-  list-style: none;
-  min-height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  font-size: 1.125rem;
-}
-summary::-webkit-details-marker {
-  display: none;
-}
-details[open] summary > span {
-  transform: rotate(45deg);
-}
-summary > span {
-  font-size: 1.5rem;
-}
 .price-table__scroll {
   overflow-x: auto;
   padding-bottom: 16px;
@@ -642,6 +623,9 @@ summary > span {
   color: oklch(0.8 0.008 75);
   margin-top: 20px;
   line-height: 1.55;
+  /* Owner request: underlined like the pricing rate note, no highlight. */
+  text-decoration: underline 1px var(--amber);
+  text-underline-offset: 0.28em;
 }
 .edit-dates {
   margin-bottom: 24px;
@@ -848,6 +832,50 @@ summary > span {
   .booking-summary {
     position: sticky;
     top: calc(var(--nav-height, 72px) + 24px);
+  }
+  /* Island: heading, calendar and summary share one grid, so the summary
+     starts level with the heading. The layout spans the first two rows as a
+     subgrid and stays the summary's sticky container: it settles where the
+     calendar column ends, before the house rules. */
+  .booking-frame {
+    display: grid;
+    grid-template-columns: minmax(648px, 1fr) 330px;
+    column-gap: 32px;
+    align-items: start;
+  }
+  .booking-frame .booking-island,
+  .booking-frame .booking-contents {
+    display: contents;
+  }
+  .booking-frame > .section-header {
+    grid-area: 1 / 1;
+  }
+  .booking-frame .booking-placeholder {
+    grid-area: 2 / 1;
+  }
+  .booking-frame .booking-layout {
+    grid-column: 1 / -1;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    gap: 0 32px;
+    /* It overlays the heading's cell; let pointers reach the heading. */
+    pointer-events: none;
+  }
+  .booking-frame .booking-layout > * {
+    pointer-events: auto;
+  }
+  .booking-frame .booking-calendar-column {
+    grid-area: 2 / 1;
+  }
+  .booking-frame .booking-summary {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .booking-frame .house-rules {
+    grid-column: 1 / -1;
+    grid-row: 3;
   }
 }
 @media (max-height: 1000px) {

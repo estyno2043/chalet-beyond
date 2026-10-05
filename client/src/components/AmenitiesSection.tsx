@@ -1,8 +1,8 @@
-import { RevealList } from "./premium/RevealList";
 import { useT } from "@/i18n/LanguageProvider";
 import { usePremiumCopy } from "./premium/copy";
 import { SectionHeader } from "./premium/SectionHeader";
 import { RevealPhoto } from "./premium/Photo";
+import { TextAnimate } from "./ui/text-animate";
 export function AmenitiesSection() {
   const t = useT();
   const c = usePremiumCopy();
@@ -25,7 +25,7 @@ export function AmenitiesSection() {
             </figure>
           ))}
         </div>
-        <RevealList>
+        <ul className="amenities-list">
           {[
             items.wifi,
             items.parking,
@@ -38,10 +38,21 @@ export function AmenitiesSection() {
             items.bbq,
             items.garden,
             items.highChair,
-          ].map(text => (
-            <li key={text}>{text}</li>
+          ].map((text, i) => (
+            // The row and its divider stay put; only the words blur in.
+            <li key={text}>
+              <TextAnimate
+                as="span"
+                by="character"
+                animation="blurIn"
+                once
+                delay={Math.min(Math.floor(i / 2), 4) * 0.06}
+              >
+                {text}
+              </TextAnimate>
+            </li>
           ))}
-        </RevealList>
+        </ul>
       </div>
     </section>
   );

@@ -18,6 +18,7 @@
 @source "./components/ui/meteors.tsx";
 @source "./components/ui/line-shadow-text.tsx";
 @source "./components/ui/globe.tsx";
+@source "./components/ui/text-animate.tsx";
 @import "tw-animate-css";
 @import "./fonts.css";
 

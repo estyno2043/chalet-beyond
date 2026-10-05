@@ -1,5 +1,5 @@
 import { SectionHeader } from "./premium/SectionHeader";
-import { Photo } from "./premium/Photo";
+import { SectionBackdrop } from "./premium/SectionBackdrop";
 import { usePremiumCopy } from "./premium/copy";
 import { Meteors } from "./ui/meteors";
 
@@ -14,17 +14,14 @@ export function ChaletIntroSection() {
   return (
     <section id="chalet" className="premium-section intro-section">
       {/* Decorative: a faint panorama with meteors over its sky. */}
-      <div className="intro-backdrop" aria-hidden="true">
-        <Photo
-          id={INTRO_PANORAMA_PHOTO_ID}
-          alt=""
-          sizes="100vw"
-          className="intro-backdrop__photo"
-        />
+      <SectionBackdrop
+        photoId={INTRO_PANORAMA_PHOTO_ID}
+        className="intro-backdrop"
+      >
         <div className="intro-backdrop__meteors">
           <Meteors number={14} minDuration={4} maxDuration={10} />
         </div>
-      </div>
+      </SectionBackdrop>
       <div className="container intro-content">
         <SectionHeader
           lines={c.intro}

@@ -1,6 +1,14 @@
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { EASE, DUR } from "@/lib/motion";
-export function Value({ value }: { value: string | number }) {
+import { LineShadowText } from "@/components/ui/line-shadow-text";
+export function Value({
+  value,
+  lineShadow,
+}: {
+  value: string | number;
+  /** Colour of a Magic UI line shadow drawn behind the value. */
+  lineShadow?: string;
+}) {
   const reduce = useReducedMotion();
   return (
     <span className="changing-value">
@@ -16,7 +24,11 @@ export function Value({ value }: { value: string | number }) {
           exit={{ opacity: 0 }}
           transition={{ duration: DUR.state, ease: EASE.ui }}
         >
-          {value}
+          {lineShadow ? (
+            <LineShadowText shadowColor={lineShadow}>{`${value}`}</LineShadowText>
+          ) : (
+            value
+          )}
         </m.span>
       </AnimatePresence>
     </span>

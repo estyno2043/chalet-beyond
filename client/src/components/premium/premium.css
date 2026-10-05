@@ -54,7 +54,8 @@
   overflow: clip;
   padding-block: clamp(120px, 14vw, 200px) clamp(88px, 10vw, 160px);
 }
-.intro-backdrop {
+/* SectionBackdrop (intro, pricing): the host sets position and isolation. */
+.section-backdrop {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -75,10 +76,10 @@
     transparent
   );
 }
-.intro-backdrop__photo {
+.intro-backdrop .section-backdrop__photo {
   opacity: 0.26;
 }
-.intro-backdrop__photo img {
+.intro-backdrop .section-backdrop__photo img {
   object-position: center 40%;
 }
 .intro-backdrop__meteors {
@@ -98,7 +99,8 @@
 }
 /* The line shadow repeats each heading line in ::after; keep it out of the
    accessible name where the alt-text form of `content` is supported. */
-.intro-header [data-text]::after {
+.intro-header [data-text]::after,
+.pricing-section [data-text]::after {
   content: attr(data-text) / "";
 }
 .intro-facts {
@@ -284,25 +286,48 @@
   align-items: start;
   margin-top: 64px;
 }
-.price-context {
-  margin: 0 0 8px;
+/* Pricing: a faint chalet behind the figures, kept quieter than the intro
+   because small print sits on it. */
+.pricing-section {
+  position: relative;
+  isolation: isolate;
+}
+.pricing-backdrop .section-backdrop__photo {
+  opacity: 0.18;
+}
+.pricing-backdrop .section-backdrop__photo img {
+  object-position: center 70%;
+}
+/* Label, figure and unit stack on one 12px gap. Thunder's line box is cut to
+   its caps (line-height 1: caps start 0.05em below the top and end 0.23em
+   above the bottom), so the gaps are the ones you see, not font leading.
+   Stacked, a figure that changes width moves nothing beside it. */
+.price-figure {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.price-figure > span {
   font-size: 1.125rem;
+  line-height: 1;
+}
+.price-figure strong {
+  display: block;
+  margin-block: -0.05em -0.23em;
+  color: var(--amber);
+  font-family: Thunder, sans-serif;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .starting-price {
-  color: var(--amber);
-  font:
-    600 clamp(5rem, 9vw, 8rem) / 0.95 Thunder,
-    sans-serif;
-  margin: 0 0 24px;
+  margin-bottom: 24px;
 }
-.starting-price span {
-  font:
-    400 1.125rem/1.2 Karla,
-    sans-serif;
-  display: block;
-  margin-top: 16px;
+.starting-price strong {
+  font-size: clamp(5rem, 9vw, 8rem);
 }
-.price-story > p:not(.starting-price),
+.price-story > p,
 .price-calculator > p {
   font-size: 1.0625rem;
 }
@@ -361,19 +386,9 @@
 }
 .calculated-price {
   margin-top: 40px;
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.calculated-price > span:first-child {
-  flex-basis: 100%;
 }
 .calculated-price strong {
-  font:
-    600 clamp(3.5rem, 5vw, 5rem) / 1 Thunder,
-    sans-serif;
-  color: var(--amber);
+  font-size: clamp(3.5rem, 5vw, 5rem);
 }
 .changing-value {
   position: relative;
@@ -396,7 +411,6 @@
   margin-top: 64px;
   border-block: 1px solid rgb(245 244 239 / 0.2);
 }
-.price-table summary,
 .house-rules summary {
   cursor: pointer;
   list-style: none;
@@ -441,6 +455,16 @@ summary > span {
   color: oklch(0.8 0.008 75);
   font-size: 1rem;
   margin-top: 24px;
+}
+/* Owner request: the condition sentence reads as marked and underlined. */
+.rate-note mark {
+  padding: 0.12em 0.3em;
+  background: oklch(0.72 0.12 65 / 0.14);
+  color: var(--foreground);
+  text-decoration: underline 1px var(--amber);
+  text-underline-offset: 0.28em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .booking-layout {
   display: grid;
@@ -924,7 +948,7 @@ summary > span {
     gap: 56px;
     margin-top: 40px;
   }
-  .price-story .starting-price {
+  .starting-price strong {
     font-size: 6.5rem;
   }
   .price-calculator {

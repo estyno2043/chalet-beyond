@@ -5,7 +5,9 @@
  * - Shares the hero's responsive gutters
  * - The reserve action is pale over the hero (it sits on footage next to the
  *   hero's pale CTA) and turns brand amber once the hero is behind the guest
+ * - xl: language, a ghost "view the chalet" action and reserve — no links
  * - Below xl: reserve, language and a menu; the links live in the menu
+ * - The phone/e-mail strip shows only once the hero is behind the guest
  */
 import React from "react";
 import { usePastHero } from "@/hooks/usePastHero";
@@ -79,7 +81,8 @@ export function Navigation() {
       data-open={open}
       data-past-hero={pastHero}
     >
-      {/* Contact strip — phone + email, visible on load and through scroll. */}
+      {/* Contact strip — phone + email. Its row is always reserved (no jump);
+          the details arrive only once the hero is behind the guest. */}
       <div className="chalet-navigation__contact mx-auto hidden items-center justify-end md:flex">
         {[
           {
@@ -126,27 +129,24 @@ export function Navigation() {
           />
         </a>
 
-        {/* Full navigation — only where it fits (xl). */}
-        <nav className="hidden items-center xl:flex">
-          <div className="chalet-navigation__links">
-            {links.map(link => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={e => {
-                  e.preventDefault();
-                  scrollToHref(link.href);
-                }}
-                className="chalet-navigation__link"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          <span className="chalet-navigation__divider" aria-hidden="true" />
+        {/* Desktop (xl): no section links — language, a quiet look at the
+            rooms, then the reserve action. The links live in the menu. */}
+        <div className="hidden items-center gap-3 xl:flex">
           <LanguageDropdown />
-          {bookButton("ml-3")}
-        </nav>
+          <RollLink
+            href="#priestory"
+            onClick={e => {
+              e.preventDefault();
+              scrollToHref("#priestory");
+            }}
+            tone="ghost"
+            size="sm"
+            className="chalet-navigation__explore"
+          >
+            {t.nav.explore}
+          </RollLink>
+          {bookButton("")}
+        </div>
 
         {/* Compact cluster — everything below xl. */}
         <div className="flex items-center gap-2 xl:hidden">

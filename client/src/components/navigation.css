@@ -15,6 +15,7 @@
   --nav-amber: oklch(0.72 0.12 65);
   --nav-line: rgb(245 244 239 / 0.24);
   --nav-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --nav-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   position: fixed;
   inset: 0 0 auto;
   z-index: 100;
@@ -52,7 +53,38 @@
   letter-spacing: 0.02em;
   color: rgb(245 244 239 / 0.74);
   text-decoration: none;
-  transition: color 180ms ease-out;
+}
+/* Over the hero the row stays reserved but empty and unfocusable. Past it the
+   details drop in (strong ease-out, second one a beat later); leaving is
+   quicker than arriving. */
+.chalet-navigation__contact {
+  visibility: hidden;
+  transition: visibility 0s linear 180ms;
+}
+.chalet-navigation__contact a {
+  opacity: 0;
+  transform: translate3d(0, -6px, 0);
+  transition:
+    opacity 160ms ease-out,
+    transform 180ms ease-out,
+    color 180ms ease-out;
+}
+.chalet-navigation[data-past-hero="true"] .chalet-navigation__contact {
+  visibility: visible;
+  transition-delay: 0s;
+}
+.chalet-navigation[data-past-hero="true"] .chalet-navigation__contact a {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 320ms var(--nav-ease-out),
+    transform 420ms var(--nav-ease-out),
+    color 180ms ease-out;
+}
+.chalet-navigation[data-past-hero="true"]
+  .chalet-navigation__contact
+  a:nth-child(2) {
+  transition-delay: 60ms, 60ms, 0ms;
 }
 .chalet-navigation__contact svg {
   color: var(--nav-amber);
@@ -70,43 +102,6 @@
 .chalet-navigation__logo img {
   width: auto;
   height: 46px;
-}
-
-.chalet-navigation__links {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.chalet-navigation__link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 6px 12px;
-  font: 500 0.875rem/1 var(--font-body-family);
-  letter-spacing: 0.01em;
-  color: rgb(245 244 239 / 0.82);
-  text-decoration: none;
-  transition: color 180ms ease-out;
-}
-/* Underline draws from the left on hover and retracts to the right on leave. */
-.chalet-navigation__link::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 8px;
-  height: 1px;
-  background: var(--nav-amber);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 320ms var(--nav-ease);
-}
-.chalet-navigation__divider {
-  width: 1px;
-  height: 20px;
-  margin-inline: 16px 12px;
-  background: var(--nav-line);
 }
 
 /* Reserve: a RollButton, pale over the hero and amber once the hero is
@@ -237,13 +232,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .chalet-navigation__contact a:hover,
-  .chalet-navigation__link:hover {
+  .chalet-navigation__contact a:hover {
     color: var(--nav-ink);
-  }
-  .chalet-navigation__link:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
   }
   .chalet-navigation__burger:hover {
     background: rgb(245 244 239 / 0.08);
@@ -255,7 +245,6 @@
 
 /* The bar arrives with the hero title, a beat after it starts. */
 @media (prefers-reduced-motion: no-preference) {
-  .chalet-navigation__contact,
   .chalet-navigation__inner {
     animation: nav-arrive 900ms var(--nav-ease) 280ms both;
   }

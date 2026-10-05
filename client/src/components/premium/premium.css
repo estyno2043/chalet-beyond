@@ -45,29 +45,68 @@
 .photo-reveal__scale {
   height: 100%;
 }
+/* Intro: centred headline and facts over a faint chalet panorama. The
+   backdrop fades out at both edges (mask, not a painted gradient) so the
+   sheet's rounded top and the next section stay the plain dark ground. */
 .intro-section {
-  padding-top: clamp(72px, 7vw, 112px);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: clamp(120px, 14vw, 200px) clamp(88px, 10vw, 160px);
 }
-.intro-split {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: clamp(40px, 6vw, 88px);
-  align-items: center;
+.intro-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 22%,
+    #000 62%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 22%,
+    #000 62%,
+    transparent
+  );
 }
-.intro-split .section-header {
+.intro-backdrop__photo {
+  opacity: 0.26;
+}
+.intro-backdrop__photo img {
+  object-position: center 40%;
+}
+.intro-backdrop__meteors {
+  position: absolute;
+  inset: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-backdrop__meteors {
+    display: none;
+  }
+}
+.intro-content {
+  text-align: center;
+}
+.intro-header {
   margin: 0;
 }
-.intro-photo {
-  aspect-ratio: 4/5;
-}
-.intro-photo img {
-  object-position: 40% center;
+/* The line shadow repeats each heading line in ::after; keep it out of the
+   accessible name where the alt-text form of `content` is supported. */
+.intro-header [data-text]::after {
+  content: attr(data-text) / "";
 }
 .intro-facts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 40px;
-  margin-top: 64px;
+  max-width: 1040px;
+  margin: clamp(56px, 7vw, 96px) auto 0;
 }
 .intro-facts dt {
   font-size: 1.125rem;
@@ -800,13 +839,6 @@ summary > span {
   .section-header p {
     font-size: 1.0625rem;
     margin-top: 24px;
-  }
-  .intro-split {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .intro-photo {
-    aspect-ratio: 4/5;
   }
   .intro-facts {
     grid-template-columns: 1fr;

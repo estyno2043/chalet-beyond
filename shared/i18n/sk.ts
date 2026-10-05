@@ -6,6 +6,7 @@ export const sk = {
     cennik: "Cenník",
     rezervacia: "Rezervácia",
     book: "Rezervovať",
+    explore: "Prezrieť chatu",
     bookStay: "Rezervovať pobyt",
     writeUs: "Napíšte nám",
     home: "Chalet Beyond — domov",

@@ -1,20 +1,36 @@
 import { SectionHeader } from "./premium/SectionHeader";
-import { RevealPhoto } from "./premium/Photo";
+import { Photo } from "./premium/Photo";
 import { usePremiumCopy } from "./premium/copy";
+import { Meteors } from "./ui/meteors";
+
+/**
+ * The chalet panorama behind the intro. The owner will supply a night photo:
+ * export it with scripts/export-chalet-photos.py and change this one id.
+ */
+export const INTRO_PANORAMA_PHOTO_ID = 39;
+
 export function ChaletIntroSection() {
   const c = usePremiumCopy();
   return (
     <section id="chalet" className="premium-section intro-section">
-      <div className="container">
-        <div className="intro-split">
-          <SectionHeader lines={c.intro} description={c.introBody} />
-          <RevealPhoto
-            id={44}
-            eager
-            sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
-            className="intro-photo"
-          />
+      {/* Decorative: a faint panorama with meteors over its sky. */}
+      <div className="intro-backdrop" aria-hidden="true">
+        <Photo
+          id={INTRO_PANORAMA_PHOTO_ID}
+          alt=""
+          sizes="100vw"
+          className="intro-backdrop__photo"
+        />
+        <div className="intro-backdrop__meteors">
+          <Meteors number={14} minDuration={4} maxDuration={10} />
         </div>
+      </div>
+      <div className="container intro-content">
+        <SectionHeader
+          lines={c.intro}
+          lineShadow="oklch(0.85 0.06 74 / 0.55)"
+          className="intro-header"
+        />
         <dl className="intro-facts">
           {c.facts.map(([title, text]) => (
             <div key={title}>

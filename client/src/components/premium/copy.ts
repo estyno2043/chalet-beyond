@@ -6,8 +6,6 @@ const longStayPercent = Math.round(LONG_STAY_DISCOUNT_RATE * 100);
 
 const sk = {
   intro: ["250 m² len", "pre vašu partiu."],
-  introBody:
-    "Celý chalet pre najviac osem hostí. Súkromná sauna, vírivka a Tatry za oknom.",
   facts: [
     ["Golf", "Black Stork vo Veľkej Lomnici."],
     ["Súkromné wellness", "Sauna a vírivka patria iba vášmu pobytu."],
@@ -103,8 +101,6 @@ const sk = {
 type Copy = { [K in keyof typeof sk]: (typeof sk)[K] };
 const de: Copy = {
   intro: ["250 m² nur", "für Ihre Runde."],
-  introBody:
-    "Das ganze Chalet für bis zu acht Gäste. Private Sauna, Whirlpool und die Tatra vor dem Fenster.",
   facts: [
     ["Golf", "Black Stork in Veľká Lomnica."],
     ["Privates Wellness", "Sauna und Whirlpool nur für Ihren Aufenthalt."],
@@ -208,8 +204,6 @@ const de: Copy = {
 };
 const en: Copy = {
   intro: ["250 m², entirely", "for your group."],
-  introBody:
-    "The whole chalet for up to eight guests. Private sauna, hot tub and the Tatras outside your window.",
   facts: [
     ["Golf", "Black Stork in Veľká Lomnica."],
     ["Private wellness", "Sauna and hot tub exclusively for your stay."],
@@ -305,8 +299,6 @@ const en: Copy = {
 };
 const pl: Copy = {
   intro: ["250 m² tylko", "dla Was."],
-  introBody:
-    "Cały chalet dla maksymalnie ośmiu gości. Prywatna sauna, jacuzzi i Tatry za oknem.",
   facts: [
     ["Golf", "Black Stork w Veľkiej Lomnicy."],
     ["Prywatne wellness", "Sauna i jacuzzi tylko na Wasz pobyt."],

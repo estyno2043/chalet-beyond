@@ -15,6 +15,8 @@
 @source "./components/*.tsx";
 @source "./components/premium";
 @source "./components/ui/menu-toggle-icon.tsx";
+@source "./components/ui/meteors.tsx";
+@source "./components/ui/line-shadow-text.tsx";
 @import "tw-animate-css";
 @import "./fonts.css";
 
@@ -48,6 +50,30 @@
   --font-display: var(--font-display-family);
   --font-body: var(--font-body-family);
   --font-mono: var(--font-mono-family);
+  /* Magic UI: Meteors and Line Shadow Text (intro section). */
+  --animate-meteor: meteor 5s linear infinite;
+  --animate-line-shadow: line-shadow 15s linear infinite;
+  @keyframes meteor {
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
+    }
+  }
+  @keyframes line-shadow {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 100% -100%;
+    }
+  }
 }
 
 :root {

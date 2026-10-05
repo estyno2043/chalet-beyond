@@ -8,6 +8,7 @@ export const en: Dict = {
     cennik: "Rates",
     rezervacia: "Booking",
     book: "Book now",
+    explore: "View the chalet",
     bookStay: "Book your stay",
     writeUs: "Write to us",
     home: "Chalet Beyond — home",

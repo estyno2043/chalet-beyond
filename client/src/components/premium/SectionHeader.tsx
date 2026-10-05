@@ -1,15 +1,19 @@
 import { useEffect, useRef } from "react";
 import { EASE, DUR } from "@/lib/motion";
+import { LineShadowText } from "@/components/ui/line-shadow-text";
 
 /** Progressive enhancement: content stays visible if observers/WAAPI fail. */
 export function SectionHeader({
   lines,
   description,
   className = "",
+  lineShadow,
 }: {
   lines: string[];
   description?: string;
   className?: string;
+  /** Colour of a Magic UI line shadow drawn behind each heading line. */
+  lineShadow?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -67,7 +71,13 @@ export function SectionHeader({
       <h2>
         {lines.map((line, i) => (
           <span className="heading-mask" key={i}>
-            <span data-heading-line>{line}</span>
+            <span data-heading-line>
+              {lineShadow ? (
+                <LineShadowText shadowColor={lineShadow}>{line}</LineShadowText>
+              ) : (
+                line
+              )}
+            </span>
             {i < lines.length - 1 && <span className="sr-only"> </span>}
           </span>
         ))}

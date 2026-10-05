@@ -1,7 +1,8 @@
 import { Photo } from "./premium/Photo";
 import { SectionHeader } from "./premium/SectionHeader";
 import { usePremiumCopy } from "./premium/copy";
-import { RollLink } from "./RollButton";
+import { TextReveal } from "./ui/text-reveal";
+
 export function LocationSection() {
   const c = usePremiumCopy();
   return (
@@ -9,23 +10,15 @@ export function LocationSection() {
       <Photo id={12} className="scroll-photo" />
       <div className="photo-shade" />
       <div className="container">
-        <SectionHeader lines={c.location} description={c.locationBody} />
+        <SectionHeader lines={c.location} />
         <dl className="location-timeline">
           {c.places.map(([name, description]) => (
             <div key={name}>
               <dt>{name}</dt>
-              <dd>{description}</dd>
+              <TextReveal as="dd">{description}</TextReveal>
             </div>
           ))}
         </dl>
-        <RollLink
-          size="sm"
-          href="https://www.google.com/maps/search/?api=1&query=Chalet+Beyond+Velka+Lomnica"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {c.map}
-        </RollLink>
       </div>
     </section>
   );

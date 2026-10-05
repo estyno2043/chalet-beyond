@@ -2,6 +2,7 @@ import { GallerySection } from "../GallerySection";
 import { PhotoInterlude } from "../PhotoInterlude";
 import { AmenitiesSection } from "../AmenitiesSection";
 import { LocationSection } from "../LocationSection";
+import { LocationMap } from "../LocationMap";
 import { PricingSection } from "../PricingSection";
 import { BookingIsland } from "./BookingIsland";
 import { Footer } from "../Footer";
@@ -16,6 +17,7 @@ export default function PageStory({ onReady }: { onReady: () => void }) {
       <PhotoInterlude />
       <AmenitiesSection />
       <LocationSection />
+      <LocationMap />
       <PricingSection />
       <BookingIsland />
       <Footer />

@@ -17,6 +17,7 @@
 @source "./components/ui/menu-toggle-icon.tsx";
 @source "./components/ui/meteors.tsx";
 @source "./components/ui/line-shadow-text.tsx";
+@source "./components/ui/globe.tsx";
 @import "tw-animate-css";
 @import "./fonts.css";
 

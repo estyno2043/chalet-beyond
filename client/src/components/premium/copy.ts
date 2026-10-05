@@ -48,8 +48,6 @@ const sk = {
   amenitiesBody: "Teplo dreva, pokoj a priestor na spoločný čas.",
   featured: ["Sauna", "Vírivka", "Kozub"],
   location: ["Hory na dosah.", "Domov v Lomnici."],
-  locationBody:
-    "Chalet Beyond vo Veľkej Lomnici je základňa na objavovanie Vysokých Tatier.",
   places: [
     ["Black Stork", "Golf vo Veľkej Lomnici"],
     ["Tatranská Lomnica", "Hory, turistika a lyžovanie"],
@@ -145,8 +143,6 @@ const de: Copy = {
   amenitiesBody: "Warmes Holz, Ruhe und Raum für gemeinsame Zeit.",
   featured: ["Sauna", "Whirlpool", "Kamin"],
   location: ["Berge in Reichweite.", "Zuhause in Lomnica."],
-  locationBody:
-    "Chalet Beyond in Veľká Lomnica ist Ihr Ausgangspunkt für die Hohe Tatra.",
   places: [
     ["Black Stork", "Golf in Veľká Lomnica"],
     ["Tatranská Lomnica", "Berge, Wandern und Skifahren"],
@@ -238,8 +234,6 @@ const en: Copy = {
   amenitiesBody: "Warm timber, quiet and room for time together.",
   featured: ["Sauna", "Hot tub", "Fireplace"],
   location: ["Mountains within reach.", "Home in Lomnica."],
-  locationBody:
-    "Chalet Beyond in Veľká Lomnica is your base for exploring the High Tatras.",
   places: [
     ["Black Stork", "Golf in Veľká Lomnica"],
     ["Tatranská Lomnica", "Mountains, hiking and skiing"],
@@ -329,8 +323,6 @@ const pl: Copy = {
   amenitiesBody: "Ciepło drewna, spokój i przestrzeń na wspólny czas.",
   featured: ["Sauna", "Jacuzzi", "Kominek"],
   location: ["Góry w zasięgu.", "Dom w Lomnicy."],
-  locationBody:
-    "Chalet Beyond w Veľkiej Lomnicy to baza do odkrywania Tatr Wysokich.",
   places: [
     ["Black Stork", "Golf w Veľkiej Lomnicy"],
     ["Tatranská Lomnica", "Góry, wędrówki i narty"],

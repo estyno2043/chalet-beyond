@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal, flushSync } from "react-dom";
 import {
-  AnimatePresence,
   animate,
   motion,
+  useDragControls,
   useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
   useTransform,
 } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import { EASE, DUR, SPRING_GESTURE } from "@/lib/motion";
+import { EASE, DUR, SPRING_GESTURE, SPRING_PAGE } from "@/lib/motion";
 import { photoUrl } from "./Photo";
 import manifest from "./photo-manifest.json";
 import { PHOTO_IDS, usePremiumCopy } from "./copy";
@@ -27,6 +28,11 @@ const EDGE = 24;
 const CONTROL = 44;
 const THUMBNAILS = 52;
 const GAP = 16;
+// Swipe paging: neighbours wait one viewport (plus a gap) to either side.
+const PAGE_GAP = 16;
+const SWIPE_DISTANCE = 80;
+const SWIPE_VELOCITY = 300;
+const pageWidth = () => innerWidth + PAGE_GAP;
 function safeArea() {
   const probe = document.createElement("div");
   probe.style.cssText =
@@ -76,7 +82,8 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
   const c = usePremiumCopy();
   const reduce = useReducedMotion();
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const indexRef = useRef(0);
+  indexRef.current = index;
   const [box, setBox] = useState(() => geometry(photos[0]));
   const [sources, setSources] = useState<Record<number, string>>(() => ({
     [photos[0]]:
@@ -89,18 +96,94 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
   const closeRef = useRef<(immediate?: boolean) => void>(() => {});
   const closingRef = useRef(false);
   const axis = useRef<"x" | "y" | null>(null);
+  const multiTouch = useRef(false);
+  const pressedAt = useRef(0);
+  const layer = useRef<HTMLDivElement>(null);
+  const slides = useRef(new Map<number, HTMLImageElement>());
+  const dragControls = useDragControls();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const backdrop = useTransform(y, [0, 300], [1, 0.15]);
-  // Arrow buttons, swipe and the keyboard all share this one transition path.
-  const navigate = useCallback(
-    (delta: number) => {
-      setDirection(delta);
-      setIndex(value => (value + delta + photos.length) % photos.length);
-      x.set(0);
-      y.set(0);
+  const wrap = useCallback(
+    (i: number) => (i + photos.length) % photos.length,
+    [photos.length]
+  );
+  // With two photos the single neighbour sits on whichever side is revealed.
+  const side = (offset: number) =>
+    photos.length === 2 ? (x.get() > 0 ? -1 : 1) : offset;
+  useMotionValueEvent(x, "change", value => {
+    if (photos.length !== 2) return;
+    const node = slides.current.get(photos[wrap(indexRef.current + 1)]);
+    if (node)
+      node.style.transform = `translateX(${(value > 0 ? -1 : 1) * pageWidth()}px)`;
+  });
+  /** Motion values paint on the next frame; write now so a photo swap and its offset share one paint. */
+  const place = useCallback(
+    (value: number) => {
+      x.jump(value);
+      if (layer.current)
+        layer.current.style.transform = value
+          ? `translateX(${value}px)`
+          : "none";
     },
-    [photos.length, x, y]
+    [x]
+  );
+  /**
+   * Arrows, keyboard and thumbnails cross-fade with a short slide from the
+   * travel side. A swipe passes its release velocity instead: the photos keep
+   * their place under the finger and one spring carries them on.
+   */
+  const show = useCallback(
+    (next: number, direction: number, velocity?: number) => {
+      const from = x.get();
+      const outgoing = slides.current.get(photos[indexRef.current]);
+      slides.current.forEach(node =>
+        node.getAnimations().forEach(animation => animation.cancel())
+      );
+      flushSync(() => {
+        setIndex(next);
+        setBox(geometry(photos[next]));
+      });
+      indexRef.current = next;
+      if (velocity !== undefined) {
+        place(from + direction * pageWidth());
+        animate(x, 0, { ...SPRING_PAGE, velocity });
+        return;
+      }
+      place(0);
+      y.jump(0);
+      const incoming = slides.current.get(photos[next]);
+      const timing = {
+        duration: DUR.state * 1000,
+        easing: `cubic-bezier(${EASE.ui})`,
+      };
+      if (outgoing?.isConnected && outgoing !== incoming)
+        outgoing.animate(
+          [
+            { transform: "none", opacity: 1 },
+            { transform: "none", opacity: 0 },
+          ],
+          { ...timing, duration: DUR.ui * 1000 }
+        );
+      incoming?.animate(
+        reduce
+          ? [{ opacity: 0 }, { opacity: 1 }]
+          : [
+              {
+                opacity: 0,
+                transform: `translateX(${direction * 4}%)`,
+                filter: "blur(2px)",
+              },
+              { opacity: 1, transform: "none", filter: "blur(0px)" },
+            ],
+        timing
+      );
+    },
+    [photos, place, reduce, x, y]
+  );
+  const navigate = useCallback(
+    (delta: number) => show(wrap(indexRef.current + delta), delta),
+    [show, wrap]
   );
   const close = useCallback(
     async (immediate = false) => {
@@ -234,6 +317,16 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
       alive = false;
     };
   }, [index, photos]);
+  // Current photo last, so it paints above a photo fading out.
+  const slots = useMemo(() => {
+    const list: { id: number; offset: number; b: typeof box }[] = [];
+    for (const offset of photos.length > 2 ? [-1, 1, 0] : [1, 0]) {
+      if (offset && photos.length < 2) continue;
+      const id = photos[wrap(index + offset)];
+      list.push({ id, offset, b: offset ? geometry(id) : box });
+    }
+    return list;
+  }, [box, index, photos, wrap]);
   const controls = {
     initial: { opacity: 0 },
     animate: { opacity: closing ? 0 : 1 },
@@ -280,52 +373,96 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
         </RollButton>
       </motion.div>
       <div ref={stage} className="lightbox-stage" style={box}>
+        {/* Pinch stays with the browser (touch-action in CSS); one finger
+            drags, locked to its first axis: sideways pages, down closes. */}
         <motion.div
+          ref={layer}
           className="lightbox-drag"
           drag
+          dragListener={false}
+          dragControls={dragControls}
           dragDirectionLock
           dragMomentum={false}
           dragElastic={1}
           style={{ x, y }}
+          onPointerDown={event => {
+            multiTouch.current = !event.isPrimary;
+            pressedAt.current = performance.now();
+            if (event.isPrimary) dragControls.start(event);
+          }}
           onDirectionLock={value => {
             axis.current = value;
           }}
           onDragStart={() => {
             axis.current = null;
+            slides.current.forEach(node =>
+              node.getAnimations().forEach(animation => animation.finish())
+            );
           }}
-          onDragEnd={(_, info) => {
+          onDragEnd={(event, info) => {
             const horizontal =
               axis.current === "x" ||
               (axis.current === null &&
                 Math.abs(info.offset.x) >= Math.abs(info.offset.y));
-            if (
-              horizontal &&
-              (Math.abs(info.offset.x) >= 80 || Math.abs(info.velocity.x) > 110)
-            )
-              navigate(info.offset.x > 0 ? -1 : 1);
-            else if (!horizontal && info.offset.y > 120) void close();
-            else {
-              animate(x, 0, SPRING_GESTURE);
-              animate(y, 0, SPRING_GESTURE);
+            // A pinch or system gesture cancels the drag; never page on it.
+            const cancelled =
+              event.type === "pointercancel" || multiTouch.current;
+            if (!cancelled && horizontal && photos.length > 1) {
+              const position = x.get();
+              // A flick that starts at rest is timed by Motion from a stale
+              // frame and reads slow; short gestures use their average speed.
+              const elapsed = (performance.now() - pressedAt.current) / 1000;
+              const velocity =
+                elapsed < 0.2
+                  ? info.offset.x / Math.max(elapsed, 0.016)
+                  : info.velocity.x;
+              // The neighbour being revealed: +1 next (from the right), -1 previous.
+              const direction =
+                position < 0 || (position === 0 && velocity < 0) ? 1 : -1;
+              const flick = Math.abs(velocity) > SWIPE_VELOCITY;
+              const commit = flick
+                ? Math.sign(velocity) === -direction
+                : Math.abs(position) > pageWidth() / 2 ||
+                  (Math.abs(info.offset.x) > SWIPE_DISTANCE &&
+                    Math.sign(info.offset.x) === -direction);
+              if (commit) {
+                show(wrap(index + direction), direction, velocity);
+                return;
+              }
+            } else if (!cancelled && !horizontal && info.offset.y > 120) {
+              void close();
+              return;
             }
+            animate(x, 0, { ...SPRING_GESTURE, velocity: info.velocity.x });
+            animate(y, 0, SPRING_GESTURE);
           }}
         >
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.img
-              key={photos[index]}
-              src={sources[photos[index]] || photoUrl(photos[index], 1600)}
-              alt={c.photoAlt[PHOTO_IDS.indexOf(photos[index])]}
-              draggable={false}
-              initial={{
-                opacity: 0,
-                x: reduce ? 0 : `${direction * 4}%`,
-                filter: reduce ? "none" : "blur(2px)",
+          {slots.map(({ id, offset, b }) => (
+            <img
+              key={id}
+              ref={node => {
+                if (!node) return;
+                slides.current.set(id, node);
+                return () => {
+                  if (slides.current.get(id) === node)
+                    slides.current.delete(id);
+                };
               }}
-              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, transition: { duration: DUR.ui } }}
-              transition={{ duration: DUR.state, ease: EASE.ui }}
+              src={sources[id] || photoUrl(id, 1600)}
+              alt={offset ? "" : c.photoAlt[PHOTO_IDS.indexOf(id)]}
+              aria-hidden={offset ? true : undefined}
+              draggable={false}
+              style={{
+                left: b.left - box.left,
+                top: b.top - box.top,
+                width: b.width,
+                height: b.height,
+                transform: offset
+                  ? `translateX(${side(offset) * pageWidth()}px)`
+                  : "none",
+              }}
             />
-          </AnimatePresence>
+          ))}
         </motion.div>
       </div>
       <motion.div className="lightbox-bottom" {...controls}>
@@ -352,8 +489,7 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
               aria-label={`${c.photo} ${i + 1}`}
               aria-current={index === i ? "true" : undefined}
               onClick={() => {
-                setDirection(i > index ? 1 : -1);
-                setIndex(i);
+                if (i !== index) show(i, i > index ? 1 : -1);
               }}
             >
               <img

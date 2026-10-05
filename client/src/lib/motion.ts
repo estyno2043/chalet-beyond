@@ -18,3 +18,9 @@ export const SPRING_GESTURE = {
   duration: 0.5,
   bounce: 0.2,
 } as const;
+/** Paging after a swipe: picks up the finger's velocity, settles without overshoot. */
+export const SPRING_PAGE = {
+  type: "spring",
+  duration: 0.45,
+  bounce: 0,
+} as const;

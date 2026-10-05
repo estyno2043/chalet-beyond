@@ -208,6 +208,102 @@
   font-size: 1.0625rem;
   border-bottom: 1px solid rgb(245 244 239 / 0.15);
 }
+/* Important rows flicker once on arrival: three hard-cut frames (380ms) of
+   offset, sliced text and split color channels; the divider never moves. */
+.amenities-list li[data-important] {
+  position: relative;
+}
+.amenities-list li[data-important] > span {
+  display: inline-block;
+}
+.amenities-list .is-glitching > span {
+  animation: amenity-sek 380ms steps(1, end) var(--sek-delay, 0ms);
+}
+.amenities-list .is-glitching::before,
+.amenities-list .is-glitching::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  position: absolute;
+  top: 16px;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: amenity-sek-ghost 380ms steps(1, end) var(--sek-delay, 0ms);
+}
+.amenities-list .is-glitching::before {
+  --sek-shift: 3px;
+  color: var(--amber);
+}
+.amenities-list .is-glitching::after {
+  --sek-shift: -3px;
+  color: rgb(120 190 230);
+}
+@keyframes amenity-sek {
+  0% {
+    opacity: 0.55;
+    transform: translateX(-3px);
+    clip-path: inset(0 0 42% 0);
+  }
+  10.5% {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0);
+  }
+  29% {
+    opacity: 0.7;
+    transform: translateX(2px);
+    clip-path: inset(38% 0 0 0);
+  }
+  39.5% {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0);
+  }
+  63% {
+    opacity: 0.85;
+    transform: translateX(-1px);
+  }
+  71%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes amenity-sek-ghost {
+  0% {
+    opacity: 0.8;
+    transform: translateX(var(--sek-shift));
+    clip-path: inset(30% 0 20% 0);
+  }
+  10.5% {
+    opacity: 0;
+  }
+  29% {
+    opacity: 0.6;
+    transform: translateX(calc(var(--sek-shift) * -1));
+    clip-path: inset(0 0 55% 0);
+  }
+  39.5% {
+    opacity: 0;
+  }
+  63% {
+    opacity: 0.5;
+    transform: translateX(calc(var(--sek-shift) / 2));
+    clip-path: inset(60% 0 0 0);
+  }
+  71%,
+  100% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .amenities-list .is-glitching > span,
+  .amenities-list .is-glitching::before,
+  .amenities-list .is-glitching::after {
+    animation: none;
+  }
+}
 .location-section {
   position: relative;
   min-height: 850px;

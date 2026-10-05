@@ -1,12 +1,53 @@
+import { useEffect, useRef } from "react";
 import { useT } from "@/i18n/LanguageProvider";
-import { usePremiumCopy } from "./premium/copy";
+import { AMENITIES, usePremiumCopy } from "./premium/copy";
 import { SectionHeader } from "./premium/SectionHeader";
 import { RevealPhoto } from "./premium/Photo";
-import { TextAnimate } from "./ui/text-animate";
+/** Stagger between important rows that arrive in the same frame. */
+const SEK_STAGGER = 90;
 export function AmenitiesSection() {
   const t = useT();
   const c = usePremiumCopy();
-  const items = t.amenities.items;
+  const list = useRef<HTMLUListElement>(null);
+  // Important rows flicker once as each scrolls into view; text stays static
+  // otherwise. The class is removed when the flicker ends.
+  useEffect(() => {
+    const rows =
+      list.current?.querySelectorAll<HTMLElement>("[data-important]");
+    if (
+      !rows?.length ||
+      typeof IntersectionObserver === "undefined" ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    const done = new AbortController();
+    const observer = new IntersectionObserver(
+      entries => {
+        entries
+          .filter(entry => entry.isIntersecting)
+          .forEach((entry, i) => {
+            const row = entry.target as HTMLElement;
+            observer.unobserve(row);
+            row.style.setProperty("--sek-delay", `${i * SEK_STAGGER}ms`);
+            row.classList.add("is-glitching");
+            row.addEventListener(
+              "animationend",
+              event => {
+                if (event.animationName === "amenity-sek")
+                  row.classList.remove("is-glitching");
+              },
+              { signal: done.signal }
+            );
+          });
+      },
+      { rootMargin: "0px 0px -20% 0px" }
+    );
+    rows.forEach(row => observer.observe(row));
+    return () => {
+      observer.disconnect();
+      done.abort();
+    };
+  }, []);
   return (
     <section id="vybavenie" className="premium-section amenities-section">
       <div className="container">
@@ -25,33 +66,17 @@ export function AmenitiesSection() {
             </figure>
           ))}
         </div>
-        <ul className="amenities-list">
-          {[
-            items.wifi,
-            items.parking,
-            items.kitchen,
-            items.coffee,
-            items.tv,
-            items.laundry,
-            items.bathrooms,
-            items.skiStorage,
-            items.bbq,
-            items.garden,
-            items.highChair,
-          ].map((text, i) => (
-            // The row and its divider stay put; only the words blur in.
-            <li key={text}>
-              <TextAnimate
-                as="span"
-                by="character"
-                animation="blurIn"
-                once
-                delay={Math.min(Math.floor(i / 2), 4) * 0.06}
-              >
-                {text}
-              </TextAnimate>
-            </li>
-          ))}
+        <ul ref={list} className="amenities-list">
+          {AMENITIES.map(({ key, important }) => {
+            const text = t.amenities.items[key];
+            return important ? (
+              <li key={key} data-important="" data-text={text}>
+                <span>{text}</span>
+              </li>
+            ) : (
+              <li key={key}>{text}</li>
+            );
+          })}
         </ul>
       </div>
     </section>

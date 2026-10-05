@@ -1,4 +1,4 @@
-import type { Lang } from "@shared/i18n";
+import type { Dict, Lang } from "@shared/i18n";
 import { LONG_STAY_DISCOUNT_RATE, LONG_STAY_MIN_NIGHTS } from "@shared/pricing";
 import { useLang } from "@/i18n/LanguageProvider";
 
@@ -370,4 +370,21 @@ export function usePremiumCopy() {
 export const PHOTO_IDS = [
   2, 3, 12, 28, 31, 33, 38, 43, 44, 46, 48, 54, 55, 58, 60, 62, 63, 65, 68, 70,
   72,
+];
+/** Amenity list order; `important` rows flicker once on arrival in every language. */
+export const AMENITIES: {
+  key: keyof Dict["amenities"]["items"];
+  important?: true;
+}[] = [
+  { key: "wifi" },
+  { key: "parking", important: true },
+  { key: "kitchen", important: true },
+  { key: "coffee" },
+  { key: "tv" },
+  { key: "laundry" },
+  { key: "bathrooms", important: true },
+  { key: "skiStorage", important: true },
+  { key: "bbq" },
+  { key: "garden" },
+  { key: "highChair" },
 ];

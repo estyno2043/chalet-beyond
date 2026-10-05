@@ -21,18 +21,41 @@ type Props = {
   cover: HTMLButtonElement;
   onClose: () => void;
 };
+// Mirrors premium.css: rows sit max(24px, safe-area) from the edge; the header
+// and the arrow row are 44px, the thumbnail strip 52px, rows 16px apart.
+const EDGE = 24;
+const CONTROL = 44;
+const THUMBNAILS = 52;
+const GAP = 16;
+function safeArea() {
+  const probe = document.createElement("div");
+  probe.style.cssText =
+    "position:fixed;visibility:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)";
+  document.body.append(probe);
+  const style = getComputedStyle(probe);
+  const insets = {
+    top: parseFloat(style.paddingTop) || 0,
+    bottom: parseFloat(style.paddingBottom) || 0,
+  };
+  probe.remove();
+  return insets;
+}
+/** The photo fills the band between the header and the controls below it. */
 function geometry(id: number) {
   const meta = manifest[String(id) as keyof typeof manifest];
   const ratio = meta.width / meta.height;
+  const safe = safeArea();
+  const above = Math.max(EDGE, safe.top) + CONTROL + GAP;
+  const below = Math.max(EDGE, safe.bottom) + THUMBNAILS + GAP + CONTROL + GAP;
   const maxW = innerWidth - (innerWidth >= 768 ? 144 : 24);
-  const maxH = innerHeight - (innerWidth >= 768 ? 200 : 220);
+  const maxH = innerHeight - above - below;
   const width = Math.min(maxW, maxH * ratio);
   const height = width / ratio;
   return {
     width,
     height,
     left: (innerWidth - width) / 2,
-    top: (innerHeight - height) / 2 - 12,
+    top: above + (maxH - height) / 2,
   };
 }
 function fromCover(cover: HTMLButtonElement, box: ReturnType<typeof geometry>) {
@@ -54,7 +77,6 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
   const reduce = useReducedMotion();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const [instant, setInstant] = useState(false);
   const [box, setBox] = useState(() => geometry(photos[0]));
   const [sources, setSources] = useState<Record<number, string>>(() => ({
     [photos[0]]:
@@ -70,9 +92,9 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const backdrop = useTransform(y, [0, 300], [1, 0.15]);
+  // Arrow buttons, swipe and the keyboard all share this one transition path.
   const navigate = useCallback(
-    (delta: number, keyboard = false) => {
-      setInstant(keyboard);
+    (delta: number) => {
       setDirection(delta);
       setIndex(value => (value + delta + photos.length) % photos.length);
       x.set(0);
@@ -139,11 +161,11 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
       }
       if (event.key === "ArrowRight") {
         event.preventDefault();
-        navigate(1, true);
+        navigate(1);
       }
       if (event.key === "ArrowLeft") {
         event.preventDefault();
-        navigate(-1, true);
+        navigate(-1);
       }
       if (event.key === "Tab") {
         const focusable = dialog.current?.querySelectorAll<HTMLElement>(
@@ -296,15 +318,12 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
               draggable={false}
               initial={{
                 opacity: 0,
-                x: reduce || instant ? 0 : `${direction * 4}%`,
-                filter: reduce || instant ? "none" : "blur(2px)",
+                x: reduce ? 0 : `${direction * 4}%`,
+                filter: reduce ? "none" : "blur(2px)",
               }}
               animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{
-                opacity: 0,
-                transition: { duration: instant ? 0 : DUR.ui },
-              }}
-              transition={{ duration: instant ? 0 : DUR.state, ease: EASE.ui }}
+              exit={{ opacity: 0, transition: { duration: DUR.ui } }}
+              transition={{ duration: DUR.state, ease: EASE.ui }}
             />
           </AnimatePresence>
         </motion.div>
@@ -333,7 +352,6 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
               aria-label={`${c.photo} ${i + 1}`}
               aria-current={index === i ? "true" : undefined}
               onClick={() => {
-                setInstant(false);
                 setDirection(i > index ? 1 : -1);
                 setIndex(i);
               }}

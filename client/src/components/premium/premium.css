@@ -188,12 +188,10 @@
 .featured-amenities h3 {
   font-size: 2.5rem;
   line-height: 1;
-  margin-bottom: 10px;
 }
-.featured-amenities p {
-  color: oklch(0.8 0.008 75);
-  font-size: 1.0625rem;
-  line-height: 1.55;
+/* Landscape hot-tub photo in a 4:5 card: keep the tub and its planter in frame. */
+.featured-amenity--33 img {
+  object-position: 30% 50%;
 }
 .amenities-list {
   display: grid;

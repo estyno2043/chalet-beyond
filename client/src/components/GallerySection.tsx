@@ -18,7 +18,7 @@ export function GallerySection() {
   return (
     <section id="priestory" className="premium-section gallery-section">
       <div className="container">
-        <SectionHeader lines={c.gallery} description={c.galleryBody} />
+        <SectionHeader lines={c.gallery} />
         <div className="gallery-bento">
           {ALBUMS.map((photos, i) => (
             <button

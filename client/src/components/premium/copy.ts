@@ -12,7 +12,6 @@ const sk = {
     ["Vysoké Tatry", "Hory, ktoré vidíte aj z obývačky."],
   ],
   gallery: ["Dom, ktorý", "chcete spoznať."],
-  galleryBody: "Prezrite si priestory ešte pred príchodom.",
   albums: ["Exteriér", "Interiér", "Spálne", "Wellness", "Okolie"],
   albumFacts: [
     "Drevo, záhrada a terasa",
@@ -27,6 +26,7 @@ const sk = {
     "Výhľad na Tatry ponad lúku",
     "Krytá terasa",
     "Vonkajšia vírivka pri chate",
+    "Vírivka v drevenom ráme pred chatou",
     "Chalet zo záhrady",
     "Obývačka s kozubom a oknami do záhrady",
     "Ležadlo pri kozube",
@@ -46,11 +46,7 @@ const sk = {
   interlude: ["Ranná káva.", "Tatry za oknom."],
   amenities: ["Večer patrí", "iba vám."],
   amenitiesBody: "Teplo dreva, pokoj a priestor na spoločný čas.",
-  featured: [
-    ["Sauna", "Súkromná sauna, bez delenia s ďalšími hosťami."],
-    ["Vírivka", "Oddych pod otvoreným nebom."],
-    ["Kozub", "Miesto, pri ktorom sa večer spomalí."],
-  ],
+  featured: ["Sauna", "Vírivka", "Kozub"],
   location: ["Hory na dosah.", "Domov v Lomnici."],
   locationBody:
     "Chalet Beyond vo Veľkej Lomnici je základňa na objavovanie Vysokých Tatier.",
@@ -107,7 +103,6 @@ const de: Copy = {
     ["Hohe Tatra", "Bergblick direkt vom Wohnzimmer."],
   ],
   gallery: ["Ein Haus zum", "Kennenlernen."],
-  galleryBody: "Entdecken Sie die Räume vor Ihrer Ankunft.",
   albums: [
     "Außenbereich",
     "Innenräume",
@@ -128,6 +123,7 @@ const de: Copy = {
     "Tatrablick über die Wiese",
     "Überdachte Terrasse",
     "Whirlpool im Freien am Chalet",
+    "Whirlpool mit Holzumrandung vor dem Chalet",
     "Chalet vom Garten aus",
     "Wohnzimmer mit Kamin und Gartenfenstern",
     "Liege am Kamin",
@@ -147,11 +143,7 @@ const de: Copy = {
   interlude: ["Morgenkaffee.", "Tatra vor dem Fenster."],
   amenities: ["Der Abend", "gehört Ihnen."],
   amenitiesBody: "Warmes Holz, Ruhe und Raum für gemeinsame Zeit.",
-  featured: [
-    ["Sauna", "Private Sauna, ohne weitere Gäste."],
-    ["Whirlpool", "Entspannung unter freiem Himmel."],
-    ["Kamin", "Ein Platz für ruhige Abende."],
-  ],
+  featured: ["Sauna", "Whirlpool", "Kamin"],
   location: ["Berge in Reichweite.", "Zuhause in Lomnica."],
   locationBody:
     "Chalet Beyond in Veľká Lomnica ist Ihr Ausgangspunkt für die Hohe Tatra.",
@@ -210,7 +202,6 @@ const en: Copy = {
     ["High Tatras", "Mountain views from the living room."],
   ],
   gallery: ["A house worth", "getting to know."],
-  galleryBody: "Explore the rooms before you arrive.",
   albums: ["Exterior", "Interior", "Bedrooms", "Wellness", "Surroundings"],
   albumFacts: [
     "Timber, garden and terrace",
@@ -225,6 +216,7 @@ const en: Copy = {
     "Tatra view across the meadow",
     "Covered terrace",
     "Outdoor hot tub beside the chalet",
+    "Hot tub in a timber surround by the chalet",
     "Chalet seen from the garden",
     "Living room with fireplace and garden windows",
     "Lounge chair by the fireplace",
@@ -244,11 +236,7 @@ const en: Copy = {
   interlude: ["Morning coffee.", "Tatras at the window."],
   amenities: ["The evening", "is yours."],
   amenitiesBody: "Warm timber, quiet and room for time together.",
-  featured: [
-    ["Sauna", "Your private sauna, shared with nobody else."],
-    ["Hot tub", "Unwind under the open sky."],
-    ["Fireplace", "A place to slow the evening down."],
-  ],
+  featured: ["Sauna", "Hot tub", "Fireplace"],
   location: ["Mountains within reach.", "Home in Lomnica."],
   locationBody:
     "Chalet Beyond in Veľká Lomnica is your base for exploring the High Tatras.",
@@ -305,7 +293,6 @@ const pl: Copy = {
     ["Tatry Wysokie", "Widok na góry prosto z salonu."],
   ],
   gallery: ["Dom, który", "warto poznać."],
-  galleryBody: "Zobaczcie wnętrza przed przyjazdem.",
   albums: ["Na zewnątrz", "Wnętrza", "Sypialnie", "Wellness", "Okolica"],
   albumFacts: [
     "Drewno, ogród i taras",
@@ -320,6 +307,7 @@ const pl: Copy = {
     "Widok na Tatry ponad łąką",
     "Zadaszony taras",
     "Jacuzzi na zewnątrz przy chalecie",
+    "Jacuzzi w drewnianej obudowie przy chalecie",
     "Chalet od strony ogrodu",
     "Salon z kominkiem i oknami na ogród",
     "Leżanka przy kominku",
@@ -339,11 +327,7 @@ const pl: Copy = {
   interlude: ["Poranna kawa.", "Tatry za oknem."],
   amenities: ["Wieczór należy", "tylko do Was."],
   amenitiesBody: "Ciepło drewna, spokój i przestrzeń na wspólny czas.",
-  featured: [
-    ["Sauna", "Prywatna sauna bez innych gości."],
-    ["Jacuzzi", "Odpoczynek pod otwartym niebem."],
-    ["Kominek", "Miejsce, w którym wieczór zwalnia."],
-  ],
+  featured: ["Sauna", "Jacuzzi", "Kominek"],
   location: ["Góry w zasięgu.", "Dom w Lomnicy."],
   locationBody:
     "Chalet Beyond w Veľkiej Lomnicy to baza do odkrywania Tatr Wysokich.",
@@ -398,5 +382,6 @@ export function usePremiumCopy() {
   return premiumCopy[useLang()];
 }
 export const PHOTO_IDS = [
-  2, 3, 12, 28, 31, 38, 43, 44, 46, 48, 54, 55, 58, 60, 62, 63, 65, 68, 70, 72,
+  2, 3, 12, 28, 31, 33, 38, 43, 44, 46, 48, 54, 55, 58, 60, 62, 63, 65, 68, 70,
+  72,
 ];

@@ -12,12 +12,15 @@ export function AmenitiesSection() {
       <div className="container">
         <SectionHeader lines={c.amenities} description={c.amenitiesBody} />
         <div className="featured-amenities">
-          {[58, 31, 44].map((id, i) => (
+          {[58, 33, 44].map((id, i) => (
             <figure key={id}>
-              <RevealPhoto id={id} sizes="(min-width: 768px) 30vw, 100vw" />
+              <RevealPhoto
+                id={id}
+                className={`featured-amenity--${id}`}
+                sizes="(min-width: 768px) 30vw, 100vw"
+              />
               <figcaption>
-                <h3>{c.featured[i][0]}</h3>
-                <p>{c.featured[i][1]}</p>
+                <h3>{c.featured[i]}</h3>
               </figcaption>
             </figure>
           ))}

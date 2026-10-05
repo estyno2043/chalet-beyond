@@ -4,7 +4,7 @@ import json
 from PIL import Image, ImageOps
 from concurrent.futures import ThreadPoolExecutor
 
-SELECTED = [2, 3, 12, 18, 28, 31, 33, 38, 39, 43, 44, 46, 48, 54, 55, 58, 60, 62, 63, 65, 68, 70, 72]
+SELECTED = [2, 3, 12, 18, 28, 31, 33, 38, 39, 41, 43, 44, 46, 48, 54, 55, 58, 60, 62, 63, 65, 68, 70, 72]
 WIDTHS = [640, 1024, 1600, 2400]
 SOURCE = Path('assets/photos/lomnica')
 TARGET = Path('client/public/photos')

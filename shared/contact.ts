@@ -17,3 +17,15 @@ export const BOOKING_LISTING_URL =
 
 /** Booking.com guest rating, kept here so the badge and any future copy agree. */
 export const BOOKING_RATING = "10";
+
+/**
+ * Operator details for the footer. The owner fills these in; each empty
+ * field renders nothing, and the whole line is hidden while all are empty.
+ */
+export const COMPANY = {
+  name: "",
+  ico: "",
+  dic: "",
+  icDph: "",
+  address: "",
+};

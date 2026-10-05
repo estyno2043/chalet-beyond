@@ -1,19 +1,27 @@
+import { useRef } from "react";
 import { useT } from "@/i18n/LanguageProvider";
-import { EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
+import { COMPANY, EMAIL, PHONE, PHONE_DISPLAY } from "@shared/contact";
+import { SectionBackdrop } from "./premium/SectionBackdrop";
+import { FooterMark } from "./premium/FooterMark";
+// Slovak registry identifiers keep their official abbreviations in every language.
+const company = [
+  COMPANY.name,
+  COMPANY.address,
+  COMPANY.ico && `IČO ${COMPANY.ico}`,
+  COMPANY.dic && `DIČ ${COMPANY.dic}`,
+  COMPANY.icDph && `IČ DPH ${COMPANY.icDph}`,
+].filter(Boolean);
 export function Footer() {
   const t = useT();
+  const footer = useRef<HTMLElement>(null);
   return (
-    <footer className="premium-footer">
+    <footer ref={footer} className="premium-footer">
+      <SectionBackdrop photoId={41} className="footer-backdrop" />
       <div className="container">
         <div className="footer-main">
-          <a href="#" aria-label="Chalet Beyond">
-            <img
-              src="/logo-light-v1.png"
-              width="240"
-              height="100"
-              alt="Chalet Beyond"
-              className="footer-logo"
-            />
+          <a href="#" className="footer-brand">
+            <span className="sr-only">Chalet Beyond</span>
+            <FooterMark footer={footer} />
           </a>
           <div className="footer-contact">
             <a href={`tel:${PHONE}`}>{PHONE_DISPLAY}</a>
@@ -42,6 +50,9 @@ export function Footer() {
             ))}
           </nav>
         </div>
+        {company.length > 0 && (
+          <p className="footer-company">{company.join(" · ")}</p>
+        )}
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Chalet Beyond</span>
           <a href={`mailto:${EMAIL}`}>{t.footer.bookingLabel}</a>

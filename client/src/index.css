@@ -4,11 +4,17 @@
  * Physical scene: Arriving at dusk, amber chalet glow against dark pine forest and Lomnický štít silhouette
  *
  * Color strategy: COMMITTED — deep charcoal body + amber accent
- * Typography: Bebas Neue (display) + Karla (body) + JetBrains Mono (data)
- * Motion: Framer Motion fadeUp, clip-path wipes, stagger 0.08s, ease [0.23,1,0.32,1]
+ * Typography: Thunder (display) + Karla (body) + JetBrains Mono (data)
+ * Motion: masked lines, decoded photo wipes, 60ms stagger; shared motion tokens.
  */
 
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+/* Only shipped surfaces generate utilities; the dormant UI catalogue does not. */
+@source "./App.tsx";
+@source "./pages";
+@source "./components/*.tsx";
+@source "./components/premium";
+@source "./components/ui/menu-toggle-icon.tsx";
 @import "tw-animate-css";
 @import "./fonts.css";
 
@@ -46,7 +52,7 @@
 
 :root {
   /* Dark Timber Palette — OKLCH */
-  --background: oklch(0.1 0.012 55);
+  --background: oklch(0.06 0.008 55);
   --foreground: oklch(0.92 0.008 75);
   --card: oklch(0.14 0.012 55);
   --card-foreground: oklch(0.92 0.008 75);
@@ -57,7 +63,7 @@
   --secondary: oklch(0.18 0.012 55);
   --secondary-foreground: oklch(0.92 0.008 75);
   --muted: oklch(0.18 0.01 55);
-  --muted-foreground: oklch(0.58 0.02 65);
+  --muted-foreground: oklch(0.78 0.008 75);
   --accent: oklch(0.72 0.12 65);
   --accent-foreground: oklch(0.1 0.012 55);
   --destructive: oklch(0.577 0.245 27.325);
@@ -69,7 +75,7 @@
   --radius: 0.25rem;
 
   /* Typography */
-  --font-display-family: "Bebas Neue", sans-serif;
+  --font-display-family: "Thunder", sans-serif;
   --font-body-family: "Karla", sans-serif;
   --font-mono-family: "JetBrains Mono", monospace;
 
@@ -103,7 +109,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body-family);
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -144,243 +150,59 @@
   }
 }
 
-@layer components {
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 3rem;
-      padding-right: 3rem;
-      max-width: 1400px;
-    }
-  }
-
-  /* Amber rule divider */
-  .amber-rule {
-    height: 1px;
-    background: oklch(0.72 0.12 65 / 0.35);
-    width: 100%;
-  }
-
-  /* Display font utility */
-  .font-display {
-    font-family: var(--font-display-family);
-  }
-
-  /* Mono font utility */
-  .font-mono-data {
-    font-family: var(--font-mono-family);
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    color: oklch(0.58 0.02 65);
-  }
-
-  /* Glow hover effect for interactive elements */
-  .glow-hover {
-    transition: box-shadow 0.3s var(--ease-out-expo);
-  }
-  .glow-hover:hover {
-    box-shadow:
-      0 0 24px oklch(0.72 0.12 65 / 0.25),
-      0 0 48px oklch(0.72 0.12 65 / 0.1);
-  }
-
-  /* Amber button */
-  .btn-amber {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: oklch(0.72 0.12 65);
-    color: oklch(0.1 0.012 55);
-    font-family: var(--font-display-family);
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    padding: 0.75rem 2rem;
-    border: none;
-    cursor: pointer;
-    transition:
-      background 0.2s var(--ease-out-expo),
-      transform 0.16s var(--ease-out-expo),
-      box-shadow 0.2s var(--ease-out-expo);
-  }
-  .btn-amber:hover {
-    background: oklch(0.78 0.13 65);
-    box-shadow: 0 0 32px oklch(0.72 0.12 65 / 0.35);
-  }
-  .btn-amber:active {
-    transform: scale(0.97);
-  }
-
-  /* Ghost button */
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: transparent;
-    color: oklch(0.92 0.008 75);
-    font-family: var(--font-display-family);
-    font-size: 1.1rem;
-    letter-spacing: 0.05em;
-    padding: 0.75rem 2rem;
-    border: 1px solid oklch(0.72 0.12 65 / 0.4);
-    cursor: pointer;
-    transition:
-      border-color 0.2s,
-      color 0.2s,
-      box-shadow 0.2s var(--ease-out-expo),
-      transform 0.16s;
-  }
-  .btn-ghost:hover {
-    border-color: oklch(0.72 0.12 65 / 0.8);
-    color: oklch(0.72 0.12 65);
-    box-shadow: 0 0 20px oklch(0.72 0.12 65 / 0.15);
-  }
-  .btn-ghost:active {
-    transform: scale(0.97);
-  }
-
-  /* Section heading style */
-  .section-heading {
-    font-family: var(--font-display-family);
-    font-size: clamp(2.5rem, 5vw, 5rem);
-    letter-spacing: -0.01em;
-    line-height: 1;
-    color: oklch(0.92 0.008 75);
-  }
-
-  /* Amber accent text */
-  .text-amber {
-    color: oklch(0.72 0.12 65);
-  }
-
-  /* Calendar overrides for dark amber theme */
-  [data-slot="calendar"] {
-    --primary: oklch(0.72 0.12 65);
-    --primary-foreground: oklch(0.1 0.012 55);
-    --accent: oklch(0.72 0.12 65 / 0.2);
-    --accent-foreground: oklch(0.92 0.008 75);
-    --muted-foreground: oklch(0.55 0.02 65);
-    background: transparent;
-    color: oklch(0.92 0.008 75);
-  }
-  [data-slot="calendar"] button {
-    color: oklch(0.92 0.008 75);
-  }
-  [data-slot="calendar"] button:hover {
-    background: oklch(0.72 0.12 65 / 0.15);
-    color: oklch(0.92 0.008 75);
-  }
-  [data-slot="calendar"] [data-selected-single="true"],
-  [data-slot="calendar"] [data-range-start="true"],
-  [data-slot="calendar"] [data-range-end="true"] {
-    background: oklch(0.72 0.12 65) !important;
-    color: oklch(0.1 0.012 55) !important;
-  }
-  [data-slot="calendar"] [data-range-middle="true"] {
-    background: oklch(0.72 0.12 65 / 0.18) !important;
-    color: oklch(0.92 0.008 75) !important;
-  }
-}
-
-/* GSAP hero integration — ensure sections below hero are visible */
-.gsap-section-below {
-  position: relative;
-  z-index: 1;
-}
-
-/* Improved glow hover with scale micro-interaction (ui-ux-pro-max: state-clarity) */
-.glow-hover {
-  transition:
-    box-shadow 0.3s var(--ease-out-expo),
-    transform 0.2s var(--ease-out-expo);
-}
-.glow-hover:hover {
-  box-shadow:
-    0 0 24px oklch(0.72 0.12 65 / 0.25),
-    0 0 48px oklch(0.72 0.12 65 / 0.1);
-}
-
-/* Amber underline link animation (ui-ux-pro-max: state-transition) */
-.link-amber {
-  position: relative;
-  color: oklch(0.72 0.12 65);
-  text-decoration: none;
-  transition: color 0.2s var(--ease-out-expo);
-}
-.link-amber::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: oklch(0.72 0.12 65);
-  transition: width 0.3s var(--ease-out-expo);
-}
-.link-amber:hover::after {
-  width: 100%;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: oklch(0.1 0.012 55);
-}
-::-webkit-scrollbar-thumb {
-  background: oklch(0.72 0.12 65 / 0.4);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.72 0.12 65 / 0.7);
-}
-
-/* Motion system — three durations, two easings, nothing else.
-   Categories rather than per-component values, so the same gesture reads the
-   same everywhere: UI feedback is quick, a section reveals once, and only the
-   hero is allowed to be cinematic. */
 :root {
+  --hero-inset: clamp(64px, 10vw, 176px);
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --motion-ui: 160ms;
+  --motion-state: 240ms;
+  --motion-modal: 420ms;
   --motion-section: 520ms;
   --motion-cinematic: 1000ms;
-
-  /* UI feedback: leaves immediately, settles hard. */
-  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
-  /* Entrances: fast out of the gate, long tail — reads as arriving, not sliding. */
-  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --stagger: 60ms;
+  --rise: 14px;
+  --rise-sm: 8px;
 }
-
-/* Reduced motion.
-   scroll-behavior is reset too: a smooth anchor scroll is motion the guest did
-   not ask for, and the html rule above sets it globally. */
+.font-display {
+  font-family: var(--font-display-family);
+}
+.font-mono-data {
+  font-family: var(--font-mono-family);
+}
+.text-amber {
+  color: var(--amber);
+}
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+@media (min-width: 640px) {
+  .container {
+    padding-inline: 40px;
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--hero-inset);
+  }
+}
+section[id] {
+  scroll-margin-top: calc(var(--nav-height, 72px) + 24px);
+}
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 5px;
+}
+::selection {
+  background: var(--amber);
+  color: var(--background);
+}
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: auto !important;
-  }
-
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+    scroll-behavior: auto;
   }
 }

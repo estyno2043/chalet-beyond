@@ -1,121 +1,242 @@
 ---
 name: Chalet Beyond
-description: Dark Timber identity with a restrained, media-led chalet hero.
+description: Dark Timber identity with real chalet photography, restrained editorial layouts and functional amber actions.
 colors:
   primary: "oklch(0.72 0.12 65)"
-  background: "oklch(0.1 0.012 55)"
+  background: "oklch(0.06 0.008 55)"
   foreground: "oklch(0.92 0.008 75)"
-  card: "oklch(0.14 0.012 55)"
-  secondary: "oklch(0.18 0.012 55)"
-  muted-foreground: "oklch(0.58 0.02 65)"
-  border: "oklch(0.72 0.12 65 / 0.18)"
+  muted-foreground: "oklch(0.78 0.008 75)"
+  secondary-text: "oklch(0.8 0.008 75)"
+  description-text: "oklch(0.82 0.008 75)"
+  border: "rgb(245 244 239 / 0.2)"
+  control-border: "rgb(245 244 239 / 0.4)"
   hero-ink: "oklch(0.97 0.007 75)"
   hero-dark: "oklch(0.12 0.01 55)"
-  hero-hover: "oklch(0.84 0.075 75)"
-  hero-soft: "oklch(0.88 0.01 75)"
-  hero-proof: "oklch(0.86 0.01 75)"
-  nav-book-hover: "oklch(0.88 0.035 75)"
-  nav-book-amber-hover: "oklch(0.79 0.11 70)"
-  menu-link-muted: "oklch(0.78 0.015 70)"
   hero-sand: "oklch(0.85 0.06 74)"
-  hero-stat-label: "oklch(0.8 0.012 75)"
+  validation: "oklch(0.84 0.09 35)"
+  photo-timeline-line: "rgb(255 255 255 / 0.5)"
+  photo-control-line: "rgb(255 255 255 / 0.6)"
+  photo-control-hover: "rgb(255 255 255 / 0.12)"
+  control-hover: "rgb(245 244 239 / 0.12)"
+  gallery-surface: "rgb(255 255 255 / 0.04)"
 typography:
   display:
-    fontFamily: "Thunder, Bebas Neue, sans-serif"
+    fontFamily: "Thunder, sans-serif"
     fontSize: "clamp(5.5rem, min(30vw, 17svh), 9.5rem)"
     fontWeight: 600
     lineHeight: 0.84
     letterSpacing: "0.004em"
   headline:
-    fontFamily: "Bebas Neue, sans-serif"
-    fontSize: "clamp(2.5rem, 5vw, 5rem)"
-    lineHeight: 1
-    letterSpacing: "-0.01em"
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(3rem, 6vw, 5.5rem)"
+    fontWeight: 600
+    lineHeight: 0.9
+    letterSpacing: "-0.018em"
   body:
     fontFamily: "Karla, sans-serif"
-    fontWeight: 300
-    lineHeight: 1.65
-  hero-body:
+    fontSize: "1.0625rem"
+    fontWeight: 400
+    lineHeight: 1.6
+  description:
     fontFamily: "Karla, sans-serif"
     fontSize: "1.125rem"
     fontWeight: 400
-    lineHeight: 1.45
-  hero-body-desktop:
-    fontFamily: "Karla, sans-serif"
-    fontSize: "1.1875rem"
-  hero-action:
-    fontFamily: "Karla, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 600
-    lineHeight: 1.4
-  hero-action-secondary:
-    fontFamily: "Karla, sans-serif"
-    fontSize: "0.9375rem"
-    fontWeight: 500
-  hero-meta:
-    fontFamily: "Karla, sans-serif"
-    fontSize: "0.8125rem"
-    fontWeight: 400
-  label:
+    lineHeight: 1.6
+  data:
     fontFamily: "JetBrains Mono, monospace"
-    fontSize: "0.75rem"
-    letterSpacing: "0.08em"
+    fontSize: "1rem"
+  action:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "0.78125rem"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "0.16em"
   navigation:
     fontFamily: "Karla, sans-serif"
     fontSize: "0.875rem"
     fontWeight: 500
+    lineHeight: 1
+    letterSpacing: "0.01em"
+  field:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.5
+  headline-compact:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(3rem, 10.8vw, 5rem)"
+    fontWeight: 600
+    lineHeight: 0.9
+    letterSpacing: "-0.018em"
+  photographic-display:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(3.75rem, 7vw, 7rem)"
+    fontWeight: 600
+    lineHeight: 0.9
+    letterSpacing: "-0.018em"
+  photographic-display-compact:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(3.5rem, 12vw, 5rem)"
+    fontWeight: 600
+    lineHeight: 0.9
+    letterSpacing: "-0.018em"
+  content-title:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "2.5rem"
+    fontWeight: 600
+    lineHeight: 1
+  gallery-lead-title:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "3.5rem"
+    fontWeight: 600
+    lineHeight: 1
+  location-place:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(2rem, 2.7vw, 2.75rem)"
+    fontWeight: 600
+    lineHeight: 1
+  compact-title:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "2rem"
+    fontWeight: 600
+    lineHeight: 1
+  starting-price:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(5rem, 9vw, 8rem)"
+    fontWeight: 600
+    lineHeight: 0.95
+  starting-price-compact:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "6.5rem"
+    fontWeight: 600
+    lineHeight: 0.95
+  calculated-price:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "clamp(3.5rem, 5vw, 5rem)"
+    fontWeight: 600
+    lineHeight: 1
+  booking-total:
+    fontFamily: "Thunder, sans-serif"
+    fontSize: "4.5rem"
+    fontWeight: 600
+    lineHeight: 1
+  guest-control-glyph:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1.375rem"
+    lineHeight: 1
+  guest-value:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1.25rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  disclosure-glyph:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1.5rem"
+  caption:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.4
+  inventory:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1.0625rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  rate-table:
+    fontFamily: "JetBrains Mono, monospace"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  rate-table-compact:
+    fontFamily: "JetBrains Mono, monospace"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  footer-contact:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "clamp(1.125rem, 2vw, 1.625rem)"
+    fontWeight: 400
+    lineHeight: 1.65
+  footer-legal:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  mobile-contact-action:
+    fontFamily: "Karla, sans-serif"
+    fontSize: "0.68rem"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "0.08em"
 rounded:
-  base: "0.25rem"
+  control: "3px"
+  thumbnail: "2px"
   pill: "999px"
-  hero-control: "2px"
+  circle: "50%"
 spacing:
-  hero-gutter-compact: "24px"
-  hero-gutter-medium: "40px"
-  hero-gutter-wide: "64px"
-  hero-copy-gap: "24px"
-  hero-facts-gap: "16px"
+  gutter-compact: "24px"
+  gutter-medium: "40px"
+  gutter-wide: "clamp(64px, 10vw, 176px)"
+  section: "clamp(88px, 10vw, 160px)"
+  header-gap: "48px"
+  inventory-gap: "64px"
+  gallery-gap: "16px"
+  booking-gap: "32px"
 components:
-  button-amber-inherited:
+  roll-outline:
+    backgroundColor: "transparent"
+    textColor: "{colors.hero-ink}"
+    typography: "{typography.action}"
+    rounded: "{rounded.pill}"
+    padding: "0 30px"
+    height: "58px"
+  roll-solid:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.background}"
-    padding: "0.75rem 2rem"
-  button-ghost-inherited:
-    backgroundColor: "transparent"
-    textColor: "{colors.foreground}"
-    padding: "0.75rem 2rem"
-  hero-primary:
-    backgroundColor: "{colors.hero-ink}"
-    textColor: "{colors.hero-dark}"
-    typography: "{typography.hero-action}"
-    rounded: "{rounded.hero-control}"
-    padding: "10px 10px 10px 20px"
-  hero-primary-hover:
-    backgroundColor: "{colors.primary}"
-  hero-secondary:
+    typography: "{typography.action}"
+    rounded: "{rounded.pill}"
+    padding: "0 30px"
+    height: "58px"
+  roll-ghost:
+    backgroundColor: "rgb(12 14 12 / 0.3)"
     textColor: "{colors.hero-ink}"
-    typography: "{typography.hero-action-secondary}"
-    rounded: "{rounded.hero-control}"
-    padding: "10px 24px"
-  hero-secondary-hover:
-    backgroundColor: "{colors.hero-ink}"
-    textColor: "{colors.hero-dark}"
-  hero-playback:
-    backgroundColor: "rgb(12 14 12 / 0.35)"
-    textColor: "{colors.hero-ink}"
-    rounded: "{rounded.hero-control}"
-    padding: "10px 16px"
+    typography: "{typography.action}"
+    rounded: "{rounded.pill}"
+    padding: "0 22px"
+    height: "44px"
   navigation-link:
-    textColor: "{colors.foreground}"
+    textColor: "rgb(245 244 239 / 0.82)"
     typography: "{typography.navigation}"
     padding: "6px 12px"
-  navigation-book:
-    backgroundColor: "{colors.hero-ink}"
-    textColor: "oklch(0.10 0.010 55)"
-    rounded: "{rounded.hero-control}"
-    padding: "0 20px"
-  navigation-book-past-hero:
-    backgroundColor: "{colors.primary}"
-    textColor: "oklch(0.10 0.010 55)"
+    height: "44px"
+  language-trigger:
+    backgroundColor: "transparent"
+    textColor: "{colors.hero-ink}"
+    rounded: "{rounded.pill}"
+    padding: "0 16px"
+    height: "44px"
+  inquiry-field:
+    backgroundColor: "transparent"
+    textColor: "{colors.foreground}"
+    typography: "{typography.field}"
+    rounded: "{rounded.control}"
+    padding: "10px 12px"
+    height: "48px"
+  guest-control:
+    backgroundColor: "transparent"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.circle}"
+    size: "44px"
+  calendar-day:
+    backgroundColor: "transparent"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.circle}"
+    size: "44px"
+  gallery-cover:
+    backgroundColor: "rgb(255 255 255 / 0.04)"
+    textColor: "{colors.hero-ink}"
+    rounded: "{rounded.control}"
+    padding: "0"
 ---
 
 # Design System: Chalet Beyond
@@ -124,167 +245,108 @@ components:
 
 **Creative North Star: "Dark Timber"**
 
-The inherited identity pairs deep charcoal, warm amber and pale type with the
-existing chalet logo. Its source describes arrival at dusk: a warm chalet against
-dark pine forest. Condensed display lettering gives the identity weight; lighter
-body text keeps information readable.
+The established Dark Timber identity pairs a near-black ground, pale type and the existing chalet logo with real property photography. The owner-approved premium refinement lets the chalet carry the page: generous space, condensed headings, quiet prose and functional controls.
 
-The implemented hero is a scoped expression of that identity: supplied exterior
-footage, a compact two-line property name and a clear availability action. Its
-minimal composition and restrained response to input apply to this hero, not to
-every future page layout.
+The hero retains its supplied footage, two-tone property name and authored letter entrance. Below it, the same identity becomes an editorial sequence of rooms, amenities, location and a direct inquiry. Motion clarifies arrival, image changes and user input; it does not add ornaments.
 
 **Key Characteristics:**
-- Inherited dark surfaces, amber accents and the existing logo.
-- Bebas Neue display type, Karla prose and JetBrains Mono data labels.
-- Hero-specific pale controls, static contrast shading and brief entrance motion.
+- A continuous dark ground with photography carrying the product.
+- Thunder headings, Karla prose and JetBrains Mono for actual tabular price data.
+- Amber for actions, money and calendar selection below the hero.
+- Stationary action targets, visible focus and reduced-motion alternatives.
 
-Scope: extracted on 2026-09-30 from `client/src/index.css`, `fonts.css`, Hero,
-HeroPointer, Navigation and LanguageSwitcher. Product authority is `PRODUCT.md`;
-the surface contract is `docs/superpowers/specs/2026-09-30-video-hero.md`.
-Other page components were not audited. Global utilities below are inherited
-definitions, not a claim that every existing screen uses them consistently.
+Scope: merged with the existing hero documentation on 2026-10-01 against the implemented frontend. `PRODUCT.md` records property and hero authority; `docs/frontend-premium-implementation.md` pins the approved below-hero contract. The frontmatter records reusable values actually used on shipped surfaces, not the dormant UI catalogue.
 
 ## Colors
 
-Warm, low-chroma neutrals support a single amber accent. Preserve source OKLCH
-values; hero-local colors do not replace global tokens.
+Warm low-chroma neutrals support one functional amber accent. Keep the source CSS color notation; the frontmatter is normative.
 
 ### Primary
-- **Amber (`primary`)** marks navigation actions, interaction detail and inherited
-  amber buttons. The global primary, accent and amber variables share this value.
+- **Amber (`primary`)** carries below-hero actions, prices, savings and selected dates. The header changes from pale to amber once the hero is behind it.
 
 ### Neutral
-- **Dark timber (`background`)** is the page base; **pale text (`foreground`)** is
-  the inherited reading color.
-- **Raised timber (`card`)** and **secondary timber (`secondary`)** are inherited
-  surface tokens. **Muted text (`muted-foreground`)** supports data labels.
-- **Amber edge (`border`)** is a translucent divider, not a second accent family.
-- **Hero ink / hero dark** provide the hero's higher-contrast text and controls.
-  **Hero hover** is the primary hero action's warm hover fill.
+- **Dark timber (`background`)** unifies the document, page sheet and footer.
+- **Pale text (`foreground`)** is the main reading color. **Muted text**, **secondary text** and **description text** support hierarchy without using amber.
+- **Quiet divider (`border`)** separates summaries, inventories and footer details; **control edge (`control-border`)** outlines form fields and circular controls.
+- **Hero ink**, **hero dark** and **hero sand** retain the existing hero's local text, control and two-tone title treatment.
+- **Validation (`validation`)** communicates date and inquiry errors; it is a semantic state, not a decorative accent.
+
+#### Photographic overlays and control states
+
+- **Photographic timeline line (`photo-timeline-line`)** keeps the location timeline visible against its photograph. **Photographic control line (`photo-control-line`)** outlines the gallery open affordance. These white-alpha edges are distinct from readable prose colors.
+- **Photographic control hover (`photo-control-hover`)** is the lightbox navigation hover surface; **control hover (`control-hover`)** is the pale circular guest/day hover surface. Neither is a text color.
+- **Gallery surface (`gallery-surface`)** is the faint neutral ground under a gallery photograph while it loads. It does not establish a reusable raised card palette.
+
+**The Functional Amber Rule.** Below the hero, amber marks actions, money and calendar selection. Keep editorial prose and descriptive headings neutral; retain the existing hero and navigation exceptions.
 
 ## Typography
 
-Hero title: **Thunder** SemiBold LC (supplied by the owner, freeware for
-commercial use; licence note beside the file). Section display: **Bebas Neue**.
-Body and hero actions: **Karla**. Data labels: **JetBrains Mono**. All are
-locally served with `font-display: swap`; retain their declared fallback families.
+**Display:** Thunder SemiBold LC, supplied by the owner. **Body:** Karla. **Data:** JetBrains Mono. All are locally served with `font-display: swap`; Thunder supplies the Latin Extended glyphs and Karla/Mono have Latin and Latin Extended files. All heading levels use Thunder. Body defaults to Karla (400, 1.65 leading); recurring prose uses the `body` and `description` roles above.
 
-- `display` is the hero title only. Thunder is extremely condensed, so it runs
-  past the usual 6rem display ceiling (up to 9.5rem, capped at 17% of the
-  viewport height so short laptops keep air under the bar). BEYOND is set in
-  `hero-sand`, the reference's two-tone name. Two lines, 0.84 leading; letters are split into spans for the
-  entrance, which drops kerning pairs — acceptable at this size.
-- `headline` captures the inherited section-heading utility. General headings
-  use the same display family with 1.05 leading.
-- `body` is inherited base text; paragraphs cap at 68ch.
-- `hero-body` grows to 1.25rem from 1024px. Its line length is 32ch, 38ch between
-  640px and 1023px, then 32ch on desktop.
-- Hero facts use Karla 400 with tabular numerals: 0.875rem/1.5, increasing to
-  0.9375rem on desktop. `label` records the inherited mono data utility.
-- Language links use mono uppercase text at 0.6875rem; the expanded menu uses
-  full language names at 0.8rem. Mobile navigation labels use 2rem Bebas Neue.
+- `display` is the hero title only: two lines with the existing two-tone treatment. Its viewport-height cap leaves space under the header on short screens.
+- `headline` is the section heading, with `headline-compact` below 768px. `photographic-display` and its compact variant belong to the photographic interlude. `content-title` is the shared amenity/gallery/summary/lightbox title; `gallery-lead-title` enlarges the leading cover. `location-place` names locations and becomes `compact-title` below 768px, as does the lightbox heading.
+- Short section descriptions use `description`, becoming `body` size below 768px. Longer prose stays near 17–18px with generous leading; section descriptions cap at 44ch.
+- `starting-price`, `starting-price-compact`, `calculated-price` and `booking-total` record the actual monetary hierarchy; they do not form a general heading scale. `guest-control-glyph` and `guest-value` belong to the controls. `disclosure-glyph` sizes a plus indicator, not the inventory or table text.
+- `inventory` records regular property-list copy. `caption` records photograph captions. `footer-contact` scales telephone/email prominence, while `footer-legal` retains normal readable text. `mobile-contact-action` is a constrained button label only and must not be reused for body or legal copy.
+- JetBrains Mono appears in the detailed rate table's price cells through `rate-table`, becoming `rate-table-compact` below 370px. Dates, counters and summary values otherwise use Karla with tabular numerals; large prices use Thunder. Do not turn every label into a mono eyebrow.
+- RollButton uses the action role, uppercase; its small variant uses 0.71875rem and 0.14em tracking. Navigation uses Karla. The language trigger is Karla 600 at 0.75rem with 0.06em tracking.
+- Hero description is Karla 400 at 1.0625rem/1.5, increasing to 1.1875rem from 1024px. Hero facts retain Thunder values and Karla labels.
 
 ## Layout
 
-**Inherited page container:** 100% width, centered; horizontal padding is 1.25rem,
-2rem from 640px and 3rem from 1024px, with a 1400px desktop maximum.
+The shared editorial container is centered with a 1600px maximum. Gutters are 24px, 40px from 640px and the responsive hero inset from 1024px. Section padding scales between 88px and 160px. Editorial splits, large photographs and open inventories establish hierarchy; section boundaries keep the continuous ground.
 
-**Hero and navigation only:** share a centered 1600px maximum and the three hero
-gutter tokens, changing at 640px and 1024px. Navigation is fixed at 72px high.
-The hero starts with 112px top padding, bottom-aligns its content and keeps its
-content column at most 600px wide. Its minimum height is 100svh, becoming
-`max(680px, 100svh)` on desktop; it may grow for short screens or longer copy.
+The intro uses a 1.1fr/1fr split and a 4:5 photograph; its facts form three columns. The gallery uses four columns and two 260px rows with its leading photograph spanning two columns and two rows. Below 1024px it becomes two columns; below 768px it becomes one. Featured amenities are three columns above 768px and one below. The location timeline has four columns, then two below 768px. Price narrative and calculator are paired columns, then stack below 768px.
 
-Hero actions wrap. Their minimum heights are 56px primary, 48px secondary and
-44px playback. Playback stays in flow below desktop and sits at the lower right
-on desktop. Full navigation links appear from 1280px; smaller widths use the
-menu. The gallery and inquiry targets reserve 72px above their scroll position.
+Booking stays in one column below 1280px. At 1280px it reserves at least 648px for two calendar months, a 32px gap and a 330px summary. Day buttons and navigation controls remain 44px. The summary sticks at `calc(var(--nav-height) + 24px)` (124px at desktop widths). At 1280px and wider on viewports at most 750px tall, its title margin contracts to 16px and summary-list bottom margin to 24px. All summary stages return to static flow at heights at most 700px; contact and success stages do so at heights at most 1000px. Narrow calendars below 370px use an 18px negative inline margin to preserve target width.
+
+Hero and navigation keep their distinct layout. The hero is at least 100svh; desktop layout is at least `max(700px, 100svh)`. Hero copy indents from the header gutter on desktop, actions share a row from 640px, and four bottom facts become a 2×2 grid below it. The header's inner bar is 72px high; the 28px contact strip appears from 768px, making `--nav-height` 100px. Full navigation links appear from 1280px. Header gutters remain 24/40/64px rather than inheriting the wider editorial inset.
+
+The fixed mobile contact bar appears below 768px after the hero, gives its inquiry action a larger column than its phone action and respects safe-area insets. The footer reserves space for that bar. Anchor offsets read the shared header height.
 
 ## Elevation & Depth
 
-The hero builds depth from real footage, two static contrast gradients and
-foreground text. It has no card surface or decorative glow. Navigation starts
-transparent, becomes almost opaque after a 10px scroll and uses a solid dark
-mobile overlay; there is no backdrop blur in this scope.
+Photography and static contrast scrims supply depth; text and controls remain flat. The below-hero sections use no repeating raised panels or decorative shadow vocabulary. The existing hero handoff is the structural exception: the page sheet casts an upward shadow and amber hairline as it overlaps the hero, then its rounded top corners straighten. The language popup retains its localized floating shadow.
 
-Inherited global buttons retain amber glow on hover, and the existing mobile
-menu CTA retains its gradient and shadow. These are recorded in the sidecar as
-inherited treatments; the hero's flatter treatment is not a global shadow ban.
+Navigation begins transparent, gains a near-opaque dark surface after scrolling and uses a dark menu overlay. There is no backdrop blur. Gallery scrims stay on photographs; location adds shade behind its text while retaining mountain detail on the right.
 
 ## Shapes
 
-The inherited base radius is small. Hero controls and the desktop navigation CTA
-use the `hero-control` radius. The inherited amber and ghost utilities specify
-no radius. The hero pointer ring is circular; this is an interaction affordance,
-not a general pill-shaped component language.
+Pills belong to RollButton, language and contact controls. Circular shapes belong to guest/date controls, gallery navigation and the existing hero pointer. Form fields and gallery covers use the small control radius; thumbnails use the smaller thumbnail radius. Photographs otherwise remain rectangular. Do not promote the handoff's animated sheet corners into a card style.
 
 ## Components
 
-**Inherited buttons:** amber fill and transparent ghost variants use Bebas Neue,
-warm hover feedback and a small pressed scale. These are existing global CSS
-utilities; the sidecar preserves their styles without treating them as hero CTAs.
+**RollButton / RollLink:** one shared action primitive with outline, solid and ghost tones, and large/small sizes. The hero CTA remains outline; the header is pale solid over the hero and amber below it; below-hero solid actions are amber. A wider ellipse rises to fill the pill over 560ms while the label rolls; the hit area stays in place. The pressed state scales to 0.98. Reduced motion uses a color change with the label stationary. Inquiry actions use the same primitive at 56px height and full summary width.
 
-**Hero layout (owner's reference, 2026-09-30):** the copy is indented past the
-bar's gutter (10vw, 64–176px from 1024px). Title, one line of description, then
-one row: the pill CTA "check available dates" and a direct line (tracked sand
-label + underlined phone). A hairline runs along the bottom with four facts —
-Booking.com rating (link), lowest nightly rate with the −10 % note, 250 m² with
-bedrooms and guests, 14-day free cancellation — values in Thunder, labels in
-Karla. Playback is a small ghost pill at the end of that row. Below 640px the
-facts become a 2×2 grid and the CTA spans the width.
+**SectionHeader and RevealPhoto:** heading lines reveal through masks once (520ms, 60ms stagger); their description rises 14px with a brief blur. Photographs decode before a downward wipe and 1.08→1 scale settle (1000ms). Reduced motion uses 240ms opacity. Content starts visible so animation is progressive enhancement. Two photographic backgrounds use native view timelines for −6%→6% vertical drift; unsupported browsers and reduced motion keep them static.
 
-**RollButton** (`components/RollButton.tsx`, from Animata Swipe Button + Magic
-UI Interactive Hover Button): a pill in Karla 700 caps, 0.16em tracking. On
-hover or keyboard focus an ellipse rises from below as a dome and fills the
-pill (560ms, quint ease-out) while the label rolls up and its filled-state copy
-rolls in. The button never moves. Tones: outline (hero CTA, fills amber), solid
-(header, pale; amber once the hero is behind, then fills pale), ghost
-(playback). Pressed scale 0.98.
+**Gallery:** five category covers use real photographs, neutral captions and a circular open affordance. Desktop hover scales the inner photograph to 1.04; reduced motion omits the scale. The lightbox opens from the clicked photograph's geometry (FLIP), supports keyboard navigation, Escape, focus containment/return and touch drag. Controls and captions fade in; reduced motion uses opacity. These are functional media interactions, not a general modal/card template.
 
-**Hero media and entrance:** poster and video cover the frame, with a 56% horizontal
-crop below desktop and centered crop from 1024px. Video starts on its own at every
-width (owner's direction, 2026-09-30): 720p60 from 1024px, 720p30 below. Only
-reduced motion and Save-Data keep the poster. Playback pauses offscreen or when
-hidden and preserves a manual pause. Footage contains cuts; the loop is not
-seamless. Scroll never seeks the video.
+**Guest controls, values and inquiry fields:** pricing and booking share guest state; circular controls enforce the property capacity. Values crossfade with at most a 4px rise and brief blur over 240ms; they never count through intermediate amounts. Inputs use a transparent ground, quiet border, visible labels, pale focus and amber caret. Error text remains close to the relevant interaction. A date selection is an inquiry step and does not claim a confirmed booking.
 
-The entrance is the hero's one authored moment. A dark curtain covers the
-footage while the title plays; each letter is born at the hero's centre (16% of
-its 680ms: fade, blur 8→3px, scale 1.06→1.04) and glides left into its slot
-(quint ease-out), 34ms apart. BEYOND starts when CHALET's last letter is halfway
-in; the whole title takes ~1.3s. The curtain lifts on the first decoded frame,
-never before 650ms and never after 1.6s, while the footage settles from 1.07 to
-1 over 2.4s. Copy, CTA row and each fact rise in behind (820ms, 620–1120ms delays) while the hairline draws in from the left.
-The bar arrives at 280ms. Reduced motion skips all of it.
+**Navigation:** retain the recolored existing logo at 46px, Karla links with a directional amber underline, the pill flag/code language dropdown and circular menu toggle. Selected languages have a pale translucent fill. The mobile menu uses Thunder links; closed contents remain inert and hidden from accessibility navigation. Pale focus outlines use a 4px offset in hero/header and 5px in the editorial surface.
 
-**Hero pointer response:** any width with hover, a fine mouse pointer and no
-reduced motion. A 30px ring trails the pointer (0.3 follow per frame) and
-dissolves over any link or button, whose own hover takes over. Nothing moves
-with the cursor. One rAF loop runs only while
-the ring or a spring is moving; no React renders. Tab, leaving, scrolling,
-resizing, losing focus or hiding the page clears the effect.
+**Preserved hero media and entrance:** video starts at every width, using 720p60 from 1024px and 720p30 below; Save-Data or reduced motion keeps the poster. Playback pauses offscreen or when hidden and preserves a manual pause. The footage has cuts and is not a seamless loop. Scroll does not seek it. Each title letter starts at the hero center, fades/scales through the first 16% of its 680ms and glides into place, 34ms apart. BEYOND starts when CHALET's last letter is halfway in. The curtain lifts after the first decoded frame between 650ms and 1.6s; footage settles from 1.07 to 1 over 2.4s. Copy, CTA and facts rise behind the title (820ms, 620–1060ms delays); the header arrives after 280ms. Reduced motion skips the entrance.
 
-**Navigation:** the logo is the brand mark recoloured for a dark ground
-(`logo-light-v1.png`, tagline dropped at 46px). Links draw an amber underline
-from the left on hover and retract it to the right. Language is one pill dropdown
-(flag + code) at every width; the menu toggle is a circle. The reserve action
-is a small RollButton, pale while the hero is under the bar and amber once it
-has scrolled away (480ms). Focus is a 2px pale outline with
-4px offset. The compact menu uses a brief 250ms fade and 8px lift, suppressed for
-reduced motion. Closed menu contents are inert and hidden from accessibility
-navigation. Language choices combine flags with text and mark the selected
-language with a pale translucent fill and border.
+The existing 30px pointer ring follows a fine mouse pointer within the hero (0.3 of remaining distance per frame) and dissolves over links/buttons. It writes directly to the DOM and runs only while catching up. Tab, pointer exit, scroll, blur or hiding the page clears it. It is confined to the hero.
 
-The sidecar renders seven extracted button/link variants. It does not simulate
-video, menu state or pointer tracking, and does not invent unaudited cards or
-form fields.
+**Motion and loading:** CSS and `lib/motion.ts` share UI/state/modal/section/cinematic durations (160/240/420/520/1000ms) and UI/enter/move/drawer easing. HeroHandoff uses the shared lazy Motion features. Below-intro PageStory loads when within 600px, on a known anchor or large scroll jump, or after 4s plus idle; anchor positions are restored after mounting. Booking loads separately within 1200px while its heading/anchor remain available. These boundaries protect first-screen motion without hiding the rest of the document indefinitely.
+
+**The Real Property Rule.** Use the owner-selected chalet photographs with truthful localized descriptions. Preserve the originals and do not substitute stock or generated interiors.
+
+**The Motion Purpose Rule.** Use the shared motion vocabulary for content arrival and functional state changes. Add no new cursor effect, ornamental panel, counting number, glow or magnetic action below the hero.
+
+The sidecar contains visual extracts of actual reusable primitives, with expanded CSS and inline icons. It does not simulate booking, calendar selection, video, gestures or application state. Owner photographs are served as AVIF/WebP at 640/1024/1600/2400px with intrinsic dimensions and localized alt text.
 
 ## Do's and Don'ts
 
-- Do retain the inherited logo, Dark Timber palette and three font families.
-- Do keep hero copy and actions legible over both the poster and moving footage.
-- Do preserve visible keyboard focus, stationary action hit areas and reduced-motion behavior in the hero and navigation.
-- Don't promote the hero's two-line title, lower-left composition or 1600px container into a mandatory site-wide layout.
-- Don't add invented ratings, prices or instant-booking promises to the hero; the rate, rating and cancellation terms come from `shared/pricing`, `shared/contact` and the pricing copy.
-- Don't gate autoplay on network guesses; Save-Data and reduced motion are the only opt-outs.
+- Do retain the existing logo and the Thunder, Karla and JetBrains Mono role separation.
+- Do keep photographs, heading masks and motion wrappers separate so effects do not overwrite one another.
+- Do preserve 44px calendar and guest controls, visible focus and reduced-motion behavior.
+- Do keep prices and inquiry details consistent with the shared pricing and guest state.
+- Do preserve the hero composition and its specific entrance as an existing authored exception.
+- Don't reintroduce Bebas Neue, legacy amber/ghost button utilities or decorative glow.
+- Don't turn descriptive sections into repeated bordered cards or add new ornaments below the hero.
+- Don't make the hero's two-line title, local sand color or lower-left composition mandatory for every section.
+- Don't invent ratings, distances, payment conditions, response times or instant-booking guarantees.
+- Don't gate hero autoplay on network guesses; Save-Data and reduced motion remain the opt-outs.

@@ -1,0 +1,52 @@
+{
+  "method": "Production Vite preview; default Lighthouse simulated mobile; three serial cold runs, median performance. Desktop preset, one run. No concurrent browser checks.",
+  "mobileMedian": 92,
+  "mobileRange": [92, 92],
+  "runs": [
+    {
+      "device": "mobile",
+      "index": 1,
+      "url": "http://localhost:4180/",
+      "fetchTime": "2026-10-01T09:10:44.349Z",
+      "performance": 92,
+      "accessibility": 100,
+      "LCPms": 3231.4437000000003,
+      "CLS": 0,
+      "TBTms": 42
+    },
+    {
+      "device": "mobile",
+      "index": 2,
+      "url": "http://localhost:4180/",
+      "fetchTime": "2026-10-01T09:10:55.996Z",
+      "performance": 92,
+      "accessibility": 100,
+      "LCPms": 3229.8729999999996,
+      "CLS": 0,
+      "TBTms": 23
+    },
+    {
+      "device": "mobile",
+      "index": 3,
+      "url": "http://localhost:4180/",
+      "fetchTime": "2026-10-01T09:11:06.937Z",
+      "performance": 92,
+      "accessibility": 100,
+      "LCPms": 3230.5055999999995,
+      "CLS": 0,
+      "TBTms": 17
+    },
+    {
+      "device": "desktop",
+      "index": 1,
+      "url": "http://localhost:4180/",
+      "fetchTime": "2026-10-01T09:11:18.006Z",
+      "performance": 100,
+      "accessibility": 100,
+      "LCPms": 614.50775,
+      "CLS": 0,
+      "TBTms": 0
+    }
+  ],
+  "runtimeCommit": "35d5b3d"
+}

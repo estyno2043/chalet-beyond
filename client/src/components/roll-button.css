@@ -4,7 +4,7 @@
   --roll-ink: oklch(0.97 0.007 75);
   --roll-dark: oklch(0.12 0.01 55);
   --roll-amber: oklch(0.72 0.12 65);
-  --roll-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --roll-ease: var(--ease-enter);
   /* Resting surface, resting text, fill, text on the fill. */
   --roll-bg: transparent;
   --roll-fg: var(--roll-ink);
@@ -123,11 +123,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roll-btn,
-  .roll-btn * {
-    transition-duration: 0ms !important;
-  }
-  .roll-btn:active {
-    transform: none;
-  }
+  .roll-btn { transition: background-color var(--motion-state), color var(--motion-state); }
+  .roll-btn__fill, .roll-btn__row { transition: none; }
+  .roll-btn:hover .roll-btn__fill, .roll-btn:focus-visible .roll-btn__fill { transform: translate3d(0,40%,0); }
+  .roll-btn:hover .roll-btn__row, .roll-btn:focus-visible .roll-btn__row { transform: none; }
+  .roll-btn .roll-btn__row--next { visibility: hidden; }
+  .roll-btn:hover, .roll-btn:focus-visible { background: var(--roll-fill); color: var(--roll-fill-fg); }
+  .roll-btn:active { transform: none; }
 }

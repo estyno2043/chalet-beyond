@@ -1,0 +1,228 @@
+{
+  "runtimeCommit": "35d5b3d",
+  "url": "http://localhost:4180",
+  "availability": "mocked empty blocked dates for visual matrix",
+  "captureMethod": "Full-section screenshots hide fixed navigation and mobile bar; actual viewport screenshots retain them. Fonts and photos await decode.",
+  "matrix": [
+    {
+      "lang": "sk",
+      "width": 1440,
+      "height": 900,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 1440,
+      "directory": ".impeccable/review/final/sk-1440",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "sk",
+      "width": 1280,
+      "height": 720,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 1280,
+      "directory": ".impeccable/review/final/sk-1280",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "sk",
+      "width": 900,
+      "height": 1000,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 900,
+      "directory": ".impeccable/review/final/sk-900",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "sk",
+      "width": 390,
+      "height": 844,
+      "calendarMonths": 1,
+      "consoleErrors": [],
+      "scrollWidth": 390,
+      "directory": ".impeccable/review/final/sk-390",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "sk",
+      "width": 320,
+      "height": 740,
+      "calendarMonths": 1,
+      "consoleErrors": [],
+      "scrollWidth": 320,
+      "directory": ".impeccable/review/final/sk-320",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "de",
+      "width": 1440,
+      "height": 900,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 1440,
+      "directory": ".impeccable/review/final/de-1440",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "de",
+      "width": 1280,
+      "height": 720,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 1280,
+      "directory": ".impeccable/review/final/de-1280",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "de",
+      "width": 900,
+      "height": 1000,
+      "calendarMonths": 2,
+      "consoleErrors": [],
+      "scrollWidth": 900,
+      "directory": ".impeccable/review/final/de-900",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "de",
+      "width": 390,
+      "height": 844,
+      "calendarMonths": 1,
+      "consoleErrors": [],
+      "scrollWidth": 390,
+      "directory": ".impeccable/review/final/de-390",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    },
+    {
+      "lang": "de",
+      "width": 320,
+      "height": 740,
+      "calendarMonths": 1,
+      "consoleErrors": [],
+      "scrollWidth": 320,
+      "directory": ".impeccable/review/final/de-320",
+      "captures": [
+        "cennik.png",
+        "chalet.png",
+        "okolie.png",
+        "photo-interlude.png",
+        "premium-footer.png",
+        "priestory.png",
+        "rezervacia.png",
+        "viewport-cennik.png",
+        "viewport-chalet.png",
+        "viewport-rezervacia.png",
+        "vybavenie.png"
+      ]
+    }
+  ]
+}

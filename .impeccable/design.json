@@ -1,23 +1,37 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T13:51:42.055789Z",
+  "generatedAt": "2026-10-01T10:00:21.365922+00:00",
   "title": "Design System: Chalet Beyond",
   "extensions": {
-    "scope": "Inherited global tokens and CSS utilities; implemented hero/navigation only. Other page components were not audited. Component snippets are visual extracts without application runtime.",
+    "scope": "Implemented hero/navigation and owner-approved below-hero premium frontend. Visual component extracts do not simulate application state; source values are normative in DESIGN.md frontmatter.",
     "sourceFiles": [
       "client/src/index.css",
       "client/src/fonts.css",
+      "client/src/lib/motion.ts",
       "client/src/components/Hero.tsx",
       "client/src/components/HeroPointer.tsx",
       "client/src/components/hero.css",
+      "client/src/components/HeroHandoff.tsx",
+      "client/src/components/hero-handoff.css",
+      "client/src/components/RollButton.tsx",
+      "client/src/components/roll-button.css",
       "client/src/components/Navigation.tsx",
       "client/src/components/navigation.css",
-      "client/src/components/LanguageSwitcher.tsx"
+      "client/src/components/LanguageDropdown.tsx",
+      "client/src/components/premium/premium.css",
+      "client/src/components/premium/SectionHeader.tsx",
+      "client/src/components/premium/Photo.tsx",
+      "client/src/components/premium/Value.tsx",
+      "client/src/components/premium/GuestCounters.tsx",
+      "client/src/components/premium/Lightbox.tsx",
+      "client/src/pages/Home.tsx",
+      "client/src/components/premium/BookingIsland.tsx"
     ],
     "colorMeta": {
       "primary": {
         "role": "primary",
         "displayName": "Amber",
+        "canonical": "oklch(0.72 0.12 65)",
         "tonalRamp": [
           "oklch(0.15 0.12 65)",
           "oklch(0.25 0.12 65)",
@@ -32,20 +46,22 @@
       "background": {
         "role": "neutral",
         "displayName": "Dark timber",
+        "canonical": "oklch(0.06 0.008 55)",
         "tonalRamp": [
-          "oklch(0.15 0.012 55)",
-          "oklch(0.25 0.012 55)",
-          "oklch(0.35 0.012 55)",
-          "oklch(0.45 0.012 55)",
-          "oklch(0.6 0.012 55)",
-          "oklch(0.75 0.012 55)",
-          "oklch(0.85 0.012 55)",
-          "oklch(0.95 0.012 55)"
+          "oklch(0.15 0.008 55)",
+          "oklch(0.25 0.008 55)",
+          "oklch(0.35 0.008 55)",
+          "oklch(0.45 0.008 55)",
+          "oklch(0.6 0.008 55)",
+          "oklch(0.75 0.008 55)",
+          "oklch(0.85 0.008 55)",
+          "oklch(0.95 0.008 55)"
         ]
       },
       "foreground": {
         "role": "neutral",
         "displayName": "Pale text",
+        "canonical": "oklch(0.92 0.008 75)",
         "tonalRamp": [
           "oklch(0.15 0.008 75)",
           "oklch(0.25 0.008 75)",
@@ -57,65 +73,85 @@
           "oklch(0.95 0.008 75)"
         ]
       },
-      "card": {
-        "role": "neutral",
-        "displayName": "Raised timber",
-        "tonalRamp": [
-          "oklch(0.15 0.012 55)",
-          "oklch(0.25 0.012 55)",
-          "oklch(0.35 0.012 55)",
-          "oklch(0.45 0.012 55)",
-          "oklch(0.6 0.012 55)",
-          "oklch(0.75 0.012 55)",
-          "oklch(0.85 0.012 55)",
-          "oklch(0.95 0.012 55)"
-        ]
-      },
-      "secondary": {
-        "role": "neutral",
-        "displayName": "Secondary timber",
-        "tonalRamp": [
-          "oklch(0.15 0.012 55)",
-          "oklch(0.25 0.012 55)",
-          "oklch(0.35 0.012 55)",
-          "oklch(0.45 0.012 55)",
-          "oklch(0.6 0.012 55)",
-          "oklch(0.75 0.012 55)",
-          "oklch(0.85 0.012 55)",
-          "oklch(0.95 0.012 55)"
-        ]
-      },
       "muted-foreground": {
         "role": "neutral",
         "displayName": "Muted text",
+        "canonical": "oklch(0.78 0.008 75)",
         "tonalRamp": [
-          "oklch(0.15 0.02 65)",
-          "oklch(0.25 0.02 65)",
-          "oklch(0.35 0.02 65)",
-          "oklch(0.45 0.02 65)",
-          "oklch(0.6 0.02 65)",
-          "oklch(0.75 0.02 65)",
-          "oklch(0.85 0.02 65)",
-          "oklch(0.95 0.02 65)"
+          "oklch(0.15 0.008 75)",
+          "oklch(0.25 0.008 75)",
+          "oklch(0.35 0.008 75)",
+          "oklch(0.45 0.008 75)",
+          "oklch(0.6 0.008 75)",
+          "oklch(0.75 0.008 75)",
+          "oklch(0.85 0.008 75)",
+          "oklch(0.95 0.008 75)"
+        ]
+      },
+      "secondary-text": {
+        "role": "neutral",
+        "displayName": "Secondary text",
+        "canonical": "oklch(0.8 0.008 75)",
+        "tonalRamp": [
+          "oklch(0.15 0.008 75)",
+          "oklch(0.25 0.008 75)",
+          "oklch(0.35 0.008 75)",
+          "oklch(0.45 0.008 75)",
+          "oklch(0.6 0.008 75)",
+          "oklch(0.75 0.008 75)",
+          "oklch(0.85 0.008 75)",
+          "oklch(0.95 0.008 75)"
+        ]
+      },
+      "description-text": {
+        "role": "neutral",
+        "displayName": "Description text",
+        "canonical": "oklch(0.82 0.008 75)",
+        "tonalRamp": [
+          "oklch(0.15 0.008 75)",
+          "oklch(0.25 0.008 75)",
+          "oklch(0.35 0.008 75)",
+          "oklch(0.45 0.008 75)",
+          "oklch(0.6 0.008 75)",
+          "oklch(0.75 0.008 75)",
+          "oklch(0.85 0.008 75)",
+          "oklch(0.95 0.008 75)"
         ]
       },
       "border": {
         "role": "neutral",
-        "displayName": "Amber edge",
+        "displayName": "Quiet divider",
+        "canonical": "rgb(245 244 239 / 0.2)",
         "tonalRamp": [
-          "oklch(0.15 0.12 65 / 0.18)",
-          "oklch(0.25 0.12 65 / 0.18)",
-          "oklch(0.35 0.12 65 / 0.18)",
-          "oklch(0.45 0.12 65 / 0.18)",
-          "oklch(0.6 0.12 65 / 0.18)",
-          "oklch(0.75 0.12 65 / 0.18)",
-          "oklch(0.85 0.12 65 / 0.18)",
-          "oklch(0.95 0.12 65 / 0.18)"
+          "rgb(20 20 20 / 0.2)",
+          "rgb(40 40 40 / 0.2)",
+          "rgb(65 65 65 / 0.2)",
+          "rgb(90 90 90 / 0.2)",
+          "rgb(130 130 130 / 0.2)",
+          "rgb(180 180 180 / 0.2)",
+          "rgb(215 215 215 / 0.2)",
+          "rgb(245 245 245 / 0.2)"
+        ]
+      },
+      "control-border": {
+        "role": "neutral",
+        "displayName": "Control edge",
+        "canonical": "rgb(245 244 239 / 0.4)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.4)",
+          "rgb(40 40 40 / 0.4)",
+          "rgb(65 65 65 / 0.4)",
+          "rgb(90 90 90 / 0.4)",
+          "rgb(130 130 130 / 0.4)",
+          "rgb(180 180 180 / 0.4)",
+          "rgb(215 215 215 / 0.4)",
+          "rgb(245 245 245 / 0.4)"
         ]
       },
       "hero-ink": {
         "role": "neutral",
         "displayName": "Hero ink",
+        "canonical": "oklch(0.97 0.007 75)",
         "tonalRamp": [
           "oklch(0.15 0.007 75)",
           "oklch(0.25 0.007 75)",
@@ -130,6 +166,7 @@
       "hero-dark": {
         "role": "neutral",
         "displayName": "Hero dark",
+        "canonical": "oklch(0.12 0.01 55)",
         "tonalRamp": [
           "oklch(0.15 0.01 55)",
           "oklch(0.25 0.01 55)",
@@ -141,192 +178,436 @@
           "oklch(0.95 0.01 55)"
         ]
       },
-      "hero-hover": {
-        "role": "primary",
-        "displayName": "Hero hover",
+      "hero-sand": {
+        "role": "neutral",
+        "displayName": "Hero sand",
+        "canonical": "oklch(0.85 0.06 74)",
         "tonalRamp": [
-          "oklch(0.15 0.075 75)",
-          "oklch(0.25 0.075 75)",
-          "oklch(0.35 0.075 75)",
-          "oklch(0.45 0.075 75)",
-          "oklch(0.6 0.075 75)",
-          "oklch(0.75 0.075 75)",
-          "oklch(0.85 0.075 75)",
-          "oklch(0.95 0.075 75)"
+          "oklch(0.15 0.06 74)",
+          "oklch(0.25 0.06 74)",
+          "oklch(0.35 0.06 74)",
+          "oklch(0.45 0.06 74)",
+          "oklch(0.6 0.06 74)",
+          "oklch(0.75 0.06 74)",
+          "oklch(0.85 0.06 74)",
+          "oklch(0.95 0.06 74)"
+        ]
+      },
+      "validation": {
+        "role": "neutral",
+        "displayName": "Validation",
+        "canonical": "oklch(0.84 0.09 35)",
+        "tonalRamp": [
+          "oklch(0.15 0.09 35)",
+          "oklch(0.25 0.09 35)",
+          "oklch(0.35 0.09 35)",
+          "oklch(0.45 0.09 35)",
+          "oklch(0.6 0.09 35)",
+          "oklch(0.75 0.09 35)",
+          "oklch(0.85 0.09 35)",
+          "oklch(0.95 0.09 35)"
+        ]
+      },
+      "photo-timeline-line": {
+        "role": "neutral",
+        "displayName": "Photo Timeline Line",
+        "canonical": "rgb(255 255 255 / 0.5)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.5)",
+          "rgb(40 40 40 / 0.5)",
+          "rgb(65 65 65 / 0.5)",
+          "rgb(90 90 90 / 0.5)",
+          "rgb(130 130 130 / 0.5)",
+          "rgb(180 180 180 / 0.5)",
+          "rgb(215 215 215 / 0.5)",
+          "rgb(245 245 245 / 0.5)"
+        ]
+      },
+      "photo-control-line": {
+        "role": "neutral",
+        "displayName": "Photo Control Line",
+        "canonical": "rgb(255 255 255 / 0.6)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.6)",
+          "rgb(40 40 40 / 0.6)",
+          "rgb(65 65 65 / 0.6)",
+          "rgb(90 90 90 / 0.6)",
+          "rgb(130 130 130 / 0.6)",
+          "rgb(180 180 180 / 0.6)",
+          "rgb(215 215 215 / 0.6)",
+          "rgb(245 245 245 / 0.6)"
+        ]
+      },
+      "photo-control-hover": {
+        "role": "neutral",
+        "displayName": "Photo Control Hover",
+        "canonical": "rgb(255 255 255 / 0.12)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.12)",
+          "rgb(40 40 40 / 0.12)",
+          "rgb(65 65 65 / 0.12)",
+          "rgb(90 90 90 / 0.12)",
+          "rgb(130 130 130 / 0.12)",
+          "rgb(180 180 180 / 0.12)",
+          "rgb(215 215 215 / 0.12)",
+          "rgb(245 245 245 / 0.12)"
+        ]
+      },
+      "control-hover": {
+        "role": "neutral",
+        "displayName": "Control Hover",
+        "canonical": "rgb(245 244 239 / 0.12)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.12)",
+          "rgb(40 40 40 / 0.12)",
+          "rgb(65 65 65 / 0.12)",
+          "rgb(90 90 90 / 0.12)",
+          "rgb(130 130 130 / 0.12)",
+          "rgb(180 180 180 / 0.12)",
+          "rgb(215 215 215 / 0.12)",
+          "rgb(245 245 245 / 0.12)"
+        ]
+      },
+      "gallery-surface": {
+        "role": "neutral",
+        "displayName": "Gallery Surface",
+        "canonical": "rgb(255 255 255 / 0.04)",
+        "tonalRamp": [
+          "rgb(20 20 20 / 0.04)",
+          "rgb(40 40 40 / 0.04)",
+          "rgb(65 65 65 / 0.04)",
+          "rgb(90 90 90 / 0.04)",
+          "rgb(130 130 130 / 0.04)",
+          "rgb(180 180 180 / 0.04)",
+          "rgb(215 215 215 / 0.04)",
+          "rgb(245 245 245 / 0.04)"
         ]
       }
     },
-    "tonalRampNote": "Synthesized OKLCH preview ramps only, retaining source hue/chroma and alpha. These ramps are not implemented palette tokens or approved additional brand colors.",
+    "tonalRampNote": "Synthesized preview ramps only, retaining source hue/chroma or neutral character and alpha. These ramps are not implemented palette tokens or approved additional brand colors.",
     "typographyMeta": {
       "display": {
-        "displayName": "Hero display",
-        "purpose": "Scoped two-line hero title; 6rem at desktop."
+        "displayName": "Display",
+        "purpose": "Preserved two-line hero title only."
       },
       "headline": {
-        "displayName": "Inherited section heading",
-        "purpose": "Existing global section-heading utility; not a page-wide audit."
+        "displayName": "Headline",
+        "purpose": "Thunder section headings; responsive smaller-screen scale in DESIGN.md."
       },
       "body": {
-        "displayName": "Inherited body",
-        "purpose": "Existing document body family, weight and leading."
+        "displayName": "Body",
+        "purpose": "Recurring 17px editorial prose; base body is Karla 400 with 1.65 leading."
       },
-      "hero-body": {
-        "displayName": "Hero description",
-        "purpose": "Hero-only short prose; increases to 1.25rem on desktop."
+      "description": {
+        "displayName": "Description",
+        "purpose": "18px section description, 17px below 768px."
       },
-      "hero-action": {
-        "displayName": "Hero primary action",
-        "purpose": "Karla semibold inquiry action."
+      "data": {
+        "displayName": "Data",
+        "purpose": "Actual detailed price-table cells."
       },
-      "label": {
-        "displayName": "Inherited data label",
-        "purpose": "Existing mono data utility."
+      "action": {
+        "displayName": "Action",
+        "purpose": "Shared RollButton uppercase label."
       },
       "navigation": {
-        "displayName": "Desktop navigation",
-        "purpose": "Karla medium desktop links."
+        "displayName": "Navigation",
+        "purpose": "Karla desktop navigation links."
+      },
+      "field": {
+        "displayName": "Field",
+        "purpose": "Transparent inquiry inputs and textarea."
+      },
+      "headline-compact": {
+        "displayName": "Headline Compact",
+        "purpose": "Section heading below 768px."
+      },
+      "photographic-display": {
+        "displayName": "Photographic Display",
+        "purpose": "Full-width photographic interlude heading."
+      },
+      "photographic-display-compact": {
+        "displayName": "Photographic Display Compact",
+        "purpose": "Photographic interlude heading below 768px."
+      },
+      "content-title": {
+        "displayName": "Content Title",
+        "purpose": "Featured amenity, gallery caption, booking summary and lightbox headings."
+      },
+      "gallery-lead-title": {
+        "displayName": "Gallery Lead Title",
+        "purpose": "Leading gallery cover heading."
+      },
+      "location-place": {
+        "displayName": "Location Place",
+        "purpose": "Location timeline place names."
+      },
+      "compact-title": {
+        "displayName": "Compact Title",
+        "purpose": "Location place names and lightbox heading below 768px."
+      },
+      "starting-price": {
+        "displayName": "Starting Price",
+        "purpose": "Starting nightly price; not the hero property title."
+      },
+      "starting-price-compact": {
+        "displayName": "Starting Price Compact",
+        "purpose": "Starting nightly price below 768px."
+      },
+      "calculated-price": {
+        "displayName": "Calculated Price",
+        "purpose": "Shared guest calculator nightly result."
+      },
+      "booking-total": {
+        "displayName": "Booking Total",
+        "purpose": "Total inquiry price and calculator result below 768px."
+      },
+      "guest-control-glyph": {
+        "displayName": "Guest Control Glyph",
+        "purpose": "Plus/minus glyphs in circular guest controls."
+      },
+      "guest-value": {
+        "displayName": "Guest Value",
+        "purpose": "Tabular guest count output; also the 404 paragraph size."
+      },
+      "disclosure-glyph": {
+        "displayName": "Disclosure Glyph",
+        "purpose": "Price-table/house-rules disclosure indicator and gallery-open fallback glyph size; not inventory prose."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Gallery photograph captions."
+      },
+      "inventory": {
+        "displayName": "Inventory",
+        "purpose": "Amenities inventory and recurring property descriptions."
+      },
+      "rate-table": {
+        "displayName": "Rate Table",
+        "purpose": "Actual rate cells; headers remain Karla."
+      },
+      "rate-table-compact": {
+        "displayName": "Rate Table Compact",
+        "purpose": "Rate cells below 370px; headers remain Karla."
+      },
+      "footer-contact": {
+        "displayName": "Footer Contact",
+        "purpose": "Footer telephone and email; fixed at 1.125rem below 768px."
+      },
+      "footer-legal": {
+        "displayName": "Footer Legal",
+        "purpose": "Footer bottom and legal-link copy."
+      },
+      "mobile-contact-action": {
+        "displayName": "Mobile Contact Action",
+        "purpose": "Constrained fixed mobile contact bar RollButton label only; not a prose or legal-text size."
       }
     },
     "shadows": [
       {
-        "name": "inherited-amber-button-hover",
-        "value": "0 0 32px oklch(0.72 0.12 65 / 0.35)",
-        "purpose": "Inherited global amber utility only."
+        "name": "page-sheet",
+        "value": "0 -1px 0 oklch(0.72 0.12 65 / 0.18), 0 -48px 96px -24px rgb(0 0 0 / 0.65)",
+        "purpose": "Existing structural hero handoff only."
       },
       {
-        "name": "inherited-ghost-button-hover",
-        "value": "0 0 20px oklch(0.72 0.12 65 / 0.15)",
-        "purpose": "Inherited global ghost utility only."
-      },
-      {
-        "name": "inherited-mobile-menu-cta",
-        "value": "0 0 0 1px rgba(180,120,40,0.3), 0 4px 16px rgba(180,120,40,0.3)",
-        "purpose": "Existing mobile menu action; not the hero CTA."
+        "name": "language-popup",
+        "value": "0 12px 32px rgb(0 0 0 / 0.45)",
+        "purpose": "Floating language choices only."
       }
     ],
     "motion": [
       {
-        "name": "inherited-ease-out-expo",
+        "name": "ease-ui",
         "value": "cubic-bezier(0.23, 1, 0.32, 1)",
-        "purpose": "Existing global utility transitions."
+        "purpose": "Functional controls and changing values."
       },
       {
-        "name": "hero-entrance-ease",
+        "name": "ease-enter",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Hero title 700ms, second line delay 80ms; copy 650ms, description/facts delays 100/150ms. Omitted for reduced motion."
+        "purpose": "Masked heading arrival and RollButton fill."
       },
       {
-        "name": "hero-control",
-        "value": "180ms ease",
-        "purpose": "Hero state changes; transitions removed for reduced motion."
+        "name": "ease-move",
+        "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "purpose": "Decoded photograph wipe/settle."
       },
       {
-        "name": "hero-video-reveal",
-        "value": "320ms ease-out",
-        "purpose": "Reveal decoded video over the poster."
+        "name": "ease-drawer",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Gallery geometry transition."
       },
       {
-        "name": "hero-pointer-content",
-        "value": "160ms ease-out",
-        "purpose": "Inner content only, at most 4px horizontal and 3px vertical; desktop fine mouse only and no reduced motion. Event-driven, no idle loop."
+        "name": "motion-ui",
+        "value": "160ms",
+        "purpose": "Control feedback."
       },
       {
-        "name": "navigation-menu",
-        "value": "250ms ease",
-        "purpose": "Compact menu fade and 8px lift; suppressed for reduced motion."
+        "name": "motion-state",
+        "value": "240ms",
+        "purpose": "Values and reduced-motion opacity."
+      },
+      {
+        "name": "motion-modal",
+        "value": "420ms",
+        "purpose": "Gallery geometry."
+      },
+      {
+        "name": "motion-section",
+        "value": "520ms",
+        "purpose": "Masked headings and gallery hover."
+      },
+      {
+        "name": "motion-cinematic",
+        "value": "1000ms",
+        "purpose": "Decoded photographs."
+      },
+      {
+        "name": "stagger",
+        "value": "60ms",
+        "purpose": "Heading lines and editorial list arrival."
+      },
+      {
+        "name": "roll-fill",
+        "value": "560ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Existing pill fill and rolling labels; reduced motion keeps label still."
       }
     ],
     "breakpoints": [
+      {
+        "name": "narrow-calendar",
+        "value": "370px"
+      },
       {
         "name": "medium-gutter",
         "value": "640px"
       },
       {
-        "name": "desktop-hero",
+        "name": "editorial-columns-contact-strip",
+        "value": "768px"
+      },
+      {
+        "name": "desktop-hero-gallery",
         "value": "1024px"
       },
       {
-        "name": "full-navigation",
+        "name": "full-navigation-two-column-booking",
         "value": "1280px"
       }
     ]
   },
   "components": [
     {
-      "name": "Amber button — inherited utility",
+      "name": "RollButton outline",
       "kind": "button",
-      "refersTo": "button-amber-inherited",
-      "description": "Existing global display-font button; preserves its inherited glow and browser focus geometry. Not the new hero primary action.",
-      "html": "<button type=\"button\" class=\"ds-amber\">Overiť dostupnosť</button>",
-      "css": ".ds-amber { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--primary, oklch(0.72 0.12 65)); color: var(--background, oklch(0.1 0.012 55)); font-family: var(--font-display-family, \"Bebas Neue\", sans-serif); font-size: 1.1rem; font-weight: 300; line-height: 1.65; letter-spacing: 0.05em; padding: 0.75rem 2rem; border: none; cursor: pointer; transition: background 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), transform 0.16s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), box-shadow 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)); } .ds-amber:hover { background: oklch(0.78 0.13 65); box-shadow: 0 0 32px oklch(0.72 0.12 65 / 0.35); } .ds-amber:active { transform: scale(0.97); } .ds-amber:focus-visible { outline-color: color-mix(in oklab, var(--ring, oklch(0.72 0.12 65 / 0.5)) 50%, transparent); } @media (prefers-reduced-motion: reduce) { .ds-amber { transition-duration: 0.01ms; } }"
+      "refersTo": "roll-outline",
+      "description": "Hero outline tone; amber rising fill.",
+      "html": "<button type=\"button\" class=\"ds-roll-outline\"><span class=\"ds-roll-outline-fill\" aria-hidden=\"true\"></span><span class=\"ds-roll-outline-label\"><span class=\"ds-roll-outline-row\">Overiť dostupnosť</span><span class=\"ds-roll-outline-row ds-roll-outline-next\" aria-hidden=\"true\">Overiť dostupnosť</span></span></button>",
+      "css": ".ds-roll-outline{--ds-bg:transparent;--ds-fg:oklch(.97 .007 75);--ds-line:rgb(245 244 239 / .5);--ds-fill:oklch(.72 .12 65);--ds-fill-fg:oklch(.12 .01 55);position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;height:58px;padding:0 30px;overflow:hidden;border:0;border-radius:999px;background:var(--ds-bg);box-shadow:inset 0 0 0 1px var(--ds-line);color:var(--ds-fg);font:700 .78125rem/1 var(--font-body-family,\"Karla\",sans-serif);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;white-space:nowrap;cursor:pointer;transition:transform 160ms ease-out,background-color 480ms var(--ease-enter,cubic-bezier(.16,1,.3,1));}.ds-roll-outline-fill{position:absolute;z-index:-1;top:0;left:-15%;width:130%;height:260%;border-radius:50%;background:var(--ds-fill);transform:translate3d(0,40%,0);transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-outline-label{position:relative;display:block;overflow:hidden;padding-block:.35em;} .ds-roll-outline-row{display:flex;align-items:center;justify-content:center;transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-outline-next{position:absolute;inset:0;color:var(--ds-fill-fg);transform:translate3d(0,calc(100% + .6em),0);transition-delay:30ms;} .ds-roll-outline:active{transform:scale(.98);} .ds-roll-outline:focus-visible{outline:2px solid oklch(.97 .007 75);outline-offset:4px;} .ds-roll-outline:focus-visible .ds-roll-outline-fill{transform:translate3d(0,-31%,0);} .ds-roll-outline:focus-visible .ds-roll-outline-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-outline:focus-visible .ds-roll-outline-next{transform:translate3d(0,0,0);} @media(hover:hover) and (pointer:fine){.ds-roll-outline:hover .ds-roll-outline-fill{transform:translate3d(0,-31%,0);} .ds-roll-outline:hover .ds-roll-outline-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-outline:hover .ds-roll-outline-next{transform:translate3d(0,0,0);}} @media(prefers-reduced-motion:reduce){.ds-roll-outline{transition:background-color 240ms,color 240ms;} .ds-roll-outline-fill{display:none;} .ds-roll-outline-row{transition:none!important;transform:none!important;} .ds-roll-outline-next{visibility:hidden;} .ds-roll-outline:hover,.ds-roll-outline:focus-visible{background:var(--ds-fill);color:var(--ds-fill-fg);} .ds-roll-outline:active{transform:none;}}"
     },
     {
-      "name": "Ghost button — inherited utility",
+      "name": "RollButton solid",
       "kind": "button",
-      "refersTo": "button-ghost-inherited",
-      "description": "Existing global outlined display-font button; amber glow is inherited, not a hero treatment.",
-      "html": "<button type=\"button\" class=\"ds-ghost\">Pozrieť priestory</button>",
-      "css": ".ds-ghost { display: inline-flex; align-items: center; gap: 0.5rem; background: transparent; color: var(--foreground, oklch(0.92 0.008 75)); font-family: var(--font-display-family, \"Bebas Neue\", sans-serif); font-size: 1.1rem; font-weight: 300; line-height: 1.65; letter-spacing: 0.05em; padding: 0.75rem 2rem; border: 1px solid oklch(0.72 0.12 65 / 0.4); cursor: pointer; transition: border-color 0.2s, color 0.2s, box-shadow 0.2s var(--ease-out-expo, cubic-bezier(0.23, 1, 0.32, 1)), transform 0.16s; } .ds-ghost:hover { border-color: oklch(0.72 0.12 65 / 0.8); color: var(--primary, oklch(0.72 0.12 65)); box-shadow: 0 0 20px oklch(0.72 0.12 65 / 0.15); } .ds-ghost:active { transform: scale(0.97); } .ds-ghost:focus-visible { outline-color: color-mix(in oklab, var(--ring, oklch(0.72 0.12 65 / 0.5)) 50%, transparent); } @media (prefers-reduced-motion: reduce) { .ds-ghost { transition-duration: 0.01ms; } }"
+      "refersTo": "roll-solid",
+      "description": "Below-hero amber action; header uses pale over hero and amber afterward.",
+      "html": "<button type=\"button\" class=\"ds-roll-solid\"><span class=\"ds-roll-solid-fill\" aria-hidden=\"true\"></span><span class=\"ds-roll-solid-label\"><span class=\"ds-roll-solid-row\">Pokračovať</span><span class=\"ds-roll-solid-row ds-roll-solid-next\" aria-hidden=\"true\">Pokračovať</span></span></button>",
+      "css": ".ds-roll-solid{--ds-bg:var(--amber,oklch(.72 .12 65));--ds-fg:var(--background,oklch(.06 .008 55));--ds-line:transparent;--ds-fill:var(--foreground,oklch(.92 .008 75));--ds-fill-fg:var(--background,oklch(.06 .008 55));position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;height:58px;padding:0 30px;overflow:hidden;border:0;border-radius:999px;background:var(--ds-bg);box-shadow:inset 0 0 0 1px var(--ds-line);color:var(--ds-fg);font:700 .78125rem/1 var(--font-body-family,\"Karla\",sans-serif);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;white-space:nowrap;cursor:pointer;transition:transform 160ms ease-out,background-color 480ms var(--ease-enter,cubic-bezier(.16,1,.3,1));}.ds-roll-solid-fill{position:absolute;z-index:-1;top:0;left:-15%;width:130%;height:260%;border-radius:50%;background:var(--ds-fill);transform:translate3d(0,40%,0);transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-solid-label{position:relative;display:block;overflow:hidden;padding-block:.35em;} .ds-roll-solid-row{display:flex;align-items:center;justify-content:center;transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-solid-next{position:absolute;inset:0;color:var(--ds-fill-fg);transform:translate3d(0,calc(100% + .6em),0);transition-delay:30ms;} .ds-roll-solid:active{transform:scale(.98);} .ds-roll-solid:focus-visible{outline:2px solid oklch(.97 .007 75);outline-offset:4px;} .ds-roll-solid:focus-visible .ds-roll-solid-fill{transform:translate3d(0,-31%,0);} .ds-roll-solid:focus-visible .ds-roll-solid-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-solid:focus-visible .ds-roll-solid-next{transform:translate3d(0,0,0);} @media(hover:hover) and (pointer:fine){.ds-roll-solid:hover .ds-roll-solid-fill{transform:translate3d(0,-31%,0);} .ds-roll-solid:hover .ds-roll-solid-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-solid:hover .ds-roll-solid-next{transform:translate3d(0,0,0);}} @media(prefers-reduced-motion:reduce){.ds-roll-solid{transition:background-color 240ms,color 240ms;} .ds-roll-solid-fill{display:none;} .ds-roll-solid-row{transition:none!important;transform:none!important;} .ds-roll-solid-next{visibility:hidden;} .ds-roll-solid:hover,.ds-roll-solid:focus-visible{background:var(--ds-fill);color:var(--ds-fill-fg);} .ds-roll-solid:active{transform:none;}}"
     },
     {
-      "name": "Hero primary action",
+      "name": "RollButton ghost",
       "kind": "button",
-      "refersTo": "hero-primary",
-      "description": "Pale, high-contrast inquiry anchor. Cursor-driven content translation is runtime behavior documented in DESIGN.md, not simulated here.",
-      "html": "<a href=\"#rezervacia\" class=\"ds-hero-primary\"><span class=\"ds-hero-primary-content\">Overiť dostupnosť<svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></span></a>",
-      "css": ".ds-hero-primary { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 56px; padding: 14px 20px; border-radius: 2px; background: var(--hero-ink, oklch(0.97 0.007 75)); color: var(--hero-dark, oklch(0.12 0.01 55)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 1rem; font-weight: 600; line-height: 1.4; text-decoration: none; white-space: nowrap; transition: background-color 180ms ease, transform 180ms ease; } .ds-hero-primary-content { display: inline-flex; flex: 1; align-items: center; justify-content: space-between; gap: inherit; } .ds-hero-primary svg { flex: none; transition: transform 180ms ease; } .ds-hero-primary:active { transform: scale(0.98); } .ds-hero-primary:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (min-width: 1024px) { .ds-hero-primary { min-width: 224px; } } @media (hover: hover) and (pointer: fine) { .ds-hero-primary:hover { background: oklch(0.84 0.075 75); } .ds-hero-primary:hover svg { transform: translateX(3px); } } @media (prefers-reduced-motion: reduce) { .ds-hero-primary, .ds-hero-primary svg { transition: none; } .ds-hero-primary:active { transform: none; } }"
-    },
-    {
-      "name": "Hero gallery action",
-      "kind": "button",
-      "refersTo": "hero-secondary",
-      "description": "Underlined secondary anchor with a 48px minimum target height.",
-      "html": "<a href=\"#priestory\" class=\"ds-hero-secondary\">Pozrieť priestory</a>",
-      "css": ".ds-hero-secondary { display: inline-flex; align-items: center; min-height: 48px; color: var(--hero-ink, oklch(0.97 0.007 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.9375rem; font-weight: 500; line-height: 1.4; text-decoration: underline; text-decoration-color: rgb(245 244 239 / 0.5); text-underline-offset: 6px; transition: text-decoration-color 180ms ease; } .ds-hero-secondary:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (hover: hover) and (pointer: fine) { .ds-hero-secondary:hover { text-decoration-color: currentColor; } } @media (prefers-reduced-motion: reduce) { .ds-hero-secondary { transition: none; } }"
-    },
-    {
-      "name": "Hero playback control",
-      "kind": "button",
-      "refersTo": "hero-playback",
-      "description": "Visual play-state sample. The application supplies play/pause state and accessible localized labels.",
-      "html": "<button type=\"button\" class=\"ds-hero-playback\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polygon points=\"6 3 20 12 6 21 6 3\"/></svg><span>Prehrať video</span></button>",
-      "css": ".ds-hero-playback { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 44px; padding: 10px 14px; border: 1px solid rgb(245 244 239 / 0.38); border-radius: 2px; background: rgb(12 14 12 / 0.6); color: var(--hero-ink, oklch(0.97 0.007 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.8125rem; font-weight: 400; line-height: 1.4; cursor: pointer; transition: background-color 180ms ease; } .ds-hero-playback:focus-visible { outline: 2px solid var(--hero-ink, oklch(0.97 0.007 75)); outline-offset: 5px; } @media (hover: hover) and (pointer: fine) { .ds-hero-playback:hover { background: rgb(12 14 12 / 0.85); } } @media (prefers-reduced-motion: reduce) { .ds-hero-playback { transition: none; } }"
+      "refersTo": "roll-ghost",
+      "description": "Preserved small ghost playback tone; application supplies playback state.",
+      "html": "<button type=\"button\" class=\"ds-roll-ghost\"><span class=\"ds-roll-ghost-fill\" aria-hidden=\"true\"></span><span class=\"ds-roll-ghost-label\"><span class=\"ds-roll-ghost-row\">Prehrať video</span><span class=\"ds-roll-ghost-row ds-roll-ghost-next\" aria-hidden=\"true\">Prehrať video</span></span></button>",
+      "css": ".ds-roll-ghost{--ds-bg:rgb(12 14 12 / .3);--ds-fg:oklch(.97 .007 75);--ds-line:rgb(245 244 239 / .32);--ds-fill:oklch(.97 .007 75);--ds-fill-fg:oklch(.12 .01 55);position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;height:58px;padding:0 30px;overflow:hidden;border:0;border-radius:999px;background:var(--ds-bg);box-shadow:inset 0 0 0 1px var(--ds-line);color:var(--ds-fg);font:700 .78125rem/1 var(--font-body-family,\"Karla\",sans-serif);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;white-space:nowrap;cursor:pointer;transition:transform 160ms ease-out,background-color 480ms var(--ease-enter,cubic-bezier(.16,1,.3,1));}.ds-roll-ghost{height:44px;padding:0 22px;font-size:.71875rem;letter-spacing:.14em;}.ds-roll-ghost-fill{position:absolute;z-index:-1;top:0;left:-15%;width:130%;height:260%;border-radius:50%;background:var(--ds-fill);transform:translate3d(0,40%,0);transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-ghost-label{position:relative;display:block;overflow:hidden;padding-block:.35em;} .ds-roll-ghost-row{display:flex;align-items:center;justify-content:center;transition:transform 560ms var(--ease-enter,cubic-bezier(.16,1,.3,1));} .ds-roll-ghost-next{position:absolute;inset:0;color:var(--ds-fill-fg);transform:translate3d(0,calc(100% + .6em),0);transition-delay:30ms;} .ds-roll-ghost:active{transform:scale(.98);} .ds-roll-ghost:focus-visible{outline:2px solid oklch(.97 .007 75);outline-offset:4px;} .ds-roll-ghost:focus-visible .ds-roll-ghost-fill{transform:translate3d(0,-31%,0);} .ds-roll-ghost:focus-visible .ds-roll-ghost-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-ghost:focus-visible .ds-roll-ghost-next{transform:translate3d(0,0,0);} @media(hover:hover) and (pointer:fine){.ds-roll-ghost:hover .ds-roll-ghost-fill{transform:translate3d(0,-31%,0);} .ds-roll-ghost:hover .ds-roll-ghost-row{transform:translate3d(0,calc(-100% - .6em),0);} .ds-roll-ghost:hover .ds-roll-ghost-next{transform:translate3d(0,0,0);}} @media(prefers-reduced-motion:reduce){.ds-roll-ghost{transition:background-color 240ms,color 240ms;} .ds-roll-ghost-fill{display:none;} .ds-roll-ghost-row{transition:none!important;transform:none!important;} .ds-roll-ghost-next{visibility:hidden;} .ds-roll-ghost:hover,.ds-roll-ghost:focus-visible{background:var(--ds-fill);color:var(--ds-fill-fg);} .ds-roll-ghost:active{transform:none;}}"
     },
     {
       "name": "Desktop navigation link",
       "kind": "nav",
       "refersTo": "navigation-link",
-      "description": "Desktop navigation item with the existing amber underline reveal. Full desktop navigation appears from 1280px.",
+      "description": "Karla link with a directional amber underline; full links appear from 1280px.",
       "html": "<nav aria-label=\"Navigation sample\"><a href=\"#priestory\" class=\"ds-nav-link\">Priestory</a></nav>",
-      "css": ".ds-nav-link { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 6px 12px; color: var(--foreground, oklch(0.92 0.008 75)); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.875rem; font-weight: 500; line-height: 1.25rem; text-decoration: none; transition: color 200ms; } .ds-nav-link::after { content: \"\"; position: absolute; bottom: 0; left: 12px; right: 12px; height: 1px; background: var(--primary, oklch(0.72 0.12 65)); transform: scaleX(0); transform-origin: left; transition: transform 300ms ease-out; } .ds-nav-link:hover { color: oklch(0.82 0.08 75); } .ds-nav-link:hover::after { transform: scaleX(1); } .ds-nav-link:focus-visible { outline: 2px solid var(--foreground, oklch(0.92 0.008 75)); outline-offset: 4px; } @media (prefers-reduced-motion: reduce) { .ds-nav-link, .ds-nav-link::after { transition: none; } }"
+      "css": ".ds-nav-link{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:6px 12px;font:500 .875rem/1 var(--font-body-family,\"Karla\",sans-serif);letter-spacing:.01em;color:rgb(245 244 239 / .82);text-decoration:none;transition:color 180ms ease-out;}.ds-nav-link::after{content:\"\";position:absolute;left:12px;right:12px;bottom:8px;height:1px;background:var(--amber,oklch(.72 .12 65));transform:scaleX(0);transform-origin:right;transition:transform 320ms var(--ease-enter,cubic-bezier(.16,1,.3,1));}.ds-nav-link:hover{color:oklch(.97 .007 75);}.ds-nav-link:hover::after{transform:scaleX(1);transform-origin:left;}.ds-nav-link:focus-visible{outline:2px solid oklch(.97 .007 75);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-nav-link,.ds-nav-link::after{transition:none;}}"
     },
     {
-      "name": "Desktop navigation action",
+      "name": "Language trigger",
       "kind": "button",
-      "refersTo": "navigation-book",
-      "description": "Amber navigation inquiry anchor with Karla text and a 44px minimum target height.",
-      "html": "<a href=\"#rezervacia\" class=\"ds-nav-book\">Rezervovať</a>",
-      "css": ".ds-nav-book { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 20px; border-radius: 2px; background: var(--primary, oklch(0.72 0.12 65)); color: oklch(0.10 0.010 55); font-family: var(--font-body-family, \"Karla\", sans-serif); font-size: 0.875rem; font-weight: 600; line-height: 1.25rem; text-decoration: none; transition: opacity 180ms ease, transform 180ms ease; } .ds-nav-book:active { transform: scale(0.98); } .ds-nav-book:focus-visible { outline: 2px solid var(--foreground, oklch(0.92 0.008 75)); outline-offset: 4px; } @media (hover: hover) and (pointer: fine) { .ds-nav-book:hover { opacity: 0.88; } } @media (prefers-reduced-motion: reduce) { .ds-nav-book { transition: none; } }"
+      "refersTo": "language-trigger",
+      "description": "Pill dropdown trigger; flag is paired with text in the application.",
+      "html": "<button type=\"button\" class=\"ds-language\" aria-haspopup=\"menu\" aria-expanded=\"false\">SK<svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-language{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 16px;border:0;border-radius:999px;box-shadow:inset 0 0 0 1px rgb(245 244 239 / .24);background:transparent;color:oklch(.97 .007 75);font:600 .75rem/1 var(--font-body-family,\"Karla\",sans-serif);letter-spacing:.06em;cursor:pointer;transition:background var(--motion-ui,160ms) var(--ease-ui,cubic-bezier(.23,1,.32,1));}.ds-language[aria-expanded=\"true\"]{background:rgb(245 244 239 / .08);}.ds-language:hover{background:rgb(245 244 239 / .08);}.ds-language:focus-visible{outline:2px solid oklch(.97 .007 75);outline-offset:4px;}@media(prefers-reduced-motion:reduce){.ds-language{transition:none;}}"
+    },
+    {
+      "name": "Inquiry field",
+      "kind": "input",
+      "refersTo": "inquiry-field",
+      "description": "Visible label, transparent field, quiet edge and amber caret.",
+      "html": "<label class=\"ds-field-label\" for=\"ds-name\">Meno</label><input id=\"ds-name\" class=\"ds-field\" name=\"name\" autocomplete=\"name\"/>",
+      "css": ".ds-field-label{display:block;font:400 1rem/1.65 var(--font-body-family,\"Karla\",sans-serif);color:var(--foreground,oklch(.92 .008 75));margin-bottom:8px;}.ds-field{width:100%;min-height:48px;border:1px solid rgb(245 244 239 / .4);background:transparent;border-radius:3px;color:var(--foreground,oklch(.92 .008 75));padding:10px 12px;font:400 1rem/1.5 var(--font-body-family,\"Karla\",sans-serif);caret-color:var(--amber,oklch(.72 .12 65));}.ds-field:focus-visible{outline:2px solid var(--foreground,oklch(.92 .008 75));outline-offset:5px;}"
+    },
+    {
+      "name": "Guest control",
+      "kind": "custom",
+      "refersTo": "guest-control",
+      "description": "44px circular controls with a tabular output; app supplies shared state/capacity.",
+      "html": "<div class=\"ds-guest\"><span id=\"ds-guest-label\">Dospelí (16+)</span><div class=\"ds-guest-controls\" role=\"group\" aria-labelledby=\"ds-guest-label\"><button type=\"button\" aria-label=\"− Dospelí (16+)\">−</button><output>2</output><button type=\"button\" aria-label=\"+ Dospelí (16+)\">+</button></div></div>",
+      "css": ".ds-guest{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px;font:400 1.0625rem/1.65 var(--font-body-family,\"Karla\",sans-serif);color:var(--foreground,oklch(.92 .008 75));}.ds-guest-controls{display:flex;align-items:center;gap:12px;flex-shrink:0;}.ds-guest button{width:44px;height:44px;border:1px solid rgb(245 244 239 / .4);border-radius:50%;font-size:1.375rem;line-height:1;color:inherit;background:transparent;cursor:pointer;transition:transform var(--motion-ui,160ms) var(--ease-ui,cubic-bezier(.23,1,.32,1)),background var(--motion-ui,160ms);}.ds-guest button:disabled{opacity:.4;cursor:default;}.ds-guest button:active:not(:disabled){transform:scale(.95);}.ds-guest button:focus-visible{outline:2px solid var(--foreground,oklch(.92 .008 75));outline-offset:5px;}.ds-guest output{min-width:24px;text-align:center;font-variant-numeric:tabular-nums;font-size:1.25rem;}@media(hover:hover) and (pointer:fine){.ds-guest button:hover:not(:disabled){background:rgb(245 244 239 / .12);}}@media(prefers-reduced-motion:reduce){.ds-guest button:active:not(:disabled){transform:none;}}"
+    },
+    {
+      "name": "Calendar day",
+      "kind": "button",
+      "refersTo": "calendar-day",
+      "description": "44px selected endpoint; range middle uses translucent amber. App supplies date logic.",
+      "html": "<button type=\"button\" class=\"ds-day\" aria-pressed=\"true\" aria-label=\"Vybraný dátum\">14</button>",
+      "css": ".ds-day{display:inline-grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:var(--amber,oklch(.72 .12 65));color:var(--background,oklch(.06 .008 55));font:500 1rem/1 var(--font-body-family,\"Karla\",sans-serif);cursor:pointer;transition:transform var(--motion-ui,160ms) var(--ease-ui,cubic-bezier(.23,1,.32,1));}.ds-day[aria-pressed=\"false\"]{background:transparent;color:var(--foreground,oklch(.92 .008 75));}.ds-day:hover{background:var(--amber,oklch(.72 .12 65));}.ds-day:active{transform:scale(.95);}.ds-day:focus-visible{outline:2px solid var(--foreground,oklch(.92 .008 75));outline-offset:5px;}.ds-day:disabled{opacity:.38;}@media(prefers-reduced-motion:reduce){.ds-day:active{transform:none;}}"
+    },
+    {
+      "name": "Gallery cover caption",
+      "kind": "custom",
+      "refersTo": "gallery-cover",
+      "description": "Caption and open affordance extracted without external imagery; application pairs them with owner photographs.",
+      "html": "<button type=\"button\" class=\"ds-cover\"><span class=\"ds-cover-open\" aria-hidden=\"true\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10M7 17 17 7\"/></svg></span><span class=\"ds-cover-caption\"><span class=\"ds-cover-title\">Interiér</span><span class=\"ds-cover-description\">Obývačka s kozubom</span></span></button>",
+      "css": ".ds-cover{position:relative;display:block;width:100%;min-height:260px;overflow:clip;border:0;border-radius:3px;text-align:left;background:rgb(255 255 255 / .04);padding:0;color:oklch(.97 .007 75);isolation:isolate;cursor:pointer;}.ds-cover::before{content:\"\";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgb(0 0 0 / .78));}.ds-cover-caption{position:absolute;bottom:24px;left:24px;right:24px;}.ds-cover-title{display:block;font:600 2.5rem/1 var(--font-display-family,\"Thunder\",sans-serif);margin-bottom:8px;}.ds-cover-description{display:block;font:400 1rem/1.4 var(--font-body-family,\"Karla\",sans-serif);}.ds-cover-open{position:absolute;top:16px;right:16px;width:40px;height:40px;display:grid;place-items:center;border:1px solid rgb(255 255 255 / .6);border-radius:50%;color:white;font:400 1.5rem/1 var(--font-body-family,\"Karla\",sans-serif);background:rgb(0 0 0 / .2);}.ds-cover:active .ds-cover-open{transform:scale(.95);}.ds-cover:focus-visible{outline:2px solid var(--foreground,oklch(.92 .008 75));outline-offset:5px;}@media(prefers-reduced-motion:reduce){.ds-cover:active .ds-cover-open{transform:none;}}"
     }
   ],
   "narrative": {
     "northStar": "Dark Timber",
-    "overview": "The inherited identity pairs deep charcoal, warm amber and pale type with the\nexisting chalet logo. Its source describes arrival at dusk: a warm chalet against\ndark pine forest. Condensed display lettering gives the identity weight; lighter\nbody text keeps information readable.\n\nThe implemented hero is a scoped expression of that identity: supplied exterior\nfootage, a compact two-line property name and a clear availability action. Its\nminimal composition and restrained response to input apply to this hero, not to\nevery future page layout.",
+    "overview": "The established Dark Timber identity pairs a near-black ground, pale type and the existing chalet logo with real property photography. The owner-approved premium refinement lets the chalet carry the page: generous space, condensed headings, quiet prose and functional controls.\n\nThe hero retains its supplied footage, two-tone property name and authored letter entrance. Below it, the same identity becomes an editorial sequence of rooms, amenities, location and a direct inquiry. Motion clarifies arrival, image changes and user input; it does not add ornaments.",
     "keyCharacteristics": [
-      "Inherited dark surfaces, amber accents and the existing logo.",
-      "Bebas Neue display type, Karla prose and JetBrains Mono data labels.",
-      "Hero-specific pale controls, static contrast shading and brief entrance motion."
+      "A continuous dark ground with photography carrying the product.",
+      "Thunder headings, Karla prose and JetBrains Mono for actual tabular price data.",
+      "Amber for actions, money and calendar selection below the hero.",
+      "Stationary action targets, visible focus and reduced-motion alternatives."
     ],
-    "rules": [],
+    "rules": [
+      {
+        "name": "The Functional Amber Rule",
+        "body": "Below the hero, amber marks actions, money and calendar selection. Keep editorial prose and descriptive headings neutral; retain the existing hero and navigation exceptions.",
+        "section": "colors"
+      },
+      {
+        "name": "The Real Property Rule",
+        "body": "Use the owner-selected chalet photographs with truthful localized descriptions. Preserve the originals and do not substitute stock or generated interiors.",
+        "section": "components"
+      },
+      {
+        "name": "The Motion Purpose Rule",
+        "body": "Use the shared motion vocabulary for content arrival and functional state changes. Add no new cursor effect, ornamental panel, counting number, glow or magnetic action below the hero.",
+        "section": "components"
+      }
+    ],
     "dos": [
-      "Do retain the inherited logo, Dark Timber palette and three font families.",
-      "Do keep hero copy and actions legible over both the poster and moving footage.",
-      "Do preserve visible keyboard focus, stationary action hit areas and reduced-motion behavior in the hero and navigation."
+      "Do retain the existing logo and the Thunder, Karla and JetBrains Mono role separation.",
+      "Do keep photographs, heading masks and motion wrappers separate so effects do not overwrite one another.",
+      "Do preserve 44px calendar and guest controls, visible focus and reduced-motion behavior.",
+      "Do keep prices and inquiry details consistent with the shared pricing and guest state.",
+      "Do preserve the hero composition and its specific entrance as an existing authored exception."
     ],
     "donts": [
-      "Don't promote the hero's two-line title, lower-left composition or 1600px container into a mandatory site-wide layout.",
-      "Don't add invented ratings, prices or instant-booking promises to the hero.",
-      "Don't replace poster-first compact playback with automatic video loading."
+      "Don't reintroduce Bebas Neue, legacy amber/ghost button utilities or decorative glow.",
+      "Don't turn descriptive sections into repeated bordered cards or add new ornaments below the hero.",
+      "Don't make the hero's two-line title, local sand color or lower-left composition mandatory for every section.",
+      "Don't invent ratings, distances, payment conditions, response times or instant-booking guarantees.",
+      "Don't gate hero autoplay on network guesses; Save-Data and reduced motion remain the opt-outs."
     ]
   }
 }

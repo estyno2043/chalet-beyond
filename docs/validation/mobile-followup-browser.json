@@ -1,0 +1,671 @@
+{
+  "date": "2026-10-01T15:23:49.702Z",
+  "base": "http://localhost:4180",
+  "results": [
+    {
+      "engine": "chromium",
+      "lang": "sk",
+      "width": 430,
+      "height": 740,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 740,
+          "height": 740
+        },
+        "title": {
+          "top": 256.375,
+          "bottom": 442.84375,
+          "height": 186.46875
+        },
+        "cta": {
+          "top": 521.625,
+          "bottom": 579.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 617.625,
+          "bottom": 722,
+          "height": 104.375
+        },
+        "innerHeight": 740,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 259,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 592,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 925,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 444,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 74,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "lang": "de",
+      "width": 390,
+      "height": 664,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 664,
+          "height": 664
+        },
+        "title": {
+          "top": 185.140625,
+          "bottom": 352.453125,
+          "height": 167.3125
+        },
+        "cta": {
+          "top": 431.234375,
+          "bottom": 489.234375,
+          "height": 58
+        },
+        "stats": {
+          "top": 527.234375,
+          "bottom": 646,
+          "height": 118.765625
+        },
+        "innerHeight": 664,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 232,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 531,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 830,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 398,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 66,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "lang": "en",
+      "width": 375,
+      "height": 600,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 600,
+          "height": 600
+        },
+        "title": {
+          "top": 151.65625,
+          "bottom": 302.84375,
+          "height": 151.1875
+        },
+        "cta": {
+          "top": 381.625,
+          "bottom": 439.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 477.625,
+          "bottom": 582,
+          "height": 104.375
+        },
+        "innerHeight": 600,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 210,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 480,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 750,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 360,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 60,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "chromium",
+      "lang": "pl",
+      "width": 320,
+      "height": 568,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 568,
+          "height": 568
+        },
+        "title": {
+          "top": 131.0625,
+          "bottom": 270.84375,
+          "height": 139.78125
+        },
+        "cta": {
+          "top": 349.625,
+          "bottom": 407.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 445.625,
+          "bottom": 550,
+          "height": 104.375
+        },
+        "innerHeight": 568,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 199,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 454,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 710,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 341,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 57,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "sk",
+      "width": 430,
+      "height": 740,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 740,
+          "height": 740
+        },
+        "title": {
+          "top": 256.375,
+          "bottom": 442.84375,
+          "height": 186.46875
+        },
+        "cta": {
+          "top": 521.625,
+          "bottom": 579.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 617.625,
+          "bottom": 722,
+          "height": 104.375
+        },
+        "innerHeight": 740,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 259,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 592,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 925,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 444,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 74,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 740,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "de",
+      "width": 390,
+      "height": 664,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 664,
+          "height": 664
+        },
+        "title": {
+          "top": 185.140625,
+          "bottom": 352.453125,
+          "height": 167.3125
+        },
+        "cta": {
+          "top": 431.234375,
+          "bottom": 489.234375,
+          "height": 58
+        },
+        "stats": {
+          "top": 527.234375,
+          "bottom": 646,
+          "height": 118.765625
+        },
+        "innerHeight": 664,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 232,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 531,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 830,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 398,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 66,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 664,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "en",
+      "width": 375,
+      "height": 600,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 600,
+          "height": 600
+        },
+        "title": {
+          "top": 151.65625,
+          "bottom": 302.84375,
+          "height": 151.1875
+        },
+        "cta": {
+          "top": 381.625,
+          "bottom": 439.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 477.625,
+          "bottom": 582,
+          "height": 104.375
+        },
+        "innerHeight": 600,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 210,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 480,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 750,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 360,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 60,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 600,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "engine": "webkit",
+      "lang": "pl",
+      "width": 320,
+      "height": 568,
+      "initial": {
+        "hero": {
+          "top": 0,
+          "bottom": 568,
+          "height": 568
+        },
+        "title": {
+          "top": 131.09375,
+          "bottom": 270.84375,
+          "height": 139.75
+        },
+        "cta": {
+          "top": 349.625,
+          "bottom": 407.625,
+          "height": 58
+        },
+        "stats": {
+          "top": 445.625,
+          "bottom": 550,
+          "height": 104.375
+        },
+        "innerHeight": 568,
+        "bar": false,
+        "overflow": false
+      },
+      "samples": [
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 198,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 454,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 710,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 340,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 56,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        },
+        {
+          "scroll": 0,
+          "heroWorldTop": 0,
+          "sheetWorldTop": 568,
+          "transform": "none",
+          "dim": false
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "limitation": "WebKit/Chrome emulation. Safari toolbar, physical iPhone inertia and rubber-band not reproduced."
+}

@@ -1,0 +1,12 @@
+{
+  "frames": 144,
+  "p95": 16.800000000000182,
+  "over50ms": 0,
+  "paintEvents": 330,
+  "paintMs": 49.09700000000007,
+  "url": "http://localhost:4180/",
+  "cpuThrottle": 4,
+  "scrollRangePx": [0, 1000],
+  "durationMs": 2400,
+  "limit": "Short desktop hero-to-intro trace. Invalid paint-bound sentinel coordinates omitted; this does not prove full-page or physical-device performance."
+}

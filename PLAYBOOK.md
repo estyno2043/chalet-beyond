@@ -150,8 +150,8 @@ Netlify → *Site configuration → Environment variables*.
 najprv do knižnice komponentov znamená poskladané kusy, nie dizajn.
 
 1. **Impeccable** — `/impeccable audit`, `/impeccable polish` na rozloženie,
-   spacing, typografiu. ⚠️ `/impeccable init` sa ešte nespúšťal; kým nevznikne
-   `DESIGN.md`, ostatné príkazy nemajú kontext projektu.
+   spacing, typografiu. Kontext berie z `DESIGN.md`, `PRODUCT.md` a
+   `.impeccable/design.json`.
 2. **Emilove skills** — `emil-design-eng`, `animate`, `improve-animations`,
    `review-animations` na pohyb a detaily.
 3. **Knižnice** — Cult UI, Aceternity, Magic UI, Motion Primitives, Eldora,
@@ -162,9 +162,20 @@ Podrobne: [docs/UI_LIBRARIES.md](docs/UI_LIBRARIES.md).
 
 ### Vizuálny jazyk
 
-Nordic Brutalism / Dark Timber. Pozadie `oklch(0.06–0.14 …)`, jantárový akcent
-`oklch(0.72 0.12 65)`, `border-radius: 2px`.
-Bebas Neue (nadpisy) · Karla (text) · JetBrains Mono (štítky).
+**Záväzný je [DESIGN.md](DESIGN.md)** — verzia z 2026-10-01 (prémiový redizajn
+podľa zadania majiteľa, [docs/source/frontend-premium-plan.md](docs/source/frontend-premium-plan.md)).
+Tu len skratka:
+
+- **Dark Timber** — súvislé tmavé pozadie `oklch(0.06 0.008 55)`, produkt nesú
+  skutočné fotografie chaletu, žiadne dekoratívne panely ani karty v kartách.
+- **Thunder** (všetky nadpisy) · **Karla** (text, ovládanie) · **JetBrains Mono**
+  len v cenách tabuľky sadzieb. Bebas Neue sa už nepoužíva.
+- **Jantár `oklch(0.72 0.12 65)`** pod hero len na akcie, peniaze a vybraté
+  dátumy — nie na nadpisy a texty.
+- Hero má vlastnú kompozíciu (video, dvojfarebný názov, `hero-sand`) — je to
+  výnimka, nie vzor pre ostatné sekcie.
+- Pohyb: maskované nadpisy, odhalenie fotiek raz, FLIP v galérii; pri reduced
+  motion len opacita. Žiadny glow, počítajúce čísla ani magnetické tlačidlá.
 
 ### Mobile-first je pravidlo, nie odporúčanie
 
@@ -235,6 +246,9 @@ sezónne ceny (neexistujú), „vhodné pre rodiny" bez výhrady.
 
 | Súbor | Na čo |
 |---|---|
+| [DESIGN.md](DESIGN.md) | záväzný dizajn systém (farby, typografia, layout, komponenty) |
+| [PRODUCT.md](PRODUCT.md) | účel webu, fakty a pokyny majiteľa k hero |
+| [docs/frontend-premium-implementation.md](docs/frontend-premium-implementation.md) | schválené zadanie sekcií pod hero a výsledky overenia |
 | [docs/BOOKING_ICAL.md](docs/BOOKING_ICAL.md) | ako získať iCal export, plán obojsmernej synchronizácie |
 | [docs/CODEX_REVIEW_ASSESSMENT.md](docs/CODEX_REVIEW_ASSESSMENT.md) | otvorené nálezy z review + kde s ním nesúhlasím |
 | [docs/UI_LIBRARIES.md](docs/UI_LIBRARIES.md) | skills a knižnice, poradie použitia |

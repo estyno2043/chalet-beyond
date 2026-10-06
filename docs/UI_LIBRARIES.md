@@ -19,7 +19,7 @@ Plugin `impeccable@impeccable`. 23 príkazov cez `/impeccable <príkaz> <cieľ>`
 | `/impeccable polish` | doladí spacing, hierarchiu, typografiu |
 | `/impeccable critique` | dizajnová kritika s odôvodnením |
 
-> ⚠️ `init` sa ešte **nespúšťal**. Kým nevznikne `DESIGN.md`, ostatné príkazy nemajú kontext o tomto projekte a budú hádať. Spustiť pred prvým väčším vizuálnym zásahom.
+> `init` je hotový — `DESIGN.md`, `PRODUCT.md` a `.impeccable/design.json` existujú (dizajn z 2026-10-01). Znova nespúšťať; pri zmene dizajnu aktualizovať `DESIGN.md`.
 
 ### Emil Kowalski — animácie a design engineering
 
@@ -42,7 +42,7 @@ Rieši presne to, čo agenti kazia najčastejšie — `ease-in` na nábehovú an
 
 ### Poradie pri vizuálnej práci
 
-1. `/impeccable init` (raz), potom `audit` alebo `polish` na rozloženie a spacing
+1. `/impeccable audit` alebo `polish` na rozloženie a spacing
 2. Emilove skills na pohyb a detaily
 3. Až potom siahnuť do knižníc nižšie po konkrétny komponent
 
@@ -64,7 +64,7 @@ Rieši presne to, čo agenti kazia najčastejšie — `ease-in` na nábehovú an
 
 ## Ako s tým pracovať v tomto projekte
 
-- Projekt má vlastný vizuálny jazyk (Nordic Brutalism / Dark Timber — pozri `client/src/pages/Home.tsx` hlavičkový komentár, `Bebas Neue` / `Karla` / `JetBrains Mono`, oklch farby, `amber-rule`). Komponenty z týchto knižníc **preniesť do existujúceho štýlu**, nekopírovať ich vlastné farby/fonty/border-radius.
+- Projekt má vlastný vizuálny jazyk — Dark Timber podľa [`DESIGN.md`](../DESIGN.md): Thunder / Karla / JetBrains Mono, oklch farby, jantár len na akcie, peniaze a vybraté dátumy. Komponenty z týchto knižníc **preniesť do existujúceho štýlu**, nekopírovať ich vlastné farby/fonty/border-radius.
 - `client/src/components/ui/` už obsahuje veľkú časť shadcn katalógu (`button`, `card`, `dialog`, `calendar`, ...) — pred pridaním nového komponentu skontrolovať, či ekvivalent už nie je v projekte.
-- Animácie stavať na `framer-motion` (už závislosť) a existujúcich helperoch `FadeUp`, `useScrollAnimation`, `TextRevealSection` — nepridávať druhú animačnú knižnicu popri Motion, ak sa dá to isté spraviť s tým, čo tu je.
+- Animácie stavať na `framer-motion` (už závislosť, cez `LazyMotion`) a spoločných krivkách a trvaniach v `client/src/lib/motion.ts` (`EASE`, `DUR`, `SPRING_*`) — nepridávať druhú animačnú knižnicu popri Motion, ak sa dá to isté spraviť s tým, čo tu je.
 - Pri kopírovaní komponentu z ktorejkoľvek knižnice vyššie: preniesť len markup + logiku, prepísať štýly na projektové oklch premenné a existujúce Tailwind utility triedy, nie vkladať cudzí design token systém.

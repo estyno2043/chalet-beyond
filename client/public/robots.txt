@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chaletbeyond.sk/sitemap.xml

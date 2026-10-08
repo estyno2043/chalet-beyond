@@ -34,3 +34,205 @@
     box-shadow: 0 -1px 0 oklch(0.72 0.12 65 / 0.18);
   }
 }
+
+/* Phone handoff. The desktop version is Framer styles on the hero box itself;
+   on iPhone that jumped during inertial scroll and was removed (see
+   docs/validation/mobile-followup.md). This one is a native scroll timeline
+   with no JS, and the hero and sheet boxes never move. Inside the hero, the
+   photo and the copy recede together as one card — same scale and drift as
+   desktop, rounded like it — while the hero darkens and the sheet's rounded
+   lip flattens as it docks at the top. */
+@supports (animation-timeline: view()) {
+  @media (max-width: 767px) {
+    .hero-handoff__hero {
+      view-timeline: --hero-exit block;
+    }
+    .hero-handoff__hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      background: oklch(0.06 0.008 55);
+      pointer-events: none;
+      animation: hero-handoff-dim linear both;
+      animation-timeline: --hero-exit;
+      animation-range: exit 0% exit 100%;
+    }
+    /* Clip, not hidden: no scroll container, so sticky children still work. */
+    .hero-handoff__sheet {
+      overflow: clip;
+      animation: hero-handoff-dock linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+
+  /* `translate` and `scale` rather than `transform`: they compose with the
+     media's own entrance zoom (hero.css) instead of replacing it. */
+  @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+    /* One shared vanishing point, so photo and copy tip back as one card. */
+    .hero-handoff__hero .chalet-hero {
+      perspective: 900px;
+    }
+    .hero-handoff__hero .chalet-hero__media,
+    .hero-handoff__hero .chalet-hero__layout {
+      animation: hero-handoff-recede linear both;
+      animation-timeline: --hero-exit;
+      animation-range: exit 0% exit 100%;
+    }
+    .hero-handoff__hero .chalet-hero__media {
+      animation-name: hero-handoff-recede, hero-handoff-round;
+    }
+
+    /* The name peels off the card letter by letter, CHALET first, as the
+       card falls back. The entrance (hero-entrance.ts) only fills backwards,
+       so it has let go of these letters long before anyone scrolls. */
+    .hero-handoff__hero .chalet-hero__letter {
+      --i: 0;
+      animation: hero-handoff-lift linear both;
+      animation-timeline: --hero-exit;
+      animation-range: exit calc((var(--i) + var(--line, 0)) * 5%) exit
+        calc(40% + (var(--i) + var(--line, 0)) * 5%);
+    }
+    .hero-handoff__hero .chalet-hero__line + .chalet-hero__line {
+      --line: 3;
+    }
+    .hero-handoff__hero .chalet-hero__letter:nth-child(2) {
+      --i: 1;
+    }
+    .hero-handoff__hero .chalet-hero__letter:nth-child(3) {
+      --i: 2;
+    }
+    .hero-handoff__hero .chalet-hero__letter:nth-child(4) {
+      --i: 3;
+    }
+    .hero-handoff__hero .chalet-hero__letter:nth-child(5) {
+      --i: 4;
+    }
+    .hero-handoff__hero .chalet-hero__letter:nth-child(6) {
+      --i: 5;
+    }
+
+    /* The next section's panorama settles as it arrives. Timed by the
+       section: the backdrop clips (overflow: hidden), which would make it
+       the photo's own scroller and freeze a plain view(). */
+    .intro-section {
+      view-timeline: --intro-arrive block;
+    }
+    /* Its text arrives over the whole climb, not in the first glance: the
+       headline drops in from the viewer — large and clear to its size — as
+       the hero falls away from them, landing as the sheet docks; then each
+       fact rises. Timelines sit on untransformed wrappers; the moving
+       children only read them. */
+    .intro-header {
+      view-timeline: --intro-head block;
+    }
+    .intro-header .heading-mask {
+      animation: hero-handoff-drop-in linear both;
+      animation-timeline: --intro-head;
+      animation-range: entry 0% cover 60%;
+    }
+    .intro-header .heading-mask + .heading-mask {
+      animation-range: entry 15% cover 70%;
+    }
+    .intro-facts > div {
+      view-timeline: --intro-fact block;
+    }
+    .intro-facts dt,
+    .intro-facts dd {
+      animation: hero-handoff-rise linear both;
+      animation-timeline: --intro-fact;
+      animation-range: entry 0% cover 50%;
+    }
+    .intro-facts dd {
+      animation-range: entry 15% cover 58%;
+    }
+    .intro-backdrop .section-backdrop__photo img {
+      animation: hero-handoff-settle linear both;
+      animation-timeline: --intro-arrive;
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+@keyframes hero-handoff-dim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.72;
+  }
+}
+@keyframes hero-handoff-recede {
+  from {
+    translate: 0 0;
+    scale: 1;
+  }
+  to {
+    translate: 0 20%;
+    rotate: x 14deg;
+    scale: 0.88;
+  }
+}
+@keyframes hero-handoff-lift {
+  from {
+    translate: 0 0;
+    opacity: 1;
+  }
+  to {
+    translate: 0 -160%;
+    opacity: 0;
+  }
+}
+@keyframes hero-handoff-settle {
+  from {
+    scale: 1.2;
+  }
+  to {
+    scale: 1;
+  }
+}
+@keyframes hero-handoff-round {
+  from {
+    clip-path: inset(0 round 0);
+  }
+  to {
+    clip-path: inset(0 round 32px);
+  }
+}
+@keyframes hero-handoff-dock {
+  from {
+    border-top-left-radius: 28px;
+    border-top-right-radius: 28px;
+  }
+  to {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+@keyframes hero-handoff-drop-in {
+  from {
+    translate: 0 40%;
+    scale: 1.6;
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  to {
+    translate: 0 0;
+    scale: 1;
+    opacity: 1;
+  }
+}
+@keyframes hero-handoff-rise {
+  from {
+    translate: 0 56px;
+    scale: 0.92;
+    opacity: 0;
+  }
+  to {
+    translate: 0 0;
+    scale: 1;
+    opacity: 1;
+  }
+}

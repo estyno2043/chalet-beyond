@@ -103,6 +103,8 @@ export function HeroPointer({
     };
   }, [surface]);
 
+  // The prerendered hero has no <body> to portal into, and needs no cursor.
+  if (typeof document === "undefined") return null;
   // Portalled to <body>: the hero is transformed while it is pushed back, and
   // a fixed element inside a transformed ancestor stops tracking the viewport.
   return createPortal(

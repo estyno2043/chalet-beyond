@@ -152,11 +152,87 @@
   position: relative;
   z-index: 1;
 }
+/* Heading rhythm down the page: centred intro, left gallery, then the two
+   mood sections centred (this pause and the amenities), then left again
+   where the content is read and acted on. */
 .photo-interlude .section-header {
   margin: 0;
+  text-align: center;
+}
+/* The window behind the heading is the brightest part of the photo: a soft
+   dark band across the middle keeps the pale heading readable over it. */
+.photo-interlude .photo-shade {
+  background:
+    radial-gradient(
+      ellipse 90% 34% at 50% 50%,
+      rgb(0 0 0 / 0.5),
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.3),
+      rgb(0 0 0 / 0.32) 35%,
+      rgb(0 0 0 / 0.72)
+    );
+}
+.photo-interlude h2 {
+  text-shadow: 0 2px 24px rgb(0 0 0 / 0.45);
+}
+/* Tatry za oknom: the view arrives the way a window does in the morning.
+   A closed blind covers the photo as the section comes up and its slats
+   tilt open top to bottom with the scroll, edge-on by the time the section
+   is centred — the slat tilt of BlindDisclosure, on the window itself.
+   Without scroll timelines, or with reduced motion, the blind is not drawn. */
+.interlude-blind {
+  display: none;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .photo-interlude {
+      view-timeline: --interlude block;
+    }
+    .interlude-blind {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      perspective: 900px;
+      pointer-events: none;
+    }
+    .interlude-blind span {
+      flex: 1;
+      background: oklch(0.12 0.01 55);
+      border-bottom: 1px solid oklch(0.2 0.012 60);
+      animation: interlude-slat-open both;
+      animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+      animation-timeline: --interlude;
+      animation-range: entry calc(30% + var(--slat) * 4%) cover
+        calc(32% + var(--slat) * 1.5%);
+    }
+  }
+}
+@keyframes interlude-slat-open {
+  from {
+    rotate: x 0deg;
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  to {
+    rotate: x -88deg;
+    opacity: 0;
+  }
 }
 .photo-interlude h2 {
   font-size: clamp(3.75rem, 7vw, 7rem);
+}
+.amenities-section .section-header,
+.featured-amenities figcaption {
+  text-align: center;
+}
+.amenities-section .section-header p {
+  margin-inline: auto;
 }
 @supports (animation-timeline: view()) {
   @keyframes photo-drift {
@@ -824,6 +900,8 @@
   display: block;
   width: 100%;
   height: auto;
+  /* The peaks rise above the mark into the footer's top padding. */
+  overflow: visible;
 }
 .footer-contact {
   display: flex;
@@ -1046,8 +1124,24 @@
     height: 80svh;
     min-height: 500px;
   }
+  /* A statement across the photo: the longest line fills the container.
+     --interlude-em is that line's width in em (Thunder, measured from
+     copy.ts); update it when the interlude copy changes. */
+  .photo-interlude {
+    --interlude-em: 4.6;
+  }
+  :lang(en) .photo-interlude {
+    --interlude-em: 6.2;
+  }
+  :lang(de) .photo-interlude {
+    --interlude-em: 6.45;
+  }
   .photo-interlude h2 {
-    font-size: clamp(3.5rem, 12vw, 5rem);
+    font-size: clamp(
+      2.5rem,
+      calc((100vw - 48px) / var(--interlude-em)),
+      6.5rem
+    );
   }
   .featured-amenities {
     grid-template-columns: 1fr;

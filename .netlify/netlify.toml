@@ -1,16 +1,15 @@
+functionsDirectory = "/Users/goat/chalet-beyond/netlify/functions"
+functionsDirectoryOrigin = "default"
 headersOrigin = "config"
 redirectsOrigin = "config"
 plugins = []
-
-[functions]
-
-[functions."*"]
 
 [build]
 publish = "/Users/goat/chalet-beyond/dist/public"
 publishOrigin = "config"
 commandOrigin = "config"
 command = "pnpm build"
+functions = "/Users/goat/chalet-beyond/netlify/functions"
 
 [build.environment]
 NODE_VERSION = "20"
@@ -28,6 +27,15 @@ PNPM_VERSION = "10"
 
 [build.services]
 
+[dev]
+command = "pnpm dev"
+targetPort = 3000.0
+port = 8888.0
+
+[functions]
+
+[functions."*"]
+
 [[headers]]
 for = "/assets/*"
 
@@ -35,11 +43,22 @@ for = "/assets/*"
 Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-for = "/videos/*"
+for = "/media/hero/*"
 
 [headers.values]
-Cache-Control = "public, max-age=2592000"
-Accept-Ranges = "bytes"
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/fonts/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/photos/*"
+
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
 
 [[redirects]]
 from = "/*"

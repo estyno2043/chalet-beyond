@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Same four pages and hreflang set as client/index.html; keep them in step. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://chaletbeyond.sk/</loc>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://chaletbeyond.sk/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://chaletbeyond.sk/de" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://chaletbeyond.sk/en" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://chaletbeyond.sk/pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chaletbeyond.sk/" />
+  </url>
+  <url>
+    <loc>https://chaletbeyond.sk/de</loc>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://chaletbeyond.sk/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://chaletbeyond.sk/de" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://chaletbeyond.sk/en" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://chaletbeyond.sk/pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chaletbeyond.sk/" />
+  </url>
+  <url>
+    <loc>https://chaletbeyond.sk/en</loc>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://chaletbeyond.sk/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://chaletbeyond.sk/de" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://chaletbeyond.sk/en" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://chaletbeyond.sk/pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chaletbeyond.sk/" />
+  </url>
+  <url>
+    <loc>https://chaletbeyond.sk/pl</loc>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://chaletbeyond.sk/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://chaletbeyond.sk/de" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://chaletbeyond.sk/en" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://chaletbeyond.sk/pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://chaletbeyond.sk/" />
+  </url>
+</urlset>

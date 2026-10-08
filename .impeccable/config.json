@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "1.1875rem",
+        "createdAt": "2026-10-06T08:56:50.097Z",
+        "reason": "Agent: DESIGN.md Typography documents hero description at 1.1875rem from 1024px; pre-existing line, not changed here"
+      }
+    ]
+  }
+}

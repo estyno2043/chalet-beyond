@@ -16,15 +16,15 @@ vi.mock("resend", () => ({
     emails = { send };
   },
 }));
-vi.mock("./lib/feeds", () => ({
+vi.mock("../functions/lib/feeds", () => ({
   feedUrls: () => [],
   loadBlockedDates: vi.fn(),
 }));
-vi.mock("./lib/rate-limit", () => ({ exceedsLimit: () => false }));
+vi.mock("../functions/lib/rate-limit", () => ({ exceedsLimit: () => false }));
 vi.mock("../../shared/pricing-promotions", () => ({
   ACTIVE_PROMOTIONS: promotions,
 }));
-import inquiry from "./inquiry";
+import inquiry from "../functions/inquiry";
 
 const request = (to: string) =>
   new Request("http://localhost/api/inquiry", {

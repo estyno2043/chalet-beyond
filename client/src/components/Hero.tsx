@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { CalendarDays, Star } from "lucide-react";
 import { useT } from "@/i18n/LanguageProvider";
 import {
@@ -8,6 +14,7 @@ import {
   PHONE_DISPLAY,
 } from "@shared/contact";
 import { PRICE_PER_NIGHT } from "@shared/pricing";
+import { playTitleEntrance, titleFontReady } from "./hero-entrance";
 import { HeroPointer } from "./HeroPointer";
 import { RollLink } from "./RollButton";
 import "./hero.css";
@@ -21,21 +28,6 @@ const PRICE_FROM = Math.min(...Object.values(PRICE_PER_NIGHT));
 
 const LINES = ["CHALET", "BEYOND"] as const;
 
-/*
- * Title entrance. Every letter appears at the hero's centre and glides left
- * into its slot; CHALET runs first, BEYOND follows once CHALET is mostly home.
- * The whole sequence is ~1.3 s — about what the first video frame needs — so
- * the wait reads as choreography instead of a loading poster.
- */
-const LETTER_MS = 680;
-const LETTER_STAGGER_MS = 34;
-/** BEYOND starts when CHALET's last letter is halfway in: a short gap, not a pause. */
-const SECOND_LINE_AT_MS =
-  (LINES[0].length - 1) * LETTER_STAGGER_MS + LETTER_MS * 0.5;
-/** Share of each letter's time spent appearing at the centre before it glides. */
-const APPEAR_AT = 0.16;
-/** Quint out: long enough a tail that the glide reads as travel, not a jump. */
-const EASE_GLIDE = "cubic-bezier(0.22, 1, 0.36, 1)";
 /** The curtain never lifts before the title has started to land, nor waits past this. */
 const CURTAIN_MIN_MS = 650;
 const CURTAIN_MAX_MS = 1600;
@@ -45,6 +37,9 @@ const connection = () =>
   (navigator as Navigator & { connection?: Connection }).connection;
 
 function readMediaPreferences() {
+  // Prerendered markup carries no video; the browser decides once React runs.
+  if (typeof window === "undefined")
+    return { desktop: false, reduced: false, autoplay: false };
   const desktop = window.matchMedia("(min-width: 1024px)").matches;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // Save-Data is an explicit choice by the guest; it is the one signal that
@@ -59,7 +54,17 @@ export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const mountedAt = useRef(performance.now());
+  // Set by the boot script on prerendered pages, where the hero is already on
+  // screen and its entrance under way before this component mounts.
+  const [boot] = useState(() =>
+    typeof window === "undefined" ? undefined : window.__heroBoot
+  );
+  const mountedAt = useRef(boot?.startedAt ?? performance.now());
+  // The prerendered copy and facts began rising when the page was parsed;
+  // shifting React's reveal delays by that much continues them, not restarts.
+  const [revealShift] = useState(() =>
+    boot ? Math.round(performance.now() - boot.parsedAt) : 0
+  );
   const [preferences, setPreferences] = useState(readMediaPreferences);
   const [hasFrame, setHasFrame] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -84,73 +89,32 @@ export function Hero() {
     };
   }, []);
 
-  // Letters: measured once the display face is in, so every letter starts from
-  // the real centre and lands on its real slot. WAAPI keeps it on the
-  // compositor while the video and the rest of the page are still loading.
+  // Letters: see hero-entrance.ts. Runs before paint, so React's own letters
+  // never show in a different state from the prerendered ones they replace.
   useLayoutEffect(() => {
     const title = titleRef.current;
     const section = sectionRef.current;
     if (!intro || !title || !section) return;
 
     let cancelled = false;
-    const animations: Animation[] = [];
-    const start = () => {
-      if (cancelled) return;
-      const centre = section.getBoundingClientRect();
-      const centreX = centre.left + centre.width / 2;
-      title.querySelectorAll<HTMLElement>("[data-line]").forEach(line => {
-        const lineIndex = Number(line.dataset.line);
-        const lineDelay = lineIndex * SECOND_LINE_AT_MS;
-        line.querySelectorAll<HTMLElement>("[data-letter]").forEach((letter, i) => {
-          const box = letter.getBoundingClientRect();
-          const dx = centreX - (box.left + box.width / 2);
-          animations.push(
-            letter.animate(
-              [
-                // Born at the centre: fades up almost in place…
-                {
-                  opacity: 0,
-                  transform: `translate3d(${dx}px, 0, 0) scale(1.06)`,
-                  filter: "blur(8px)",
-                  easing: "ease-out",
-                },
-                {
-                  opacity: 1,
-                  transform: `translate3d(${dx * 0.94}px, 0, 0) scale(1.04)`,
-                  filter: "blur(3px)",
-                  offset: APPEAR_AT,
-                  easing: EASE_GLIDE,
-                },
-                // …then glides left into its slot and sharpens on arrival.
-                {
-                  opacity: 1,
-                  transform: "translate3d(0, 0, 0) scale(1)",
-                  filter: "blur(0px)",
-                },
-              ],
-              {
-                duration: LETTER_MS,
-                delay: lineDelay + i * LETTER_STAGGER_MS,
-                fill: "backwards",
-              }
-            )
-          );
-        });
+    let animations: Animation[] = [];
+    if (boot?.startedAt !== undefined) {
+      animations = playTitleEntrance(
+        section,
+        title,
+        performance.now() - boot.startedAt
+      );
+    } else {
+      void titleFontReady().then(() => {
+        if (!cancelled) animations = playTitleEntrance(section, title);
       });
-      title.dataset.intro = "running";
-    };
-
-    // A slow font must not hold the title hostage: after 700 ms the letters go
-    // with whatever face is on screen.
-    const fontReady = document.fonts?.load("600 1em Thunder") ?? Promise.resolve();
-    const fallback = new Promise(resolve => setTimeout(resolve, 700));
-    void Promise.race([fontReady, fallback]).then(start, start);
+    }
 
     return () => {
       cancelled = true;
       animations.forEach(animation => animation.cancel());
     };
-  }, [intro]);
+  }, [intro, boot]);
 
   // Curtain: lifts on the first decoded frame, but not before the title has
   // started landing, and never later than CURTAIN_MAX_MS (poster underneath).
@@ -231,7 +195,6 @@ export function Hero() {
     };
   }, [enabled, source]);
 
-
   const stats = [
     {
       value: (
@@ -271,6 +234,11 @@ export function Hero() {
       className="chalet-hero"
       aria-labelledby="hero-title"
       data-intro={intro ? "on" : "off"}
+      style={
+        revealShift
+          ? ({ "--hero-shift": `-${revealShift}ms` } as CSSProperties)
+          : undefined
+      }
     >
       <div
         className="chalet-hero__media"

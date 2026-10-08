@@ -28,6 +28,38 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Language pages carry their own prerendered hero (scripts/prerender-hero.mjs).
+# Listed before the SPA fallback, which would otherwise answer with Slovak.
+[[redirects]]
+  from = "/de"
+  to = "/de.html"
+  status = 200
+
+[[redirects]]
+  from = "/de/"
+  to = "/de.html"
+  status = 200
+
+[[redirects]]
+  from = "/en"
+  to = "/en.html"
+  status = 200
+
+[[redirects]]
+  from = "/en/"
+  to = "/en.html"
+  status = 200
+
+[[redirects]]
+  from = "/pl"
+  to = "/pl.html"
+  status = 200
+
+[[redirects]]
+  from = "/pl/"
+  to = "/pl.html"
+  status = 200
+
 # SPA fallback — wouter handles client-side routes.
 [[redirects]]
   from = "/*"

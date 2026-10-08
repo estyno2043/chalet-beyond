@@ -7,7 +7,12 @@
   --hero-ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   isolation: isolate;
+  /* The hero box fills the largest viewport, so on load nothing below it
+     shows behind a translucent or collapsing browser bar (iOS 26 Safari
+     draws the page under its floating bar). Its layout stays at 100svh, so
+     copy and facts sit above the bar; only the photo runs on beneath it. */
   min-height: 100svh;
+  min-height: 100lvh;
   overflow: hidden;
   background: var(--hero-dark);
   color: var(--hero-ink);
@@ -386,32 +391,35 @@
   }
 }
 
-/* Entrance of everything but the title: one rise, staged behind the letters. */
+/* Entrance of everything but the title: one rise, staged behind the letters.
+   --hero-shift (negative, set by Hero.tsx) is how long the prerendered copy
+   has already been rising when React replaces it. */
 @media (prefers-reduced-motion: no-preference) {
   .chalet-hero[data-intro="on"] [data-reveal] {
     animation: hero-rise 820ms var(--hero-ease) both;
   }
   .chalet-hero[data-intro="on"] [data-reveal="1"] {
-    animation-delay: 620ms;
+    animation-delay: calc(620ms + var(--hero-shift, 0ms));
   }
   .chalet-hero[data-intro="on"] [data-reveal="2"] {
-    animation-delay: 720ms;
+    animation-delay: calc(720ms + var(--hero-shift, 0ms));
   }
   .chalet-hero[data-intro="on"] [data-reveal="3"] {
-    animation-delay: 880ms;
+    animation-delay: calc(880ms + var(--hero-shift, 0ms));
   }
   .chalet-hero[data-intro="on"] [data-reveal="4"] {
-    animation-delay: 940ms;
+    animation-delay: calc(940ms + var(--hero-shift, 0ms));
   }
   .chalet-hero[data-intro="on"] [data-reveal="5"] {
-    animation-delay: 1000ms;
+    animation-delay: calc(1000ms + var(--hero-shift, 0ms));
   }
   .chalet-hero[data-intro="on"] [data-reveal="6"] {
-    animation-delay: 1060ms;
+    animation-delay: calc(1060ms + var(--hero-shift, 0ms));
   }
   /* The hairline draws in from the left above the facts. */
   .chalet-hero[data-intro="on"] .chalet-hero__footer::before {
-    animation: hero-rule 1200ms var(--hero-ease) 800ms both;
+    animation: hero-rule 1200ms var(--hero-ease)
+      calc(800ms + var(--hero-shift, 0ms)) both;
   }
 }
 @keyframes hero-rule {

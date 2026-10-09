@@ -4,10 +4,10 @@ import { usePremiumCopy } from "./premium/copy";
 import { Meteors } from "./ui/meteors";
 
 /**
- * The chalet panorama behind the intro. The owner will supply a night photo:
- * export it with scripts/export-chalet-photos.py and change this one id.
+ * The chalet panorama behind the intro: the owner's night version of photo
+ * 39, so the meteors cross a real starry sky.
  */
-export const INTRO_PANORAMA_PHOTO_ID = 39;
+export const INTRO_PANORAMA_PHOTO_ID = 80;
 
 export function ChaletIntroSection() {
   const c = usePremiumCopy();

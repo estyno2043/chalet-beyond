@@ -9,15 +9,16 @@ Na webe je už nasadené: štruktúrované dáta (LodgingBusiness) s oficiálnou
 telefónom, e-mailom, adresou a súradnicami miesta na Mapách. To Googlu pomáha spojiť
 miesto s naším webom, ale samo o sebe Booking zo záznamu nevymení.
 
-## 1. Hneď (zadarmo, robí majiteľ — 10 minút)
+## 1. Hneď (zadarmo)
 
-1. Prihlásiť sa do Google účtu majiteľa, otvoriť Chalet Beyond na Mapách.
-2. **Navrhnúť úpravu** → web `https://chaletbeyond.sk`, telefón `+421 905 111 061`,
-   opraviť vybavenie (odstrániť fitcentrum a čo nesedí).
-   Google návrh posúdi sám; pri prenájmoch z Bookingu ho nemusí prijať.
-3. **Pridať fotky** → vlastné fotky chaty (z `assets/photos/lomnica`). Pribudnú medzi
-   fotky; tie z Bookingu tam zostanú, kým je inzerát na Bookingu aktívny.
-4. **Booking extranet** → opraviť vybavenie a údaje tam. Google ich preberá odtiaľ.
+Overené 9. 10. 2026: pri tomto zázname (Vila z Bookingu) Mapy **neponúkajú
+„Navrhnúť úpravu"** ani úpravu webu/telefónu — dáta patria Bookingu.
+Jediné, čo sa dá urobiť zadarmo:
+
+1. **Booking extranet** → opraviť vybavenie (fitcentrum, bezbariérový prístup,
+   zvieratá), popis a fotky. Google ich preberá odtiaľ.
+2. Na Mapách vpravo dole **„Odoslať spätnú väzbu k produktu"** → napísať, že
+   oficiálny web je chaletbeyond.sk. Je to len podnet pre Google, nič nezaručuje.
 
 ## 2. Náš web ako možnosť rezervácie na Mapách (plné riešenie)
 

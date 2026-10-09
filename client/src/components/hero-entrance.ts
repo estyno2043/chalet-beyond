@@ -69,9 +69,17 @@ export function playTitleEntrance(
   const animations: Animation[] = [];
 
   lines.forEach((line, lineIndex) => {
-    line.querySelectorAll<HTMLElement>("[data-letter]").forEach((letter, i) => {
+    const letters = line.querySelectorAll<HTMLElement>("[data-letter]");
+    // On phones the word spans the centre, so letters would be born on top
+    // of each other mid-word and fan out both ways. Start past the word's
+    // right end instead, so every letter still glides left.
+    const originX = Math.max(
+      centreX,
+      letters[letters.length - 1].getBoundingClientRect().right
+    );
+    letters.forEach((letter, i) => {
       const box = letter.getBoundingClientRect();
-      const dx = centreX - (box.left + box.width / 2);
+      const dx = originX - (box.left + box.width / 2);
       const animation = letter.animate(
         [
           // Born at the centre: fades up almost in place…

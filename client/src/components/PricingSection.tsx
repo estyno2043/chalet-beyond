@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import { PRICE_PER_NIGHT, CHILD_PRICE_PER_NIGHT } from "@shared/pricing";
 import { useGuests } from "@/contexts/GuestsContext";
 import { usePremiumCopy } from "./premium/copy";
@@ -21,8 +22,26 @@ export function PricingSection() {
   const { adults, children } = useGuests();
   const baseNight = PRICE_PER_NIGHT[adults] + children * CHILD_PRICE_PER_NIGHT;
   const startingPrice = Math.min(...Object.values(PRICE_PER_NIGHT));
+  const section = useRef<HTMLElement>(null);
+
+  // The backdrop photo covers the section, so a taller section would zoom it.
+  // Lift its bottom edge by the open price table's height to keep it still.
+  useLayoutEffect(() => {
+    const host = section.current!;
+    const panel = host.querySelector<HTMLElement>(".blind-disclosure__panel")!;
+    const observer = new ResizeObserver(() =>
+      host.style.setProperty("--price-table-height", `${panel.offsetHeight}px`)
+    );
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="cennik" className="premium-section pricing-section">
+    <section
+      ref={section}
+      id="cennik"
+      className="premium-section pricing-section"
+    >
       <SectionBackdrop
         photoId={PRICING_BACKDROP_PHOTO_ID}
         className="pricing-backdrop"

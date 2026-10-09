@@ -464,6 +464,9 @@
   position: relative;
   isolation: isolate;
 }
+.pricing-backdrop {
+  bottom: var(--price-table-height, 0px);
+}
 .pricing-backdrop .section-backdrop__photo {
   opacity: 0.18;
 }

@@ -17,8 +17,10 @@ export function startSmoothScroll() {
 
   new Lenis({
     autoRaf: true,
-    // Settles in ~200 ms: a glide that still answers the next wheel notch.
-    lerp: 0.08,
+    // Lenis damps at lerp × 60 per second: 0.14 is 95% of the way in ~350 ms,
+    // a glide that still answers the next wheel notch. 0.08 took ~600 ms and
+    // trailed the wheel.
+    lerp: 0.14,
     // The mobile menu and the price table scroll on their own.
     allowNestedScroll: true,
     // The lightbox and the mobile menu lock the page with overflow: hidden;

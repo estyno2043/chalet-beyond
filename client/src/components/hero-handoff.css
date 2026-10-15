@@ -43,10 +43,11 @@
    desktop, rounded like it — while the hero darkens and the sheet's rounded
    lip flattens as it docks at the top. */
 @supports (animation-timeline: view()) {
+  .hero-handoff__hero {
+    view-timeline: --hero-exit block;
+  }
+
   @media (max-width: 767px) {
-    .hero-handoff__hero {
-      view-timeline: --hero-exit block;
-    }
     .hero-handoff__hero::after {
       content: "";
       position: absolute;
@@ -83,7 +84,11 @@
     .hero-handoff__hero .chalet-hero__media {
       animation-name: hero-handoff-recede, hero-handoff-round;
     }
+  }
 
+  /* Shared by both widths: on desktop the hero box itself recedes (Framer,
+     HeroHandoff.tsx) while its name and the intro run on these timelines. */
+  @media (prefers-reduced-motion: no-preference) {
     /* The name peels off the card letter by letter, CHALET first, as the
        card falls back. The entrance (hero-entrance.ts) only fills backwards,
        so it has let go of these letters long before anyone scrolls. */

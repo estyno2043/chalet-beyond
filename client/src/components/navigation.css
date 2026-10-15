@@ -1,12 +1,8 @@
-/* Header height as one token: the menu overlay and anchor offsets read it, so
-   the contact strip (md and up) cannot push content under the bar unnoticed. */
+/* Header height as one token: the menu overlay and anchor offsets read it.
+   On xl the bar stands taller over the hero and settles to this once the
+   page scrolls, which is where anchors land. */
 :root {
   --nav-height: 72px;
-}
-@media (min-width: 768px) {
-  :root {
-    --nav-height: 100px;
-  }
 }
 
 .chalet-navigation {
@@ -23,9 +19,11 @@
   border-bottom: 1px solid transparent;
   background: transparent;
   color: var(--nav-ink);
+  /* Returning is unhurried; stepping aside (below) is quicker. */
   transition:
     background-color 280ms ease-out,
-    border-color 280ms ease-out;
+    border-color 280ms ease-out,
+    transform 420ms var(--nav-ease-out);
 }
 .chalet-navigation[data-scrolled="true"] {
   background: oklch(0.08 0.01 55 / 0.97);
@@ -34,15 +32,77 @@
 .chalet-navigation[data-open="true"] {
   background: oklch(0.06 0.008 55 / 0.98);
 }
+/* Over the hero a static scrim keeps the pale controls readable against
+   bright sky in the footage; it fades as the bar's own surface arrives. */
+.chalet-navigation::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -48px;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    oklch(0.06 0.008 55 / 0.55),
+    oklch(0.06 0.008 55 / 0)
+  );
+  pointer-events: none;
+  transition: opacity 280ms ease-out;
+}
+.chalet-navigation:is([data-scrolled="true"], [data-open="true"])::before {
+  opacity: 0;
+}
+/* Reading down past the hero, the bar slides out of the way. Keyboard focus
+   inside it keeps it on screen. */
+.chalet-navigation[data-hidden="true"]:not(:focus-within) {
+  transform: translate3d(0, calc(-100% - 2px), 0);
+  transition:
+    background-color 280ms ease-out,
+    border-color 280ms ease-out,
+    transform 280ms cubic-bezier(0.4, 0, 1, 1);
+}
 
-.chalet-navigation__contact,
+/* Reading progress: the amber hairline on the bar's lower edge fills with
+   the page. Native scroll timeline, no JS; elsewhere the static line stays. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .chalet-navigation::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 -1px;
+      height: 1px;
+      background: var(--nav-amber);
+      transform-origin: 0 50%;
+      opacity: 0;
+      transition: opacity 280ms ease-out;
+      animation: nav-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+    .chalet-navigation[data-scrolled="true"]::after {
+      opacity: 0.85;
+    }
+    .chalet-navigation[data-open="true"]::after {
+      opacity: 0;
+    }
+  }
+}
+@keyframes nav-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 .chalet-navigation__inner {
   width: min(100%, 1600px);
   padding-inline: 24px;
 }
+.chalet-navigation__actions {
+  gap: 8px;
+}
 .chalet-navigation__contact {
   gap: 24px;
-  height: 28px;
+  margin-right: 16px;
 }
 .chalet-navigation__contact a {
   display: inline-flex;
@@ -91,6 +151,7 @@
 }
 .chalet-navigation__inner {
   height: 72px;
+  transition: transform 420ms var(--nav-ease-out);
 }
 
 .chalet-navigation__logo {
@@ -102,6 +163,29 @@
 .chalet-navigation__logo img {
   width: auto;
   height: 46px;
+  transform-origin: 0 50%;
+  transition: transform 420ms var(--nav-ease-out);
+}
+
+/* xl: over the hero the row sits lower with a larger mark; once the page
+   moves both settle into the compact bar. Transforms only — the bar's box
+   stays 72px, so nothing is laid out again. */
+@media (min-width: 1280px) {
+  .chalet-navigation__inner {
+    transform: translate3d(0, 12px, 0);
+  }
+  .chalet-navigation__logo img {
+    height: 56px;
+  }
+  .chalet-navigation__actions {
+    gap: 12px;
+  }
+  .chalet-navigation[data-scrolled="true"] .chalet-navigation__inner {
+    transform: none;
+  }
+  .chalet-navigation[data-scrolled="true"] .chalet-navigation__logo img {
+    transform: scale(0.82);
+  }
 }
 
 /* Reserve: a RollButton, pale over the hero and amber once the hero is
@@ -172,7 +256,9 @@
   min-height: 64px;
   padding: 8px 4px;
   border-bottom: 1px solid oklch(0.72 0.12 65 / 0.18);
-  font: 600 2.25rem/1 "Thunder", var(--font-display-family);
+  font:
+    600 2.25rem/1 "Thunder",
+    var(--font-display-family);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: rgb(245 244 239 / 0.86);
@@ -219,13 +305,11 @@
 }
 
 @media (min-width: 640px) {
-  .chalet-navigation__contact,
   .chalet-navigation__inner {
     padding-inline: 40px;
   }
 }
 @media (min-width: 1024px) {
-  .chalet-navigation__contact,
   .chalet-navigation__inner {
     padding-inline: 64px;
   }
@@ -243,10 +327,20 @@
   }
 }
 
-/* The bar arrives with the hero title, a beat after it starts. */
+/* The bar arrives with the hero title, a beat after it starts: the mark
+   first, then each control in reading order. Fills backwards only, so hover
+   and press transforms own the controls once they land. Phone and e-mail
+   keep their own past-hero arrival. */
 @media (prefers-reduced-motion: no-preference) {
-  .chalet-navigation__inner {
-    animation: nav-arrive 900ms var(--nav-ease) 280ms both;
+  .chalet-navigation__logo,
+  .chalet-navigation__actions > :not(.chalet-navigation__contact) {
+    animation: nav-arrive 900ms var(--nav-ease) 280ms backwards;
+  }
+  .chalet-navigation__actions > :nth-child(2) {
+    animation-delay: 360ms;
+  }
+  .chalet-navigation__actions > :nth-child(3) {
+    animation-delay: 420ms;
   }
 }
 @keyframes nav-arrive {

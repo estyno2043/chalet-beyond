@@ -8,7 +8,6 @@ export const de: Dict = {
     cennik: "Preise",
     rezervacia: "Buchung",
     book: "Buchen",
-    explore: "Chalet ansehen",
     bookStay: "Aufenthalt buchen",
     writeUs: "Schreiben Sie uns",
     home: "Chalet Beyond — Startseite",

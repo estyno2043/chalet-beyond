@@ -8,7 +8,6 @@ export const pl: Dict = {
     cennik: "Cennik",
     rezervacia: "Rezerwacja",
     book: "Rezerwuj",
-    explore: "Zobacz chatę",
     bookStay: "Zarezerwuj pobyt",
     writeUs: "Napisz do nas",
     home: "Chalet Beyond — strona główna",

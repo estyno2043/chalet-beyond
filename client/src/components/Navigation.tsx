@@ -5,9 +5,11 @@
  * - Shares the hero's responsive gutters
  * - The reserve action is pale over the hero (it sits on footage next to the
  *   hero's pale CTA) and turns brand amber once the hero is behind the guest
- * - xl: language, a ghost "view the chalet" action and reserve — no links
- * - Below xl: reserve, language and a menu; the links live in the menu
- * - The phone/e-mail strip shows only once the hero is behind the guest
+ * - xl: phone and e-mail, language and reserve in one row — no links
+ * - Below xl: language, reserve and a menu; the links live in the menu
+ * - Phone and e-mail show only once the hero is behind the guest
+ * - Past the hero the bar steps aside while reading down and returns on the
+ *   first scroll up
  */
 import React from "react";
 import { usePastHero } from "@/hooks/usePastHero";
@@ -32,6 +34,30 @@ const HREFS = [
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/** True while the guest scrolls down; false on the first scroll up. */
+function useScrollingDown(active: boolean) {
+  const [down, setDown] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!active) {
+      setDown(false);
+      return;
+    }
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      // Ignore the last pixels of a Lenis glide settling either way.
+      if (Math.abs(y - last) < 8) return;
+      setDown(y > last);
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [active]);
+
+  return down;
+}
+
 export function Navigation() {
   const t = useT();
   const links = [
@@ -44,6 +70,7 @@ export function Navigation() {
   const [open, setOpen] = React.useState(false);
   const scrolled = useScrollThreshold(10);
   const pastHero = usePastHero();
+  const hidden = useScrollingDown(pastHero && !open);
 
   React.useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -80,31 +107,8 @@ export function Navigation() {
       data-scrolled={scrolled && !open}
       data-open={open}
       data-past-hero={pastHero}
+      data-hidden={hidden}
     >
-      {/* Contact strip — phone + email. Its row is always reserved (no jump);
-          the details arrive only once the hero is behind the guest. */}
-      <div className="chalet-navigation__contact mx-auto hidden items-center justify-end md:flex">
-        {[
-          {
-            href: `tel:${PHONE}`,
-            label: PHONE_DISPLAY,
-            Icon: Phone,
-            aria: `${t.contact.callAria} ${PHONE_DISPLAY}`,
-          },
-          {
-            href: `mailto:${EMAIL}`,
-            label: EMAIL,
-            Icon: Mail,
-            aria: `${t.contact.emailAria} ${EMAIL}`,
-          },
-        ].map(({ href, label, Icon, aria }) => (
-          <a key={href} href={href} aria-label={aria}>
-            <Icon size={12} strokeWidth={1.6} aria-hidden="true" />
-            {label}
-          </a>
-        ))}
-      </div>
-
       <div className="chalet-navigation__inner mx-auto flex items-center justify-between">
         <a
           href="#"
@@ -129,29 +133,40 @@ export function Navigation() {
           />
         </a>
 
-        {/* Desktop (xl): no section links — language, a quiet look at the
-            rooms, then the reserve action. The links live in the menu. */}
-        <div className="hidden items-center gap-3 xl:flex">
+        {/* Desktop (xl): no section links — the ways to reach the owners,
+            language, then the reserve action. The links live in the menu. */}
+        <div className="chalet-navigation__actions hidden items-center xl:flex">
+          {/* Phone + e-mail. Their space is always reserved (no jump); the
+              details arrive only once the hero is behind the guest. */}
+          <div className="chalet-navigation__contact flex items-center">
+            {[
+              {
+                href: `tel:${PHONE}`,
+                label: PHONE_DISPLAY,
+                Icon: Phone,
+                aria: `${t.contact.callAria} ${PHONE_DISPLAY}`,
+              },
+              {
+                href: `mailto:${EMAIL}`,
+                label: EMAIL,
+                Icon: Mail,
+                aria: `${t.contact.emailAria} ${EMAIL}`,
+              },
+            ].map(({ href, label, Icon, aria }) => (
+              <a key={href} href={href} aria-label={aria}>
+                <Icon size={12} strokeWidth={1.6} aria-hidden="true" />
+                {label}
+              </a>
+            ))}
+          </div>
           <LanguageDropdown />
-          <RollLink
-            href="#priestory"
-            onClick={e => {
-              e.preventDefault();
-              scrollToHref("#priestory");
-            }}
-            tone="ghost"
-            size="sm"
-            className="chalet-navigation__explore"
-          >
-            {t.nav.explore}
-          </RollLink>
           {bookButton("")}
         </div>
 
         {/* Compact cluster — everything below xl. */}
-        <div className="flex items-center gap-2 xl:hidden">
-          {bookButton("chalet-navigation__book--compact")}
+        <div className="chalet-navigation__actions flex items-center xl:hidden">
           <LanguageDropdown />
+          {bookButton("chalet-navigation__book--compact")}
           <button
             type="button"
             aria-label={open ? t.nav.menuClose : t.nav.menuOpen}

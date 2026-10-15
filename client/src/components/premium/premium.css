@@ -458,17 +458,14 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 80px;
-  align-items: start;
+  align-items: end;
   margin-top: 64px;
 }
 /* Pricing: a faint chalet behind the figures, kept quieter than the intro
    because small print sits on it. */
-.pricing-section {
+.pricing-intro {
   position: relative;
   isolation: isolate;
-}
-.pricing-backdrop {
-  bottom: var(--price-table-height, 0px);
 }
 .pricing-backdrop .section-backdrop__photo {
   opacity: 0.18;
@@ -505,12 +502,8 @@
 .starting-price strong {
   font-size: clamp(5rem, 9vw, 8rem);
 }
-.price-story > p,
-.price-calculator > p {
+.price-notes > p {
   font-size: 1.0625rem;
-}
-.price-story .roll-btn {
-  margin-top: 32px;
 }
 .premium-section .roll-btn[data-tone="solid"],
 .mobile-book-bar .roll-btn[data-tone="solid"] {
@@ -562,12 +555,6 @@
   font-variant-numeric: tabular-nums;
   font-size: 1.25rem;
 }
-.calculated-price {
-  margin-top: 40px;
-}
-.calculated-price strong {
-  font-size: clamp(3.5rem, 5vw, 5rem);
-}
 .changing-value {
   position: relative;
   display: inline-block;
@@ -578,11 +565,10 @@
 }
 .price-offer-note {
   color: var(--amber);
-  margin-top: 24px;
 }
-.price-calculator > p:last-child {
+.price-notes > p + p {
   color: oklch(0.8 0.008 75);
-  margin-top: 24px;
+  margin-top: 16px;
 }
 .price-table,
 .house-rules {
@@ -633,28 +619,40 @@
 .booking-calendar-column {
   min-width: 0;
 }
+/* The calendar fills its column: day cells are a seventh of the month's
+   width (two months share it from 648px), between a 40px floor and a 64px
+   ceiling, and the round day buttons grow with them up to 52px. */
 .booking-calendar {
+  container-type: inline-size;
   min-height: 408px;
   scroll-margin-top: 100px;
 }
 .booking-calendar .rdp-root {
   --rdp-accent-color: var(--amber);
   --rdp-accent-background-color: oklch(0.72 0.12 65 / 0.18);
-  --rdp-day-height: 48px;
-  --rdp-day-width: 44px;
-  --rdp-day_button-height: 44px;
-  --rdp-day_button-width: 44px;
-  --rdp-months-gap: 32px;
+  --rdp-day-width: clamp(40px, 100cqi / 7, 64px);
+  --rdp-day-height: clamp(44px, 100cqi / 7, 60px);
+  --rdp-day_button-width: min(var(--rdp-day-width) - 4px, 52px);
+  --rdp-day_button-height: min(var(--rdp-day-height) - 4px, 52px);
+  --rdp-months-gap: 48px;
   --rdp-nav_button-height: 44px;
   --rdp-nav_button-width: 44px;
   --rdp-nav-height: 56px;
   --rdp-today-color: var(--foreground);
+  --rdp-animation_duration: var(--motion-modal);
+  --rdp-animation_timing: var(--ease-enter);
   font:
     400 1rem Karla,
     sans-serif;
   width: max-content;
   max-width: 100%;
   margin-inline: auto;
+}
+@container (min-width: 648px) {
+  .booking-calendar .rdp-root {
+    --rdp-day-width: clamp(40px, (100cqi - 48px) / 14, 64px);
+    --rdp-day-height: clamp(44px, (100cqi - 48px) / 14, 60px);
+  }
 }
 .booking-calendar .rdp-month_caption {
   height: 56px;
@@ -683,13 +681,42 @@
   font-size: 1rem;
   font-weight: 500;
 }
-.booking-calendar .rdp-range_start .rdp-day_button,
-.booking-calendar .rdp-range_end .rdp-day_button {
+/* A lone check-in is selected without a range yet; fill it like an end. */
+.booking-calendar .rdp-selected:not(.rdp-range_middle) .rdp-day_button {
   background: var(--amber);
   color: var(--background);
 }
 .booking-calendar .rdp-range_middle {
   background: oklch(0.72 0.12 65 / 0.18);
+}
+/* The stay band fades in behind the nights as the check-out lands; the two
+   ends settle into place from a slightly smaller circle. */
+.booking-calendar .rdp-day {
+  transition: background-color var(--motion-state) var(--ease-ui);
+}
+.booking-calendar .rdp-selected:not(.rdp-range_middle) .rdp-day_button {
+  animation: day-pick var(--motion-modal) var(--ease-enter);
+}
+@keyframes day-pick {
+  from {
+    transform: scale(0.82);
+  }
+}
+/* Check-in chosen: the nights under the pointer preview the stay, ending on
+   an amber ring; nights too short to end on read as unavailable but stay
+   clickable, so a click explains the minimum instead of doing nothing. */
+.booking-calendar .range-preview:not(.rdp-selected) {
+  background: oklch(0.72 0.12 65 / 0.08);
+}
+.booking-calendar .preview-end:not(.too-short) .rdp-day_button {
+  box-shadow: inset 0 0 0 1px oklch(0.72 0.12 65 / 0.35);
+}
+.booking-calendar .too-short:not(.rdp-selected) .rdp-day_button {
+  color: oklch(0.8 0.008 75 / 0.5);
+  cursor: not-allowed;
+}
+.date-validation span {
+  display: inline-block;
 }
 .booking-calendar .rdp-disabled {
   opacity: 0.38;
@@ -709,14 +736,12 @@
   min-height: 48px;
   font-size: 1rem;
 }
-.booking-calendar-column .guest-counters {
-  max-width: 680px;
-  margin-top: 16px;
+.booking-summary .guest-counters {
+  gap: 0;
+  margin-bottom: 20px;
 }
-.guest-note {
-  font-size: 1rem;
-  color: oklch(0.8 0.008 75);
-  margin-top: 20px;
+.booking-summary .guest-counter {
+  min-height: 56px;
 }
 .booking-summary {
   min-width: 0;
@@ -1030,50 +1055,6 @@
     position: sticky;
     top: calc(var(--nav-height, 72px) + 24px);
   }
-  /* Island: heading, calendar and summary share one grid, so the summary
-     starts level with the heading. The layout spans the first two rows as a
-     subgrid and stays the summary's sticky container: it settles where the
-     calendar column ends, before the house rules. */
-  .booking-frame {
-    display: grid;
-    grid-template-columns: minmax(648px, 1fr) 330px;
-    column-gap: 32px;
-    align-items: start;
-  }
-  .booking-frame .booking-island,
-  .booking-frame .booking-contents {
-    display: contents;
-  }
-  .booking-frame > .section-header {
-    grid-area: 1 / 1;
-  }
-  .booking-frame .booking-placeholder {
-    grid-area: 2 / 1;
-  }
-  .booking-frame .booking-layout {
-    grid-column: 1 / -1;
-    grid-row: 1 / span 2;
-    align-self: stretch;
-    grid-template-columns: subgrid;
-    grid-template-rows: subgrid;
-    gap: 0 32px;
-    /* It overlays the heading's cell; let pointers reach the heading. */
-    pointer-events: none;
-  }
-  .booking-frame .booking-layout > * {
-    pointer-events: auto;
-  }
-  .booking-frame .booking-calendar-column {
-    grid-area: 2 / 1;
-  }
-  .booking-frame .booking-summary {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-  }
-  .booking-frame .house-rules {
-    grid-column: 1 / -1;
-    grid-row: 3;
-  }
 }
 @media (max-height: 1000px) {
   .booking-summary:has(.inquiry-form),
@@ -1192,19 +1173,18 @@
   .starting-price strong {
     font-size: 6.5rem;
   }
-  .price-calculator {
+  .price-notes {
     border-top: 1px solid rgb(245 244 239 / 0.2);
     padding-top: 28px;
   }
-  .calculated-price strong {
-    font-size: 4.5rem;
-  }
-  .booking-calendar .rdp-root {
-    --rdp-day-width: 44px;
-    --rdp-day-height: 48px;
-  }
   .booking-layout {
-    gap: 36px;
+    gap: 24px;
+  }
+  /* One line of status on a phone; the error row keeps its space so the
+     summary below does not jump when a message appears. */
+  .availability-state {
+    min-height: 0;
+    margin-top: 8px;
   }
   .house-rules dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1262,6 +1242,9 @@
   .guest-counter button:active:not(:disabled),
   .booking-calendar .rdp-day_button:active {
     transform: none;
+  }
+  .booking-calendar .rdp-selected:not(.rdp-range_middle) .rdp-day_button {
+    animation: none;
   }
 }
 .gallery-bento {
@@ -1500,10 +1483,11 @@ html[data-gallery-open="true"] .mobile-book-bar {
   }
 }
 .booking-placeholder {
-  min-height: 870px;
+  min-height: 760px;
 }
 .booking-island {
-  min-height: 870px;
+  min-height: 760px;
+  margin-top: clamp(72px, 8vw, 120px);
 }
 .lightbox-thumbnails button {
   height: 44px;

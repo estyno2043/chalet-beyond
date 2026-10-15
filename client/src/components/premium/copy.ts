@@ -1,5 +1,9 @@
 import type { Dict, Lang } from "@shared/i18n";
-import { LONG_STAY_DISCOUNT_RATE, LONG_STAY_MIN_NIGHTS } from "@shared/pricing";
+import {
+  LONG_STAY_DISCOUNT_RATE,
+  LONG_STAY_MIN_NIGHTS,
+  MIN_NIGHTS,
+} from "@shared/pricing";
 import { useLang } from "@/i18n/LanguageProvider";
 
 const longStayPercent = Math.round(LONG_STAY_DISCOUNT_RATE * 100);
@@ -67,12 +71,12 @@ const sk = {
   adults: "Dospelí (16+)",
   children: "Deti (0–15)",
   childNote: "Deti 0–15 rokov: 40 € / noc za dieťa. Spolu najviac 8 hostí.",
-  booking: ["Overte", "voľný termín."],
   continue: "Pokračovať",
   edit: "Upraviť termín",
   optional: "voliteľné",
   dateError: "Vyberte príchod a odchod, minimálne 2 noci.",
   datesBusy: "Tento rozsah obsahuje obsadené noci. Vyberte iný odchod.",
+  minNights: `Minimálny pobyt sú ${MIN_NIGHTS} noci. Vyberte neskorší odchod.`,
   assurances: "Bezplatné storno do 14 dní pred príchodom · Min. 2 noci",
   successBody:
     "Dopyt sme prijali. Ozveme sa vám s potvrdením dostupnosti a ďalším postupom.",
@@ -162,13 +166,13 @@ const de: Copy = {
   children: "Kinder (0–15)",
   childNote:
     "Kinder 0–15 Jahre: 40 € / Nacht pro Kind. Insgesamt höchstens 8 Gäste.",
-  booking: ["Freie Termine", "prüfen."],
   continue: "Weiter",
   edit: "Termin ändern",
   optional: "optional",
   dateError: "Wählen Sie An- und Abreise, mindestens 2 Nächte.",
   datesBusy:
     "Dieser Zeitraum enthält belegte Nächte. Wählen Sie eine andere Abreise.",
+  minNights: `Mindestaufenthalt ${MIN_NIGHTS} Nächte. Wählen Sie eine spätere Abreise.`,
   assurances: "Kostenlos stornieren bis 14 Tage vor Anreise · Min. 2 Nächte",
   successBody:
     "Ihre Anfrage ist eingegangen. Wir melden uns mit Verfügbarkeit und den nächsten Schritten.",
@@ -251,12 +255,12 @@ const en: Copy = {
   children: "Children (0–15)",
   childNote:
     "Children aged 0–15: €40 / night per child. Maximum 8 guests in total.",
-  booking: ["Check available", "dates."],
   continue: "Continue",
   edit: "Edit dates",
   optional: "optional",
   dateError: "Choose arrival and departure, at least 2 nights.",
   datesBusy: "This range includes occupied nights. Choose another departure.",
+  minNights: `The minimum stay is ${MIN_NIGHTS} nights. Choose a later departure.`,
   assurances: "Free cancellation until 14 days before arrival · Min. 2 nights",
   successBody:
     "We received your inquiry. We will contact you with availability and the next steps.",
@@ -339,12 +343,12 @@ const pl: Copy = {
   children: "Dzieci (0–15)",
   childNote:
     "Dzieci 0–15 lat: 40 € / noc za dziecko. Łącznie maksymalnie 8 gości.",
-  booking: ["Sprawdźcie", "wolny termin."],
   continue: "Dalej",
   edit: "Zmień termin",
   optional: "opcjonalne",
   dateError: "Wybierzcie przyjazd i wyjazd, minimum 2 noce.",
   datesBusy: "Ten zakres obejmuje zajęte noce. Wybierzcie inną datę wyjazdu.",
+  minNights: `Minimalny pobyt to ${MIN_NIGHTS} noce. Wybierzcie późniejszy wyjazd.`,
   assurances: "Bezpłatne anulowanie do 14 dni przed przyjazdem · Min. 2 noce",
   successBody:
     "Otrzymaliśmy zapytanie. Skontaktujemy się z Wami z dostępnością i kolejnymi krokami.",

@@ -1,12 +1,8 @@
-import { useLayoutEffect, useRef } from "react";
-import { PRICE_PER_NIGHT, CHILD_PRICE_PER_NIGHT } from "@shared/pricing";
-import { useGuests } from "@/contexts/GuestsContext";
+import { PRICE_PER_NIGHT } from "@shared/pricing";
 import { usePremiumCopy } from "./premium/copy";
 import { SectionHeader } from "./premium/SectionHeader";
 import { SectionBackdrop } from "./premium/SectionBackdrop";
-import { GuestCounters } from "./premium/GuestCounters";
-import { Value } from "./premium/Value";
-import { RollLink } from "./RollButton";
+import { BookingIsland } from "./premium/BookingIsland";
 import { BlindDisclosure } from "./ui/blind-disclosure";
 import { LineShadowText } from "./ui/line-shadow-text";
 import { useT } from "@/i18n/LanguageProvider";
@@ -16,40 +12,28 @@ export const PRICING_BACKDROP_PHOTO_ID = 18;
 /** Hatched shadow behind the price figures (hero sand, as in the intro). */
 const PRICE_SHADOW = "oklch(0.85 0.06 74 / 0.5)";
 
+/**
+ * Prices and booking as one section: the starting price and its conditions,
+ * then dates, guests and the live total in one place, then the full price
+ * table and the house rules for whoever wants the detail.
+ */
 export function PricingSection() {
   const c = usePremiumCopy();
   const t = useT();
-  const { adults, children } = useGuests();
-  const baseNight = PRICE_PER_NIGHT[adults] + children * CHILD_PRICE_PER_NIGHT;
   const startingPrice = Math.min(...Object.values(PRICE_PER_NIGHT));
-  const section = useRef<HTMLElement>(null);
-
-  // The backdrop photo covers the section, so a taller section would zoom it.
-  // Lift its bottom edge by the open price table's height to keep it still.
-  useLayoutEffect(() => {
-    const host = section.current!;
-    const panel = host.querySelector<HTMLElement>(".blind-disclosure__panel")!;
-    const observer = new ResizeObserver(() =>
-      host.style.setProperty("--price-table-height", `${panel.offsetHeight}px`)
-    );
-    observer.observe(panel);
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <section
-      ref={section}
-      id="cennik"
-      className="premium-section pricing-section"
-    >
-      <SectionBackdrop
-        photoId={PRICING_BACKDROP_PHOTO_ID}
-        className="pricing-backdrop"
-      />
-      <div className="container">
-        <SectionHeader lines={c.pricing} />
-        <div className="pricing-split">
-          <div className="price-story">
+    <section id="cennik" className="premium-section pricing-section">
+      {/* The backdrop sits behind the price intro only, so the calendar and
+          the tables below keep a plain ground. */}
+      <div className="pricing-intro">
+        <SectionBackdrop
+          photoId={PRICING_BACKDROP_PHOTO_ID}
+          className="pricing-backdrop"
+        />
+        <div className="container">
+          <SectionHeader lines={c.pricing} />
+          <div className="pricing-split">
             <div className="price-figure starting-price">
               <span>{c.from}</span>
               <strong>
@@ -57,30 +41,19 @@ export function PricingSection() {
                   {`${startingPrice} €`}
                 </LineShadowText>
               </strong>
-              <span>{c.night}</span>
+              <span>
+                {c.night} · {c.whole}
+              </span>
             </div>
-            <p>{c.whole}</p>
-            <RollLink href="#rezervacia" tone="solid">
-              {t.nav.book}
-            </RollLink>
-          </div>
-          <div className="price-calculator">
-            <GuestCounters id="pricing" />
-            <div
-              className="price-figure calculated-price"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <span>{c.baseNight}</span>
-              <strong>
-                <Value value={`${baseNight} €`} lineShadow={PRICE_SHADOW} />
-              </strong>
-              <span>{c.night}</span>
+            <div className="price-notes">
+              <p className="price-offer-note">{c.weeklyNote}</p>
+              <p>{c.childNote}</p>
             </div>
-            <p className="price-offer-note">{c.weeklyNote}</p>
-            <p>{c.childNote}</p>
           </div>
         </div>
+      </div>
+      <BookingIsland />
+      <div className="container">
         <BlindDisclosure className="price-table" summary={c.allPrices}>
           <div className="price-table__scroll">
             <table>
@@ -104,6 +77,25 @@ export function PricingSection() {
         <p className="rate-note">
           <mark>{c.rateNote}</mark>
         </p>
+        <BlindDisclosure className="house-rules" summary={t.rules.title}>
+          <dl>
+            {[
+              { label: t.rules.checkIn, value: "15:00 – 23:00" },
+              { label: t.rules.checkOut, value: "08:00 – 11:00" },
+              { label: t.rules.smoking, value: t.rules.smokingValue },
+              { label: t.rules.pets, value: t.rules.petsValue },
+              { label: t.rules.quiet, value: "23:00 – 05:00" },
+              { label: t.rules.children, value: t.rules.childrenValue },
+              { label: t.rules.cribs, value: t.rules.cribsValue },
+              { label: t.rules.capacity, value: t.rules.capacityValue },
+            ].map(rule => (
+              <div key={rule.label} data-slat>
+                <dt>{rule.label}</dt>
+                <dd>{rule.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </BlindDisclosure>
       </div>
     </section>
   );

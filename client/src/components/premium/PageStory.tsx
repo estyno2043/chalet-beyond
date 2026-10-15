@@ -4,7 +4,6 @@ import { AmenitiesSection } from "../AmenitiesSection";
 import { LocationSection } from "../LocationSection";
 import { LocationMap } from "../LocationMap";
 import { PricingSection } from "../PricingSection";
-import { BookingIsland } from "./BookingIsland";
 import { Footer } from "../Footer";
 import { useEffect } from "react";
 
@@ -19,7 +18,6 @@ export default function PageStory({ onReady }: { onReady: () => void }) {
       <LocationSection />
       <LocationMap />
       <PricingSection />
-      <BookingIsland />
       <Footer />
     </>
   );

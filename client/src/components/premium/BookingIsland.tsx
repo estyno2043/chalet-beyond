@@ -1,15 +1,12 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { SectionHeader } from "./SectionHeader";
-import { usePremiumCopy } from "./copy";
 const Booking = lazy(() =>
   import("../BookingSection").then(module => ({
     default: module.BookingSection,
   }))
 );
-/** Keep anchor and heading available; load calendar code before it reaches view. */
+/** Keep the anchor available; load calendar code before it reaches view. */
 export function BookingIsland() {
-  const c = usePremiumCopy();
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -25,27 +22,12 @@ export function BookingIsland() {
     return () => observer.disconnect();
   }, []);
   return (
-    <section
-      ref={ref}
-      id="rezervacia"
-      className="premium-section booking-section"
-    >
-      {/* From 1280px the frame is one grid: the summary column starts level
-          with the heading and stays sticky beside the calendar. */}
-      <div className="container booking-frame">
-        <SectionHeader lines={c.booking} />
-        <div className="booking-island">
-          <Suspense
-            fallback={<div className="booking-placeholder" aria-busy="true" />}
-          >
-            {ready ? (
-              <Booking embedded />
-            ) : (
-              <div className="booking-placeholder" />
-            )}
-          </Suspense>
-        </div>
-      </div>
-    </section>
+    <div ref={ref} id="rezervacia" className="container booking-island">
+      <Suspense
+        fallback={<div className="booking-placeholder" aria-busy="true" />}
+      >
+        {ready ? <Booking /> : <div className="booking-placeholder" />}
+      </Suspense>
+    </div>
   );
 }

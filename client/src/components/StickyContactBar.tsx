@@ -14,6 +14,31 @@ export function StickyContactBar() {
   const t = useT();
   const reduce = useReducedMotion();
   const [focused, setFocused] = useState(false);
+  const [atBooking, setAtBooking] = useState(false);
+  // The bar only leads to the booking block; once that block is on screen
+  // the bar would just cover its continue button. The block loads lazily,
+  // so look it up on each scroll frame rather than once.
+  useEffect(() => {
+    let frame = 0;
+    const check = () => {
+      frame = 0;
+      const rect = document
+        .getElementById("rezervacia")
+        ?.getBoundingClientRect();
+      setAtBooking(Boolean(rect && rect.top < innerHeight && rect.bottom > 0));
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    check();
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
   useEffect(() => {
     const check = () =>
       setFocused(
@@ -38,7 +63,7 @@ export function StickyContactBar() {
   }, []);
   return (
     <AnimatePresence>
-      {past && !focused && (
+      {past && !focused && !atBooking && (
         <m.div
           className="mobile-book-bar"
           initial={{ y: reduce ? 0 : "100%", opacity: 0 }}

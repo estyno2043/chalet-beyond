@@ -6,6 +6,8 @@
   /* Shrinks towards its top edge: pushed up and back, not into the centre. */
   transform-origin: 50% 0%;
   will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .hero-handoff__dim {
   position: absolute;
@@ -18,11 +20,12 @@
   position: relative;
   z-index: 1;
   background: oklch(0.06 0.008 55);
-  /* A hairline of brand amber on the lip, then a long soft shadow cast up
-     onto the hero — the sheet sits physically above it. */
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  /* Clean, optimized shadow */
   box-shadow:
     0 -1px 0 oklch(0.72 0.12 65 / 0.18),
-    0 -48px 96px -24px rgb(0 0 0 / 0.65);
+    0 -16px 36px -8px rgb(0 0 0 / 0.45);
 }
 
 @media (max-width: 767px) {
@@ -35,13 +38,7 @@
   }
 }
 
-/* Phone handoff. The desktop version is Framer styles on the hero box itself;
-   on iPhone that jumped during inertial scroll and was removed (see
-   docs/validation/mobile-followup.md). This one is a native scroll timeline
-   with no JS, and the hero and sheet boxes never move. Inside the hero, the
-   photo and the copy recede together as one card — same scale and drift as
-   desktop, rounded like it — while the hero darkens and the sheet's rounded
-   lip flattens as it docks at the top. */
+/* Native scroll timeline with no JS, and the hero and sheet boxes never move. */
 @supports (animation-timeline: view()) {
   .hero-handoff__hero {
     view-timeline: --hero-exit block;
@@ -62,61 +59,19 @@
     /* Clip, not hidden: no scroll container, so sticky children still work. */
     .hero-handoff__sheet {
       overflow: clip;
-      animation: hero-handoff-dock linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 100%;
     }
   }
 
-  /* `translate` and `scale` rather than `transform`: they compose with the
-     media's own entrance zoom (hero.css) instead of replacing it. */
   @media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-    /* One shared vanishing point, so photo and copy tip back as one card. */
-    .hero-handoff__hero .chalet-hero {
-      perspective: 900px;
-    }
     .hero-handoff__hero .chalet-hero__media,
     .hero-handoff__hero .chalet-hero__layout {
       animation: hero-handoff-recede linear both;
       animation-timeline: --hero-exit;
       animation-range: exit 0% exit 100%;
     }
-    .hero-handoff__hero .chalet-hero__media {
-      animation-name: hero-handoff-recede, hero-handoff-round;
-    }
   }
 
-  /* Shared by both widths: on desktop the hero box itself recedes (Framer,
-     HeroHandoff.tsx) while its name and the intro run on these timelines. */
   @media (prefers-reduced-motion: no-preference) {
-    /* The name peels off the card letter by letter, CHALET first, as the
-       card falls back. The entrance (hero-entrance.ts) only fills backwards,
-       so it has let go of these letters long before anyone scrolls. */
-    .hero-handoff__hero .chalet-hero__letter {
-      --i: 0;
-      animation: hero-handoff-lift linear both;
-      animation-timeline: --hero-exit;
-      animation-range: exit calc((var(--i) + var(--line, 0)) * 5%) exit
-        calc(40% + (var(--i) + var(--line, 0)) * 5%);
-    }
-    .hero-handoff__hero .chalet-hero__line + .chalet-hero__line {
-      --line: 3;
-    }
-    .hero-handoff__hero .chalet-hero__letter:nth-child(2) {
-      --i: 1;
-    }
-    .hero-handoff__hero .chalet-hero__letter:nth-child(3) {
-      --i: 2;
-    }
-    .hero-handoff__hero .chalet-hero__letter:nth-child(4) {
-      --i: 3;
-    }
-    .hero-handoff__hero .chalet-hero__letter:nth-child(5) {
-      --i: 4;
-    }
-    .hero-handoff__hero .chalet-hero__letter:nth-child(6) {
-      --i: 5;
-    }
 
     /* The next section's panorama settles as it arrives. Timed by the
        section: the backdrop clips (overflow: hidden), which would make it

@@ -33,18 +33,24 @@ const PAGE_GAP = 16;
 const SWIPE_DISTANCE = 80;
 const SWIPE_VELOCITY = 300;
 const pageWidth = () => innerWidth + PAGE_GAP;
+let cachedSafeAreaKey = "";
+let cachedSafeArea = { top: 0, bottom: 0 };
+
 function safeArea() {
+  const key = `${innerWidth}x${innerHeight}`;
+  if (key === cachedSafeAreaKey) return cachedSafeArea;
   const probe = document.createElement("div");
   probe.style.cssText =
-    "position:fixed;visibility:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)";
+    "position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)";
   document.body.append(probe);
   const style = getComputedStyle(probe);
-  const insets = {
+  cachedSafeArea = {
     top: parseFloat(style.paddingTop) || 0,
     bottom: parseFloat(style.paddingBottom) || 0,
   };
+  cachedSafeAreaKey = key;
   probe.remove();
-  return insets;
+  return cachedSafeArea;
 }
 /** The photo fills the band between the header and the controls below it. */
 function geometry(id: number) {
@@ -355,22 +361,36 @@ export default function Lightbox({ photos, title, cover, onClose }: Props) {
       />
       <motion.div className="lightbox-top" {...controls}>
         <h2 id="gallery-title">{title}</h2>
-        <RollButton
-          size="sm"
-          onClick={() => {
-            void close();
-          }}
-          aria-label={c.close}
-          className="lightbox-close"
-        >
-          <span
-            ref={node => {
-              closeButton.current = node?.closest("button") ?? null;
+        <div className="flex items-center gap-3">
+          <RollButton
+            size="sm"
+            tone="solid"
+            onClick={() => {
+              void close().then(() => {
+                void import("@/lib/smooth-scroll").then(m => m.scrollTo("#rezervacia"));
+              });
             }}
+            className="lightbox-book-cta hidden sm:inline-flex"
           >
-            <X size={18} aria-hidden="true" />
-          </span>
-        </RollButton>
+            Rezervovať pobyt
+          </RollButton>
+          <RollButton
+            size="sm"
+            onClick={() => {
+              void close();
+            }}
+            aria-label={c.close}
+            className="lightbox-close"
+          >
+            <span
+              ref={node => {
+                closeButton.current = node?.closest("button") ?? null;
+              }}
+            >
+              <X size={18} aria-hidden="true" />
+            </span>
+          </RollButton>
+        </div>
       </motion.div>
       <div ref={stage} className="lightbox-stage" style={box}>
         {/* Pinch stays with the browser (touch-action in CSS); one finger

@@ -15,7 +15,7 @@ export function Footer() {
   const t = useT();
   const footer = useRef<HTMLElement>(null);
   return (
-    <footer ref={footer} className="premium-footer">
+    <footer id="premium-footer" ref={footer} className="premium-footer">
       <SectionBackdrop photoId={41} className="footer-backdrop" />
       <div className="container">
         <div className="footer-main">

@@ -7,6 +7,7 @@
  * Desktop uses it too: one control reads calmer than a row of four flags.
  */
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, m } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { LANGS, LANG_NAMES, type Lang } from "@shared/i18n";
 import { FLAGS } from "@/i18n/flags";
@@ -29,8 +30,6 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       setOpen(false);
-      // Escape without this leaves focus on a button that is no longer
-      // meaningful, which strands anyone navigating by keyboard.
       triggerRef.current?.focus();
     };
 
@@ -58,16 +57,16 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`${current.toUpperCase()} — ${LANG_NAMES[current]}`}
-        className="h-11 flex items-center justify-center gap-2 rounded-full px-4"
+        className="h-11 flex items-center justify-center gap-2 rounded-full px-4 active:scale-[0.97] transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]"
         style={{
-          boxShadow: "inset 0 0 0 1px rgb(245 244 239 / 0.24)",
-          background: open ? "rgb(245 244 239 / 0.08)" : "transparent",
+          boxShadow:
+            "inset 0 0 0 1px rgb(245 244 239 / 0.24), inset 0 1px 0 0 rgba(255, 255, 255, 0.08)",
+          background: open ? "rgb(245 244 239 / 0.12)" : "transparent",
           color: "oklch(0.97 0.007 75)",
           fontFamily: "var(--font-body-family)",
           fontSize: "0.75rem",
           fontWeight: 600,
           letterSpacing: "0.06em",
-          transition: "background var(--motion-ui) var(--ease-ui)",
         }}
       >
         <CurrentFlag />
@@ -76,53 +75,63 @@ export function LanguageDropdown({ className = "" }: { className?: string }) {
           size={11}
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform var(--motion-ui) var(--ease-ui)",
+            transition: "transform 180ms cubic-bezier(0.23, 1, 0.32, 1)",
           }}
         />
       </button>
 
-      {/* Right-aligned: the trigger sits at the right edge of the bar, so a
-          left-aligned panel would hang off the screen on a narrow phone. */}
-      <div
-        role="menu"
-        aria-label="Language"
-        hidden={!open}
-        className="absolute right-0 top-full mt-2 overflow-hidden rounded-xl"
-        style={{
-          minWidth: "11rem",
-          zIndex: 60,
-          background: "oklch(0.08 0.010 55 / 0.98)",
-          border: "1px solid rgb(245 244 239 / 0.14)",
-          boxShadow: "0 12px 32px rgb(0 0 0 / 0.45)",
-        }}
-      >
-        {LANGS.map(lang => {
-          const Flag = FLAGS[lang];
-          const active = lang === current;
-          return (
-            <button
-              key={lang}
-              type="button"
-              role="menuitem"
-              onClick={() => choose(lang)}
-              className="w-full flex items-center gap-2.5 px-3"
-              style={{
-                minHeight: "2.75rem",
-                fontFamily: "var(--font-body-family)",
-                fontSize: "0.875rem",
-                fontWeight: active ? 600 : 400,
-                textAlign: "left",
-                color: active ? "oklch(0.97 0.007 75)" : "oklch(0.78 0.015 70)",
-                background: active ? "rgb(245 244 239 / 0.08)" : "transparent",
-                borderBottom: "1px solid rgb(245 244 239 / 0.06)",
-              }}
-            >
-              <Flag />
-              <span>{LANG_NAMES[lang]}</span>
-            </button>
-          );
-        })}
-      </div>
+      {/* Origin-aware popover: scales from trigger (top-right anchor) */}
+      <AnimatePresence>
+        {open && (
+          <m.div
+            role="menu"
+            aria-label="Language"
+            initial={{ opacity: 0, scale: 0.95, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -4 }}
+            transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+            className="absolute right-0 top-full mt-2 overflow-hidden rounded-xl"
+            style={{
+              minWidth: "11rem",
+              zIndex: 60,
+              transformOrigin: "top right",
+              background: "oklch(0.09 0.012 55 / 0.96)",
+              backdropFilter: "blur(20px) saturate(160%)",
+              WebkitBackdropFilter: "blur(20px) saturate(160%)",
+              border: "1px solid oklch(0.72 0.12 65 / 0.28)",
+              boxShadow:
+                "0 18px 40px -8px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.08)",
+            }}
+          >
+            {LANGS.map(lang => {
+              const Flag = FLAGS[lang];
+              const active = lang === current;
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  role="menuitem"
+                  onClick={() => choose(lang)}
+                  className="w-full flex items-center gap-2.5 px-3.5 transition-[background-color,color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-[oklch(0.18_0.015_55/0.8)] active:scale-[0.98]"
+                  style={{
+                    minHeight: "2.75rem",
+                    fontFamily: "var(--font-body-family)",
+                    fontSize: "0.875rem",
+                    fontWeight: active ? 600 : 400,
+                    textAlign: "left",
+                    color: active ? "var(--amber)" : "oklch(0.85 0.012 75)",
+                    background: active ? "oklch(0.72 0.12 65 / 0.12)" : "transparent",
+                    borderBottom: "1px solid rgb(245 244 239 / 0.06)",
+                  }}
+                >
+                  <Flag />
+                  <span>{LANG_NAMES[lang]}</span>
+                </button>
+              );
+            })}
+          </m.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -117,7 +117,7 @@ export function FooterMark({
     });
     observer.observe(node);
     return () => observer.disconnect();
-  });
+  }, [level]);
   return (
     <svg
       ref={svg}

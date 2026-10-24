@@ -15,7 +15,7 @@ export function MenuToggleIcon({
   strokeWidth = 2.5,
   strokeLinecap = 'round',
   strokeLinejoin = 'round',
-  duration = 500,
+  duration = 260,
   ...props
 }: MenuToggleProps) {
   return (
@@ -27,7 +27,7 @@ export function MenuToggleIcon({
       strokeLinecap={strokeLinecap}
       strokeLinejoin={strokeLinejoin}
       className={cn(
-        'transition-transform ease-in-out',
+        'transition-transform ease-[cubic-bezier(0.23,1,0.32,1)]',
         open && '-rotate-45',
         className,
       )}
@@ -38,7 +38,7 @@ export function MenuToggleIcon({
     >
       <path
         className={cn(
-          'transition-all ease-in-out',
+          'transition-[stroke-dasharray,stroke-dashoffset] ease-[cubic-bezier(0.23,1,0.32,1)]',
           open
             ? '[stroke-dasharray:20_300] [stroke-dashoffset:-32.42px]'
             : '[stroke-dasharray:12_63]',

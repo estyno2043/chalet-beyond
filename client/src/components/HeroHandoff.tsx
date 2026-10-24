@@ -33,13 +33,9 @@ function AnimatedHandoff({
     offset: ["start start", "end start"],
   });
 
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "48%"]);
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
-  // Hinged at its top edge, the hero swings back under the arriving sheet.
-  const heroTilt = useTransform(scrollYProgress, [0, 1], [0, -16]);
-  const heroRadius = useTransform(scrollYProgress, [0, 0.5, 1], [0, 20, 32]);
-  const heroDim = useTransform(scrollYProgress, [0, 1], [0, 0.72]);
-  const sheetRadius = useTransform(scrollYProgress, [0, 0.8, 1], [36, 28, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.98]);
+  const heroDim = useTransform(scrollYProgress, [0, 1], [0, 0.45]);
 
   return (
     <>
@@ -52,9 +48,6 @@ function AnimatedHandoff({
             : {
                 y: heroY,
                 scale: heroScale,
-                rotateX: heroTilt,
-                transformPerspective: 1400,
-                borderRadius: heroRadius,
               }
         }
       >
@@ -67,20 +60,9 @@ function AnimatedHandoff({
           />
         )}
       </m.div>
-      <m.div
-        id="page-sheet"
-        className="hero-handoff__sheet"
-        style={
-          reduce
-            ? undefined
-            : {
-                borderTopLeftRadius: sheetRadius,
-                borderTopRightRadius: sheetRadius,
-              }
-        }
-      >
+      <div id="page-sheet" className="hero-handoff__sheet">
         {children}
-      </m.div>
+      </div>
     </>
   );
 }

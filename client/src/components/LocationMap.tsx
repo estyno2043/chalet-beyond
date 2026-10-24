@@ -28,7 +28,7 @@ function StaticGlobe() {
       <line x1="100" y1="20" x2="100" y2="180" />
       <ellipse cx="100" cy="100" rx="80" ry="28" />
       <line x1="20" y1="100" x2="180" y2="100" />
-      <circle className="location-map__marker" cx="100" cy="100" r="4" />
+      <circle className="location-map__marker" cx="100" cy="100" r="3.5" />
     </svg>
   );
 }
@@ -69,7 +69,22 @@ export function LocationMap() {
         </div>
         <div className="location-map__copy">
           <p className="location-map__place">Veľká Lomnica</p>
-          <p className="location-map__coords">49.12° N · 20.36° E</p>
+          <div className="location-map__badge">
+            <span className="location-map__dot" aria-hidden="true" />
+            <p className="location-map__coords">49.12° N · 20.36° E</p>
+          </div>
+          <div className="location-map__ledger" aria-label="Dostupnosť">
+            {c.distances.map(([name, time]) => (
+              <div key={name} className="location-map__ledger-row">
+                <span className="location-map__ledger-name">{name}</span>
+                <span
+                  className="location-map__ledger-line"
+                  aria-hidden="true"
+                />
+                <span className="location-map__ledger-time">{time}</span>
+              </div>
+            ))}
+          </div>
           <RollLink
             href="https://www.google.com/maps/search/?api=1&query=Chalet+Beyond+Velka+Lomnica"
             target="_blank"

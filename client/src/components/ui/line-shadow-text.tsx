@@ -1,37 +1,20 @@
 /*
  * Line Shadow Text — Magic UI (magicui.design/r/line-shadow-text).
- * Markup and classes as published; `motion/react` mapped to framer-motion's
- * lazy `m` components (the app runs under LazyMotion). The keyframes live in
- * index.css (`--animate-line-shadow`); reduced motion keeps a still shadow.
+ * Markup and classes as published. The keyframes live in index.css
+ * (`--animate-line-shadow`); reduced motion keeps a still shadow.
  */
-import { type CSSProperties, type HTMLAttributes } from "react";
-import { m, type MotionProps } from "framer-motion";
+import {
+  type CSSProperties,
+  type ElementType,
+  type HTMLAttributes,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
-const motionElements = {
-  article: m.article,
-  div: m.div,
-  h1: m.h1,
-  h2: m.h2,
-  h3: m.h3,
-  h4: m.h4,
-  h5: m.h5,
-  h6: m.h6,
-  li: m.li,
-  p: m.p,
-  section: m.section,
-  span: m.span,
-} as const;
-
-type MotionElementType = keyof typeof motionElements;
-
-interface LineShadowTextProps
-  extends Omit<HTMLAttributes<HTMLElement>, keyof MotionProps>,
-    MotionProps {
+interface LineShadowTextProps extends HTMLAttributes<HTMLElement> {
   children: string;
   shadowColor?: string;
-  as?: MotionElementType;
+  as?: ElementType;
 }
 
 export function LineShadowText({
@@ -41,10 +24,8 @@ export function LineShadowText({
   as: Component = "span",
   ...props
 }: LineShadowTextProps) {
-  const MotionComponent = motionElements[Component];
-
   return (
-    <MotionComponent
+    <Component
       style={{ "--shadow-color": shadowColor } as CSSProperties}
       className={cn(
         "relative z-0 inline-flex",
@@ -60,6 +41,6 @@ export function LineShadowText({
       {...props}
     >
       {children}
-    </MotionComponent>
+    </Component>
   );
 }

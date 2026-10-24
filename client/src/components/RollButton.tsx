@@ -10,7 +10,13 @@
  * The second label row is the filled state's copy, so its colour is correct
  * the moment it appears.
  */
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+} from "react";
 import { cn } from "@/lib/utils";
 import "./roll-button.css";
 
@@ -24,6 +30,34 @@ type Common = {
   size?: Size;
   className?: string;
 };
+
+function useMagnetic<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof window === "undefined") return;
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (!fine.matches || reduce.matches) return;
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = node.getBoundingClientRect();
+      const x = e.clientX - (rect.left + rect.width / 2);
+      const y = e.clientY - (rect.top + rect.height / 2);
+      node.style.transform = `translate3d(${x * 0.14}px, ${y * 0.18}px, 0)`;
+    };
+    const onMouseLeave = () => {
+      node.style.transform = "";
+    };
+    node.addEventListener("mousemove", onMouseMove);
+    node.addEventListener("mouseleave", onMouseLeave);
+    return () => {
+      node.removeEventListener("mousemove", onMouseMove);
+      node.removeEventListener("mouseleave", onMouseLeave);
+    };
+  }, []);
+  return ref;
+}
 
 function Face({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
   return (
@@ -48,8 +82,10 @@ export function RollLink({
   className,
   ...props
 }: Common & AnchorHTMLAttributes<HTMLAnchorElement>) {
+  const ref = useMagnetic<HTMLAnchorElement>();
   return (
     <a
+      ref={ref}
       {...props}
       className={cn("roll-btn", className)}
       data-tone={tone}
@@ -70,8 +106,10 @@ export function RollButton({
   type = "button",
   ...props
 }: Common & ButtonHTMLAttributes<HTMLButtonElement>) {
+  const ref = useMagnetic<HTMLButtonElement>();
   return (
     <button
+      ref={ref}
       {...props}
       type={type}
       className={cn("roll-btn", className)}

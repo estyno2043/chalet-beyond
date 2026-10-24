@@ -32,7 +32,10 @@ const LINES = ["CHALET", "BEYOND"] as const;
 const CURTAIN_MIN_MS = 650;
 const CURTAIN_MAX_MS = 1600;
 
-type Connection = EventTarget & { saveData?: boolean };
+type Connection = EventTarget & {
+  saveData?: boolean;
+  effectiveType?: string;
+};
 const connection = () =>
   (navigator as Navigator & { connection?: Connection }).connection;
 
@@ -40,11 +43,16 @@ function readMediaPreferences() {
   // Prerendered markup carries no video; the browser decides once React runs.
   if (typeof window === "undefined")
     return { desktop: false, reduced: false, autoplay: false };
-  const desktop = window.matchMedia("(min-width: 1024px)").matches;
+  const net = connection();
+  const effectiveType = net?.effectiveType;
+  const slowNetwork = effectiveType === "slow-2g" || effectiveType === "2g";
+  const constrainedNetwork = slowNetwork || effectiveType === "3g";
+  const desktop =
+    window.matchMedia("(min-width: 1024px)").matches && !constrainedNetwork;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // Save-Data is an explicit choice by the guest; it is the one signal that
-  // still keeps the video from starting on its own.
-  const saveData = Boolean(connection()?.saveData);
+  // Save-Data or a 2G mountain connection keeps the video from starting on its
+  // own so the preloaded poster and interactive assets are not starved.
+  const saveData = Boolean(net?.saveData) || slowNetwork;
   return { desktop, reduced, autoplay: !reduced && !saveData };
 }
 
@@ -301,9 +309,28 @@ export function Hero() {
               </span>
             ))}
           </h1>
-          <p className="chalet-hero__description" data-reveal="1">
-            {t.hero.description}
-          </p>
+          <a
+            href="#rezervacia"
+            onClick={e => {
+              e.preventDefault();
+              void import("@/lib/smooth-scroll").then(m => m.scrollTo("#rezervacia"));
+            }}
+            className="group mt-6 sm:mt-8 mb-6 sm:mb-8 inline-flex flex-wrap items-center gap-2.5 px-4 py-2.5 rounded-full bg-[oklch(0.12_0.012_55/0.88)] border border-[oklch(0.72_0.12_65/0.45)] hover:border-[var(--amber)] backdrop-blur-md shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+            data-reveal="1"
+            title="Prejsť na výber termínu so zľavou 20 %"
+          >
+            <span className="size-2 rounded-full bg-[var(--amber)] animate-pulse" aria-hidden="true" />
+            <span className="font-mono text-xs font-semibold tracking-wider text-[var(--amber)]">
+              NOVEMBER −20 %
+            </span>
+            <span className="text-[oklch(0.72_0.12_65/0.4)] font-mono text-xs">·</span>
+            <span className="font-['Karla',sans-serif] text-xs text-[rgb(245_244_239/0.92)] tracking-wide">
+              Celý chalet s wellnessom už od <strong className="font-mono text-[var(--amber)]">240 € / noc</strong>
+            </span>
+            <span className="font-['Karla',sans-serif] text-xs text-[var(--amber)] font-medium group-hover:translate-x-1 transition-transform">
+              Vybrať termín →
+            </span>
+          </a>
 
           <div className="chalet-hero__actions" data-reveal="2">
             <RollLink

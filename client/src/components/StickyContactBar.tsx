@@ -79,7 +79,8 @@ export function StickyContactBar() {
             {c.bar.replace(
               "{price}",
               String(Math.min(...Object.values(PRICE_PER_NIGHT)))
-            )}
+            )}{" "}
+            · −20 %
           </RollLink>
           <a
             href={`tel:${PHONE}`}

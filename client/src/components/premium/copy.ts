@@ -15,6 +15,7 @@ const sk = {
     ["Súkromné wellness", "Sauna a vírivka patria iba vášmu pobytu."],
     ["Vysoké Tatry", "Hory, ktoré vidíte aj z obývačky."],
   ],
+  factLabels: ["Areál", "Privátny relax", "Panoráma"],
   gallery: ["Dom, ktorý", "chcete spoznať."],
   albums: ["Exteriér", "Interiér", "Spálne", "Wellness", "Okolie"],
   albumFacts: [
@@ -57,6 +58,11 @@ const sk = {
     ["Tatranská Lomnica", "Hory, turistika a lyžovanie"],
     ["AquaCity Poprad", "Vodný oddych"],
     ["Poprad–Tatry", "Letisko v regióne"],
+  ],
+  distances: [
+    ["Black Stork Golf Resort", "1 min"],
+    ["Tatranská Lomnica · lanovka & ski", "7 min"],
+    ["Letisko Poprad-Tatry", "12 min"],
   ],
   map: "Otvoriť mapu",
   pricing: ["Celý chalet.", "Vaša priama cena."],
@@ -103,6 +109,7 @@ const de: Copy = {
     ["Privates Wellness", "Sauna und Whirlpool nur für Ihren Aufenthalt."],
     ["Hohe Tatra", "Bergblick direkt vom Wohnzimmer."],
   ],
+  factLabels: ["Areal", "Privater Relax", "Panorama"],
   gallery: ["Ein Haus zum", "Kennenlernen."],
   albums: [
     "Außenbereich",
@@ -152,6 +159,11 @@ const de: Copy = {
     ["AquaCity Poprad", "Wasser und Erholung"],
     ["Poprad–Tatry", "Flughafen in der Region"],
   ],
+  distances: [
+    ["Black Stork Golf Resort", "1 Min."],
+    ["Tatranská Lomnica · Bergbahn & Ski", "7 Min."],
+    ["Flughafen Poprad-Tatry", "12 Min."],
+  ],
   map: "Karte öffnen",
   pricing: ["Das ganze Chalet.", "Ihr direkter Preis."],
   from: "ab",
@@ -198,6 +210,7 @@ const en: Copy = {
     ["Private wellness", "Sauna and hot tub exclusively for your stay."],
     ["High Tatras", "Mountain views from the living room."],
   ],
+  factLabels: ["Area", "Private relax", "Panorama"],
   gallery: ["A house worth", "getting to know."],
   albums: ["Exterior", "Interior", "Bedrooms", "Wellness", "Surroundings"],
   albumFacts: [
@@ -240,6 +253,11 @@ const en: Copy = {
     ["Tatranská Lomnica", "Mountains, hiking and skiing"],
     ["AquaCity Poprad", "Water and relaxation"],
     ["Poprad–Tatry", "Regional airport"],
+  ],
+  distances: [
+    ["Black Stork Golf Resort", "1 min"],
+    ["Tatranská Lomnica · lifts & ski", "7 min"],
+    ["Poprad-Tatry Airport", "12 min"],
   ],
   map: "Open map",
   pricing: ["The whole chalet.", "Your direct price."],
@@ -286,6 +304,7 @@ const pl: Copy = {
     ["Prywatne wellness", "Sauna i jacuzzi tylko na Wasz pobyt."],
     ["Tatry Wysokie", "Widok na góry prosto z salonu."],
   ],
+  factLabels: ["Areal", "Prywatny relaks", "Panorama"],
   gallery: ["Dom, który", "warto poznać."],
   albums: ["Na zewnątrz", "Wnętrza", "Sypialnie", "Wellness", "Okolica"],
   albumFacts: [
@@ -328,6 +347,11 @@ const pl: Copy = {
     ["Tatranská Lomnica", "Góry, wędrówki i narty"],
     ["AquaCity Poprad", "Wodny wypoczynek"],
     ["Poprad–Tatry", "Lotnisko w regionie"],
+  ],
+  distances: [
+    ["Black Stork Golf Resort", "1 min"],
+    ["Tatrzańska Łomnica · kolejki & ski", "7 min"],
+    ["Lotnisko Poprad-Tatry", "12 min"],
   ],
   map: "Otwórz mapę",
   pricing: ["Cały chalet.", "Wasza cena bezpośrednia."],

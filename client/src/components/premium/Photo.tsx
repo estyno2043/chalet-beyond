@@ -97,12 +97,20 @@ export function RevealPhoto({
       }, 820);
     };
 
+    let lastBottomInset = -1;
     const refreshTrigger = () => {
       if (started) return;
-      trigger?.disconnect();
       // IntersectionObserver percentage margins resolve against root width,
       // so use pixels to put the line at 75% of the viewport height.
       const bottomInset = Math.round(window.innerHeight * 0.25);
+      // Ignore minor height changes from mobile URL bar retracting during scroll.
+      if (
+        lastBottomInset !== -1 &&
+        Math.abs(bottomInset - lastBottomInset) < 32
+      )
+        return;
+      lastBottomInset = bottomInset;
+      trigger?.disconnect();
       trigger = new IntersectionObserver(
         entries => {
           if (started) return;

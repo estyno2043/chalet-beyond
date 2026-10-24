@@ -18,35 +18,39 @@
   align-items: center;
   justify-content: center;
   height: 58px;
-  padding: 0 30px;
+  padding: 0 28px;
   overflow: hidden;
   border: 0;
   border-radius: 999px;
   background: var(--roll-bg);
-  box-shadow: inset 0 0 0 1px var(--roll-line);
+  box-shadow: inset 0 0 0 1px var(--roll-line), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
   color: var(--roll-fg);
-  font: 700 0.78125rem/1 var(--font-body-family);
-  letter-spacing: 0.16em;
+  font: 700 0.8125rem/1 var(--font-body-family);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform 160ms ease-out,
-    background-color 480ms var(--roll-ease),
-    box-shadow 480ms var(--roll-ease);
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 380ms var(--roll-ease),
+    box-shadow 380ms var(--roll-ease);
 }
 .roll-btn[data-size="sm"] {
   height: 44px;
-  padding: 0 22px;
-  font-size: 0.71875rem;
-  letter-spacing: 0.14em;
+  padding: 0 20px;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .roll-btn[data-tone="solid"] {
   --roll-bg: var(--roll-ink);
   --roll-fg: var(--roll-dark);
   --roll-line: transparent;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
 }
 .roll-btn[data-tone="ghost"] {
   --roll-bg: rgb(12 14 12 / 0.3);
@@ -54,7 +58,7 @@
   --roll-fill: var(--roll-ink);
 }
 .roll-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 .roll-btn:focus-visible {
   outline: 2px solid var(--roll-ink);
@@ -73,21 +77,23 @@
   border-radius: 50%;
   background: var(--roll-fill);
   transform: translate3d(0, 40%, 0);
-  transition: transform 560ms var(--roll-ease);
+  transition: transform 380ms var(--roll-ease);
 }
 
 .roll-btn__label {
   position: relative;
   display: block;
   overflow: hidden;
-  /* Room for accents and descenders inside the clipping box. */
+  /* Room for accents, descenders and wide glyphs */
   padding-block: 0.35em;
+  padding-inline: 4px;
 }
 .roll-btn__row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.9em;
+  white-space: nowrap;
+  gap: 0.6em;
   transition: transform 560ms var(--roll-ease);
 }
 .roll-btn__row svg {
@@ -123,11 +129,32 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .roll-btn { transition: background-color var(--motion-state), color var(--motion-state); }
-  .roll-btn__fill, .roll-btn__row { transition: none; }
-  .roll-btn:hover .roll-btn__fill, .roll-btn:focus-visible .roll-btn__fill { transform: translate3d(0,40%,0); }
-  .roll-btn:hover .roll-btn__row, .roll-btn:focus-visible .roll-btn__row { transform: none; }
-  .roll-btn .roll-btn__row--next { visibility: hidden; }
-  .roll-btn:hover, .roll-btn:focus-visible { background: var(--roll-fill); color: var(--roll-fill-fg); }
-  .roll-btn:active { transform: none; }
+  .roll-btn {
+    transition:
+      background-color var(--motion-state),
+      color var(--motion-state);
+  }
+  .roll-btn__fill,
+  .roll-btn__row {
+    transition: none;
+  }
+  .roll-btn:hover .roll-btn__fill,
+  .roll-btn:focus-visible .roll-btn__fill {
+    transform: translate3d(0, 40%, 0);
+  }
+  .roll-btn:hover .roll-btn__row,
+  .roll-btn:focus-visible .roll-btn__row {
+    transform: none;
+  }
+  .roll-btn .roll-btn__row--next {
+    visibility: hidden;
+  }
+  .roll-btn:hover,
+  .roll-btn:focus-visible {
+    background: var(--roll-fill);
+    color: var(--roll-fill-fg);
+  }
+  .roll-btn:active {
+    transform: none;
+  }
 }

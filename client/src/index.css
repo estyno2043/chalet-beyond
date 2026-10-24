@@ -18,7 +18,6 @@
 @source "./components/ui/meteors.tsx";
 @source "./components/ui/line-shadow-text.tsx";
 @source "./components/ui/globe.tsx";
-@import "tw-animate-css";
 @import "./fonts.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -56,14 +55,14 @@
   --animate-line-shadow: line-shadow 15s linear infinite;
   @keyframes meteor {
     0% {
-      transform: rotate(var(--angle)) translateX(0);
+      transform: rotate(var(--angle)) translate3d(0, 0, 0);
       opacity: 1;
     }
     70% {
       opacity: 1;
     }
     100% {
-      transform: rotate(var(--angle)) translateX(-500px);
+      transform: rotate(var(--angle)) translate3d(-500px, 0, 0);
       opacity: 0;
     }
   }

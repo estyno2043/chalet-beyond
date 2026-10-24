@@ -2,14 +2,17 @@
    On xl the bar stands taller over the hero and settles to this once the
    page scrolls, which is where anchors land. */
 :root {
-  --nav-height: 72px;
+  --nav-ticker-height: 28px;
+  --nav-bar-height: 72px;
+  --nav-height: calc(var(--nav-ticker-height) + var(--nav-bar-height));
 }
 
 .chalet-navigation {
   --nav-ink: oklch(0.97 0.007 75);
   --nav-dark: oklch(0.1 0.01 55);
   --nav-amber: oklch(0.72 0.12 65);
-  --nav-line: rgb(245 244 239 / 0.24);
+  --nav-line: rgb(245 244 239 / 0.2);
+  --nav-line-amber: oklch(0.72 0.12 65 / 0.25);
   --nav-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --nav-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   position: fixed;
@@ -26,14 +29,17 @@
     transform 420ms var(--nav-ease-out);
 }
 .chalet-navigation[data-scrolled="true"] {
-  background: oklch(0.08 0.01 55 / 0.97);
-  border-bottom-color: oklch(0.72 0.12 65 / 0.18);
+  background: oklch(0.08 0.01 55 / 0.96);
+  border-bottom-color: var(--nav-line-amber);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 .chalet-navigation[data-open="true"] {
   background: oklch(0.06 0.008 55 / 0.98);
 }
-/* Over the hero a static scrim keeps the pale controls readable against
-   bright sky in the footage; it fades as the bar's own surface arrives. */
+
+/* Over the hero a static scrim keeps controls readable against bright sky;
+   it fades as the bar's own surface arrives. */
 .chalet-navigation::before {
   content: "";
   position: absolute;
@@ -41,7 +47,7 @@
   z-index: -1;
   background: linear-gradient(
     to bottom,
-    oklch(0.06 0.008 55 / 0.55),
+    oklch(0.06 0.008 55 / 0.65),
     oklch(0.06 0.008 55 / 0)
   );
   pointer-events: none;
@@ -50,18 +56,10 @@
 .chalet-navigation:is([data-scrolled="true"], [data-open="true"])::before {
   opacity: 0;
 }
-/* Reading down past the hero, the bar slides out of the way. Keyboard focus
-   inside it keeps it on screen. */
-.chalet-navigation[data-hidden="true"]:not(:focus-within) {
-  transform: translate3d(0, calc(-100% - 2px), 0);
-  transition:
-    background-color 280ms ease-out,
-    border-color 280ms ease-out,
-    transform 280ms cubic-bezier(0.4, 0, 1, 1);
-}
 
-/* Reading progress: the amber hairline on the bar's lower edge fills with
-   the page. Native scroll timeline, no JS; elsewhere the static line stays. */
+/* Header ostáva trvale prístupný pri scrolle pre okamžitú možnosť rezervácie */
+
+/* Reading progress: the amber hairline on the bar's lower edge fills with page scroll */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .chalet-navigation::after {
@@ -77,7 +75,7 @@
       animation-timeline: scroll(root block);
     }
     .chalet-navigation[data-scrolled="true"]::after {
-      opacity: 0.85;
+      opacity: 0.9;
     }
     .chalet-navigation[data-open="true"]::after {
       opacity: 0;
@@ -93,67 +91,79 @@
   }
 }
 
-.chalet-navigation__inner {
-  width: min(100%, 1600px);
-  padding-inline: 24px;
+/* ——— Top Edge Infinite Running Promo Ticker ——— */
+.chalet-promo-ticker {
+  display: block;
+  width: 100%;
+  height: var(--nav-ticker-height, 28px);
+  background: oklch(0.09 0.012 55 / 0.96);
+  border-bottom: 1px solid oklch(0.72 0.12 65 / 0.28);
+  overflow: hidden;
+  position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 10;
+  user-select: none;
+  contain: layout paint;
+  transition: background-color 200ms ease;
 }
-.chalet-navigation__actions {
-  gap: 8px;
+.chalet-navigation:is([data-past-hero="true"], [data-scrolled="true"]) .chalet-promo-ticker {
+  display: none !important;
 }
-.chalet-navigation__contact {
-  gap: 24px;
-  margin-right: 16px;
+.chalet-promo-ticker:hover {
+  background: oklch(0.13 0.018 55 / 0.98);
 }
-.chalet-navigation__contact a {
+.chalet-promo-ticker__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  height: 100%;
+  animation: promo-marquee 38s linear infinite;
+  will-change: transform;
+}
+.chalet-promo-ticker:hover .chalet-promo-ticker__track {
+  animation-play-state: paused;
+}
+.chalet-promo-ticker__content {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font: 400 0.75rem/1 var(--font-body-family);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  color: rgb(245 244 239 / 0.74);
-  text-decoration: none;
+  white-space: nowrap;
+  font-family: var(--font-body-family, "Karla", sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(245 244 239 / 0.86);
 }
-/* Over the hero the row stays reserved but empty and unfocusable. Past it the
-   details drop in (strong ease-out, second one a beat later); leaving is
-   quicker than arriving. */
-.chalet-navigation__contact {
-  visibility: hidden;
-  transition: visibility 0s linear 180ms;
+.chalet-promo-ticker__content span {
+  display: inline-block;
+  padding-right: 2rem;
 }
-.chalet-navigation__contact a {
-  opacity: 0;
-  transform: translate3d(0, -6px, 0);
-  transition:
-    opacity 160ms ease-out,
-    transform 180ms ease-out,
-    color 180ms ease-out;
+@keyframes promo-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
-.chalet-navigation[data-past-hero="true"] .chalet-navigation__contact {
-  visibility: visible;
-  transition-delay: 0s;
+@media (prefers-reduced-motion: reduce) {
+  .chalet-promo-ticker__track {
+    animation: none;
+    transform: none;
+    justify-content: center;
+    width: 100%;
+  }
 }
-.chalet-navigation[data-past-hero="true"] .chalet-navigation__contact a {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 320ms var(--nav-ease-out),
-    transform 420ms var(--nav-ease-out),
-    color 180ms ease-out;
-}
-.chalet-navigation[data-past-hero="true"]
-  .chalet-navigation__contact
-  a:nth-child(2) {
-  transition-delay: 60ms, 60ms, 0ms;
-}
-.chalet-navigation__contact svg {
-  color: var(--nav-amber);
-}
+
 .chalet-navigation__inner {
+  width: min(100%, 1680px);
+  padding-inline: 20px;
   height: 72px;
   transition: transform 420ms var(--nav-ease-out);
 }
 
+/* ——— Brand Logo & Coordinates ——— */
 .chalet-navigation__logo {
   display: inline-flex;
   flex: none;
@@ -162,43 +172,216 @@
 }
 .chalet-navigation__logo img {
   width: auto;
-  height: 46px;
+  height: 44px;
   transform-origin: 0 50%;
   transition: transform 420ms var(--nav-ease-out);
 }
 
-/* xl: over the hero the row sits lower with a larger mark; once the page
-   moves both settle into the compact bar. Transforms only — the bar's box
-   stays 72px, so nothing is laid out again. */
-@media (min-width: 1280px) {
-  .chalet-navigation__inner {
-    transform: translate3d(0, 12px, 0);
+/* Pulsing Status Dot */
+@keyframes nav-pulse-beacon {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 8px oklch(0.72 0.12 65 / 0.85);
   }
-  .chalet-navigation__logo img {
-    height: 56px;
-  }
-  .chalet-navigation__actions {
-    gap: 12px;
-  }
-  .chalet-navigation[data-scrolled="true"] .chalet-navigation__inner {
-    transform: none;
-  }
-  .chalet-navigation[data-scrolled="true"] .chalet-navigation__logo img {
-    transform: scale(0.82);
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+    box-shadow: 0 0 2px oklch(0.72 0.12 65 / 0.2);
   }
 }
+.chalet-navigation__pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--nav-amber);
+  animation: nav-pulse-beacon 2.4s ease-in-out infinite;
+}
 
-/* Reserve: a RollButton, pale over the hero and amber once the hero is
-   behind; its fill is always the other of the two. */
+/* Desktop Architectural Coordinates & Live Weather Beacon */
+.chalet-navigation__meta {
+  gap: 14px;
+  user-select: none;
+}
+.chalet-navigation__divider {
+  color: oklch(0.72 0.12 65 / 0.35);
+  font-weight: 300;
+  font-size: 0.875rem;
+}
+.chalet-navigation__status-beacon {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  background: oklch(0.12 0.012 55 / 0.65);
+  border: 1px solid oklch(0.72 0.12 65 / 0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+.chalet-navigation__location {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  color: rgb(245 244 239 / 0.76);
+  white-space: nowrap;
+}
+.chalet-navigation__weather-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: 1px solid oklch(0.72 0.12 65 / 0.3);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--nav-ink);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ——— Desktop High-Conversion Center Teaser (Hero only) ——— */
+.chalet-navigation__center-teaser {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: oklch(0.12 0.012 55 / 0.6);
+  border: 1px solid oklch(0.72 0.12 65 / 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 12px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition:
+    border-color 220ms ease-out,
+    background-color 220ms ease-out,
+    transform 200ms ease-out,
+    box-shadow 220ms ease-out;
+}
+.chalet-navigation__center-teaser:hover {
+  border-color: oklch(0.72 0.12 65 / 0.5);
+  background: oklch(0.15 0.014 55 / 0.8);
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 22px oklch(0.72 0.12 65 / 0.25);
+}
+.chalet-navigation__center-teaser:active {
+  transform: scale(0.975);
+}
+.chalet-navigation__teaser-badge {
+  color: var(--nav-amber);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: oklch(0.72 0.12 65 / 0.18);
+  border: 1px solid oklch(0.72 0.12 65 / 0.42);
+  box-shadow: 0 0 10px oklch(0.72 0.12 65 / 0.25);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.chalet-navigation__teaser-highlight {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  color: rgb(245 244 239 / 0.88);
+  white-space: nowrap;
+}
+.chalet-navigation__teaser-sep {
+  color: oklch(0.72 0.12 65 / 0.4);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+.chalet-navigation__teaser-price {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: rgb(245 244 239 / 0.76);
+  white-space: nowrap;
+}
+
+/* ——— Desktop Actions & Contact ——— */
+.chalet-navigation__actions {
+  gap: 12px;
+}
+.chalet-navigation__contact {
+  display: flex;
+  align-items: center;
+  margin-right: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.chalet-navigation__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 0.8125rem/1 var(--font-body-family);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: rgb(245 244 239 / 0.88);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 180ms ease-out,
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.chalet-navigation__phone:active {
+  transform: scale(0.97);
+}
+.chalet-navigation__phone svg {
+  color: var(--nav-amber);
+  flex-shrink: 0;
+}
+.chalet-navigation__phone:hover {
+  color: var(--nav-amber);
+}
+
+/* ——— Refined Luxury CTA Button ——— */
 .chalet-navigation__book {
   --roll-fill: var(--nav-amber);
+  border-radius: 999px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 0 0 1px oklch(0.72 0.12 65 / 0.45), 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 240ms ease-out, transform 180ms ease-out;
+}
+.chalet-navigation__book:hover {
+  box-shadow: inset 0 0 0 1px var(--nav-amber), 0 0 24px oklch(0.72 0.12 65 / 0.35);
+}
+.chalet-navigation__book:active {
+  transform: scale(0.97);
 }
 .chalet-navigation[data-past-hero="true"] .chalet-navigation__book {
   --roll-bg: var(--nav-amber);
   --roll-fill: var(--nav-ink);
+  box-shadow: 0 4px 18px oklch(0.72 0.12 65 / 0.3);
 }
-/* Below 640px the hero's own CTA is on screen; the bar keeps to language and
-   menu so the row never crowds the logo. */
+
+/* Tight laptop viewports (1280px – 1460px) gracefully collapse extra text */
+@media (min-width: 1280px) and (max-width: 1460px) {
+  .chalet-navigation__meta .chalet-navigation__location {
+    display: none;
+  }
+}
+
+/* ——— Mobile Elements (Below xl) ——— */
+.chalet-navigation__mobile-weather {
+  background: oklch(0.12 0.012 55 / 0.7);
+  border: 1px solid oklch(0.72 0.12 65 / 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  user-select: none;
+}
+
 .chalet-navigation .chalet-navigation__book--compact {
   display: none;
 }
@@ -216,12 +399,13 @@
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px var(--nav-line);
   color: var(--nav-ink);
+  background: oklch(0.12 0.012 55 / 0.4);
   transition:
     background-color 180ms ease-out,
-    transform 160ms ease-out;
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .chalet-navigation__burger:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 .chalet-navigation :is(a, button):focus-visible {
@@ -240,8 +424,10 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  border-top: 1px solid oklch(0.72 0.12 65 / 0.18);
-  background: oklch(0.06 0.008 55);
+  border-top: 1px solid oklch(0.72 0.12 65 / 0.25);
+  background: oklch(0.07 0.009 55 / 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   opacity: 0;
   pointer-events: none;
   transition: opacity 240ms ease-out;
@@ -250,14 +436,19 @@
   opacity: 1;
   pointer-events: auto;
 }
+
+.chalet-navigation__menu-top {
+  user-select: none;
+}
 .chalet-navigation__menu-link {
   display: flex;
   align-items: center;
-  min-height: 64px;
+  gap: 16px;
+  min-height: 58px;
   padding: 8px 4px;
-  border-bottom: 1px solid oklch(0.72 0.12 65 / 0.18);
+  border-bottom: 1px solid oklch(245 244 239 / 0.08);
   font:
-    600 2.25rem/1 "Thunder",
+    600 2rem/1 "Thunder",
     var(--font-display-family);
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -274,10 +465,12 @@
   opacity: 1;
   transform: none;
 }
+.chalet-navigation__menu-link:hover,
+.chalet-navigation__menu-link:active {
+  color: var(--nav-amber);
+}
+
 .chalet-navigation__menu-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   padding-bottom: 24px;
 }
 .chalet-navigation__menu-primary,
@@ -286,12 +479,22 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 56px;
+  min-height: 52px;
   border-radius: 999px;
   font: 700 0.8125rem/1 var(--font-body-family);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 180ms ease-out,
+    box-shadow 180ms ease-out;
+}
+.chalet-navigation__menu-primary:active,
+.chalet-navigation__menu-secondary:active {
+  transform: scale(0.97);
 }
 .chalet-navigation__menu-primary {
   background: var(--nav-amber);
@@ -302,16 +505,33 @@
   color: var(--nav-ink);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
+  background: oklch(0.12 0.01 55 / 0.35);
 }
 
+/* ——— Responsive Gutters & XL Transitions ——— */
 @media (min-width: 640px) {
   .chalet-navigation__inner {
-    padding-inline: 40px;
+    padding-inline: 36px;
   }
 }
 @media (min-width: 1024px) {
   .chalet-navigation__inner {
+    padding-inline: 48px;
+  }
+}
+@media (min-width: 1280px) {
+  .chalet-navigation__inner {
+    transform: translate3d(0, 8px, 0);
     padding-inline: 64px;
+  }
+  .chalet-navigation__logo img {
+    height: 52px;
+  }
+  .chalet-navigation[data-scrolled="true"] .chalet-navigation__inner {
+    transform: none;
+  }
+  .chalet-navigation[data-scrolled="true"] .chalet-navigation__logo img {
+    transform: scale(0.85);
   }
 }
 
@@ -320,37 +540,7 @@
     color: var(--nav-ink);
   }
   .chalet-navigation__burger:hover {
-    background: rgb(245 244 239 / 0.08);
-  }
-  .chalet-navigation__menu-link:hover {
-    color: var(--nav-ink);
-  }
-}
-
-/* The bar arrives with the hero title, a beat after it starts: the mark
-   first, then each control in reading order. Fills backwards only, so hover
-   and press transforms own the controls once they land. Phone and e-mail
-   keep their own past-hero arrival. */
-@media (prefers-reduced-motion: no-preference) {
-  .chalet-navigation__logo,
-  .chalet-navigation__actions > :not(.chalet-navigation__contact) {
-    animation: nav-arrive 900ms var(--nav-ease) 280ms backwards;
-  }
-  .chalet-navigation__actions > :nth-child(2) {
-    animation-delay: 360ms;
-  }
-  .chalet-navigation__actions > :nth-child(3) {
-    animation-delay: 420ms;
-  }
-}
-@keyframes nav-arrive {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -10px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
+    background: rgb(245 244 239 / 0.12);
   }
 }
 
@@ -358,6 +548,7 @@
   .chalet-navigation *,
   .chalet-navigation {
     transition: none !important;
+    animation: none !important;
   }
   .chalet-navigation__menu-link {
     opacity: 1;

@@ -29,12 +29,12 @@ export function AmenitiesSection() {
             const row = entry.target as HTMLElement;
             observer.unobserve(row);
             row.style.setProperty("--sek-delay", `${i * SEK_STAGGER}ms`);
-            row.classList.add("is-glitching");
+            row.classList.add("is-highlighted");
             row.addEventListener(
               "animationend",
               event => {
-                if (event.animationName === "amenity-sek")
-                  row.classList.remove("is-glitching");
+                if (event.animationName === "amenity-shimmer")
+                  row.classList.remove("is-highlighted");
               },
               { signal: done.signal }
             );

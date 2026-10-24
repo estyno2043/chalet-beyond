@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { DayPicker, type DateRange } from "react-day-picker";
 import { sk, de, enUS, pl } from "react-day-picker/locale";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useLang, useT } from "@/i18n/LanguageProvider";
 import { useGuests } from "@/contexts/GuestsContext";
 import {
@@ -315,7 +315,7 @@ export function BookingSection() {
         </p>
         <p id="date-validation" className="date-validation" role="alert">
           {dateError ? (
-            <motion.span
+            <m.span
               key={errorTick}
               initial={{ opacity: 0 }}
               animate={
@@ -326,7 +326,7 @@ export function BookingSection() {
               transition={{ duration: DUR.modal, ease: EASE.ui }}
             >
               {dateError}
-            </motion.span>
+            </m.span>
           ) : (
             "\u00a0"
           )}
@@ -391,7 +391,7 @@ export function BookingSection() {
         </div>
         <AnimatePresence mode="wait" initial={false}>
           {status === "sent" ? (
-            <motion.div
+            <m.div
               key="success"
               ref={node => {
                 successRef.current = node;
@@ -414,14 +414,14 @@ export function BookingSection() {
               animate={{ opacity: 1 }}
               transition={{ duration: DUR.state }}
             >
-              <motion.div
+              <m.div
                 className="success-ring"
                 initial={{ scale: reduce ? 1 : 0.92, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={reduce ? { duration: DUR.state } : SPRING_GESTURE}
               >
                 <svg viewBox="0 0 48 48" aria-hidden="true">
-                  <motion.path
+                  <m.path
                     d="M13 25l8 8 15-18"
                     fill="none"
                     stroke="currentColor"
@@ -435,15 +435,15 @@ export function BookingSection() {
                     }}
                   />
                 </svg>
-              </motion.div>
-              <motion.h4
+              </m.div>
+              <m.h4
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.18, duration: DUR.state }}
               >
                 {t.booking.sentTitle}
-              </motion.h4>
-              <motion.p
+              </m.h4>
+              <m.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.24, duration: DUR.state }}
@@ -455,10 +455,10 @@ export function BookingSection() {
                     {c.successEmail} <strong>{form.email}</strong>.
                   </>
                 )}
-              </motion.p>
-            </motion.div>
+              </m.p>
+            </m.div>
           ) : step === "dates" ? (
-            <motion.div
+            <m.div
               key="dates"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -472,9 +472,9 @@ export function BookingSection() {
               >
                 {c.continue}
               </RollButton>
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="contact"
               ref={contactRef}
               initial={{ opacity: 0 }}
@@ -578,7 +578,7 @@ export function BookingSection() {
                   {status === "sending" ? t.booking.sending : t.booking.submit}
                 </RollButton>
               </form>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
         {status === "error" && (

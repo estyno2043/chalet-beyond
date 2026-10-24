@@ -141,6 +141,13 @@ describe("dated promotions", () => {
     expect(result.total).toBe(result.baseTotal - result.promotionDiscount);
   });
 
+  it("applies the active November 20% promotion by default to November stays", () => {
+    const result = calcTotal(utc("2026-11-10"), utc("2026-11-14"), 2);
+    expect(result.discountKind).toBe("promotion");
+    expect(result.promotionDiscount).toBe(PRICE_PER_NIGHT[2] * 4 * 0.2);
+    expect(result.total).toBe(result.baseTotal - result.promotionDiscount);
+  });
+
   it("chooses the lowest overlapping offer per night and keeps child charges on fixed adult rates", () => {
     const fixed: DatePromotion = {
       id: "fixed",

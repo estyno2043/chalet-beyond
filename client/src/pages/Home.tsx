@@ -7,22 +7,29 @@ import { GuestsProvider } from "@/contexts/GuestsContext";
 import "@/components/premium/premium.css";
 import { StickyContactBar } from "@/components/StickyContactBar";
 
+import { preloadBookingSection } from "@/components/premium/BookingIsland";
+
 const PageStory = lazy(() => import("@/components/premium/PageStory"));
-const STORY_ANCHORS = [
-  "priestory",
-  "photo-interlude",
-  "vybavenie",
-  "okolie",
-  "cennik",
-  "rezervacia",
-  "premium-footer",
-];
+const STORY_PLACEHOLDER_HEIGHTS: Record<string, string> = {
+  priestory: "1120px",
+  "photo-interlude": "78svh",
+  vybavenie: "1240px",
+  okolie: "1080px",
+  cennik: "460px",
+  rezervacia: "760px",
+  "premium-footer": "520px",
+};
+const STORY_ANCHORS = Object.keys(STORY_PLACEHOLDER_HEIGHTS);
 
 function StoryPlaceholder() {
   return (
     <div aria-busy="true">
       {STORY_ANCHORS.map(id => (
-        <div key={id} id={id} style={{ minHeight: "100svh" }} />
+        <div
+          key={id}
+          id={id}
+          style={{ minHeight: STORY_PLACEHOLDER_HEIGHTS[id] }}
+        />
       ))}
     </div>
   );
@@ -31,9 +38,13 @@ function StoryPlaceholder() {
 function DeferredStory() {
   const ref = useRef<HTMLDivElement>(null);
   const pendingAnchor = useRef(window.location.hash.slice(1));
-  const [ready, setReady] = useState(() =>
-    STORY_ANCHORS.includes(pendingAnchor.current)
-  );
+  const [ready, setReady] = useState(() => {
+    const initial = pendingAnchor.current;
+    if (initial === "rezervacia" || initial === "cennik") {
+      preloadBookingSection();
+    }
+    return STORY_ANCHORS.includes(initial);
+  });
   useEffect(() => {
     if (ready) return;
     // Also expose the complete document without requiring a scroll gesture.
@@ -70,7 +81,11 @@ function DeferredStory() {
       const href = anchor?.getAttribute("href");
       if (!href?.startsWith("#") || !STORY_ANCHORS.includes(href.slice(1)))
         return;
-      pendingAnchor.current = href.slice(1);
+      const target = href.slice(1);
+      pendingAnchor.current = target;
+      if (target === "rezervacia" || target === "cennik") {
+        preloadBookingSection();
+      }
       setReady(true);
     };
     document.addEventListener("click", loadForAnchor, true);

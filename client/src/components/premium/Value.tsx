@@ -17,15 +17,21 @@ export function Value({
           key={value}
           initial={{
             opacity: 0,
-            y: reduce ? 0 : 4,
-            filter: reduce ? "none" : "blur(2px)",
+            y: reduce ? 0 : 8,
+            filter: reduce ? "none" : "blur(1.5px)",
           }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: DUR.state, ease: EASE.ui }}
+          exit={{
+            opacity: 0,
+            y: reduce ? 0 : -8,
+            filter: reduce ? "none" : "blur(1.5px)",
+          }}
+          transition={{ duration: DUR.state, ease: EASE.enter }}
         >
           {lineShadow ? (
-            <LineShadowText shadowColor={lineShadow}>{`${value}`}</LineShadowText>
+            <LineShadowText
+              shadowColor={lineShadow}
+            >{`${value}`}</LineShadowText>
           ) : (
             value
           )}

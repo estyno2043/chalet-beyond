@@ -9,6 +9,8 @@ export const en: Dict = {
     rezervacia: "Booking",
     book: "Book now",
     bookStay: "Book your stay",
+    checkAvailability: "Check availability",
+    ticker: "Autumn special · −20% off all November stays · Private chalet with wellness · Rates from €240 / night · Automatic discount in calendar · Book with 20% off → · ",
     writeUs: "Write to us",
     home: "Chalet Beyond — home",
     menuOpen: "Open menu",
@@ -25,6 +27,7 @@ export const en: Dict = {
     description:
       "A private chalet in Veľká Lomnica. The whole place, just for you.",
     offerCta: "Check available dates",
+    novemberPromo: "Autumn promo: −20% for all November stays",
     directLabel: "Book direct",
     statsLabel: "The chalet in numbers",
   },

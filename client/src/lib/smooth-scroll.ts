@@ -1,32 +1,78 @@
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
+let lenis: Lenis | null = null;
+
+export function getLenis(): Lenis | null {
+  return lenis;
+}
+
 /**
- * Momentum scrolling for mouse wheels and trackpads, so the page glides and
- * settles the way it does on an iPhone instead of stepping per notch.
+ * Momentum smooth scrolling for mouse wheels and trackpads, so the page glides
+ * and settles with luxury precision instead of harsh steps per notch.
  *
- * Touch screens keep native scrolling — iOS and Android already have real
- * momentum — and reduced motion keeps the browser's own scroll. Scroll-driven
- * CSS timelines and framer-motion's useScroll still read the real window
- * scroll, which Lenis moves every frame.
+ * Touch screens keep native momentum, and prefers-reduced-motion keeps native scroll.
  */
 export function startSmoothScroll() {
+  if (typeof window === "undefined" || lenis) return lenis;
+
   const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (!pointer.matches || reduced.matches) return;
+  if (!pointer.matches || reduced.matches) return null;
 
-  new Lenis({
+  lenis = new Lenis({
     autoRaf: true,
-    // Lenis damps at lerp × 60 per second: 0.14 is 95% of the way in ~350 ms,
-    // a glide that still answers the next wheel notch. 0.08 took ~600 ms and
-    // trailed the wheel.
-    lerp: 0.14,
-    // The mobile menu and the price table scroll on their own.
+    lerp: 0.1,
+    duration: 1.2,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
     allowNestedScroll: true,
-    // The lightbox and the mobile menu lock the page with overflow: hidden;
-    // leave the wheel to the browser while they are open.
     virtualScroll: () =>
       document.documentElement.style.overflow !== "hidden" &&
       document.body.style.overflow !== "hidden",
+  });
+
+  return lenis;
+}
+
+/** Smoothly glide to an element or selector, taking navbar offset into account. */
+export function scrollTo(
+  target: string | HTMLElement | number,
+  options?: { offset?: number; immediate?: boolean; duration?: number }
+) {
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const navOffset = options?.offset ?? -88;
+
+  if (lenis && !reduced && !options?.immediate) {
+    lenis.scrollTo(target, {
+      offset: navOffset,
+      duration: options?.duration ?? 1.2,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      immediate: options?.immediate ?? false,
+    });
+    return;
+  }
+
+  const behavior = reduced || options?.immediate ? "auto" : "smooth";
+
+  if (typeof target === "number") {
+    window.scrollTo({
+      top: target,
+      behavior,
+    });
+    return;
+  }
+
+  const el =
+    typeof target === "string" ? document.querySelector(target) : target;
+  if (!el) return;
+
+  const y = el.getBoundingClientRect().top + window.scrollY + navOffset;
+  window.scrollTo({
+    top: Math.max(0, y),
+    behavior,
   });
 }

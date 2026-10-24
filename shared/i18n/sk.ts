@@ -7,6 +7,8 @@ export const sk = {
     rezervacia: "Rezervácia",
     book: "Rezervovať",
     bookStay: "Rezervovať pobyt",
+    checkAvailability: "Overiť dostupnosť",
+    ticker: "Jesenná ponuka · Zľava −20 % na celý november · Súkromný chalet s wellnessom · Ceny od 240 € / noc · Automatická zľava v kalendári · Rezervovať so zľavou → · ",
     writeUs: "Napíšte nám",
     home: "Chalet Beyond — domov",
     menuOpen: "Otvoriť menu",
@@ -23,6 +25,7 @@ export const sk = {
     description:
       "Súkromný chalet vo Veľkej Lomnici. Celý priestor len pre vás.",
     offerCta: "Overiť voľný termín",
+    novemberPromo: "Jesenná akcia −20 % na celý november",
     directLabel: "Rezervujte priamo",
     statsLabel: "Chalet v číslach",
   },

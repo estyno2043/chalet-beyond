@@ -9,6 +9,8 @@ export const de: Dict = {
     rezervacia: "Buchung",
     book: "Buchen",
     bookStay: "Aufenthalt buchen",
+    checkAvailability: "Verfügbarkeit prüfen",
+    ticker: "Herbst-Special · −20 % auf alle November-Aufenthalte · Privates Chalet mit Wellness · Preise ab 240 € / Nacht · Automatischer Rabatt im Kalender · Jetzt buchen → · ",
     writeUs: "Schreiben Sie uns",
     home: "Chalet Beyond — Startseite",
     menuOpen: "Menü öffnen",
@@ -25,6 +27,7 @@ export const de: Dict = {
     description:
       "Ihr privates Chalet in Veľká Lomnica. Das ganze Haus nur für Sie.",
     offerCta: "Freien Termin prüfen",
+    novemberPromo: "Herbst-Aktion: −20 % für den gesamten November",
     directLabel: "Direkt buchen",
     statsLabel: "Das Chalet in Zahlen",
   },

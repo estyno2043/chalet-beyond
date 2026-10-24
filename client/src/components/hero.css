@@ -84,11 +84,11 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   width: min(100%, 1600px);
   min-height: 100svh;
   margin-inline: auto;
-  padding: 104px 24px 28px var(--hero-inset);
+  padding: 124px 24px 28px var(--hero-inset);
 }
 
 .chalet-hero__content {
@@ -199,6 +199,19 @@
   flex-direction: column-reverse;
   justify-content: flex-end;
   gap: 6px;
+  border-radius: 8px;
+  transition:
+    transform 240ms ease-out,
+    background-color 240ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .chalet-hero__stat:hover {
+    transform: translateY(-2px);
+  }
+  .chalet-hero__stat:hover dd {
+    color: var(--hero-sand);
+    text-shadow: 0 0 20px oklch(0.72 0.12 65 / 0.25);
+  }
 }
 .chalet-hero__stat dd {
   display: flex;
@@ -210,6 +223,9 @@
     var(--font-display-family);
   letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums;
+  transition:
+    color 240ms ease-out,
+    text-shadow 240ms ease-out;
 }
 .chalet-hero__stat dd small {
   font: 600 0.8125rem/1 var(--font-body-family);
@@ -286,7 +302,7 @@
 @media (min-width: 640px) {
   .chalet-hero__layout {
     --hero-inset: 40px;
-    padding: 112px 40px 36px var(--hero-inset);
+    padding: 130px 40px 36px var(--hero-inset);
   }
   .chalet-hero__actions {
     flex-direction: row;
@@ -305,7 +321,7 @@
      remains stable when the controls retract during a native fling. */
   .chalet-hero__layout {
     min-height: 100svh;
-    padding: 88px 20px max(18px, env(safe-area-inset-bottom));
+    padding: 122px 20px max(20px, env(safe-area-inset-bottom));
   }
   .chalet-hero__title {
     font-size: clamp(4.5rem, min(26vw, 15svh), 7rem);
@@ -346,7 +362,7 @@
     /* Indented past the bar's 64px gutter, like the reference. */
     --hero-inset: clamp(64px, 10vw, 176px);
     min-height: max(700px, 100svh);
-    padding: 112px 64px 44px var(--hero-inset);
+    padding: clamp(140px, 16vh, 180px) 64px 44px var(--hero-inset);
   }
   .chalet-hero__poster,
   .chalet-hero__video {
@@ -373,14 +389,14 @@
     font-size: 1.1875rem;
   }
   .chalet-hero__actions {
-    margin-top: 40px;
+    margin-top: 28px;
   }
   .chalet-hero__footer {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
     gap: 32px;
-    margin-top: 56px;
+    margin-top: clamp(32px, 5vh, 52px);
     padding-top: 28px;
   }
   .chalet-hero__stats {

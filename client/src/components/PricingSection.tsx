@@ -46,8 +46,31 @@ export function PricingSection() {
               </span>
             </div>
             <div className="price-notes">
+              <div className="mb-3.5 p-3.5 rounded-xl bg-[oklch(0.72_0.12_65/0.14)] border border-[oklch(0.72_0.12_65/0.4)] flex flex-col gap-1.5 shadow-lg">
+                <div className="flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-[var(--amber)]" aria-hidden="true" />
+                  <span className="text-[var(--amber)] text-xs font-mono font-semibold tracking-widest uppercase">
+                    Novembrová akcia · Zľava −20 %
+                  </span>
+                </div>
+                <p className="text-xs font-['Karla',sans-serif] text-[oklch(0.97_0.007_75)] leading-relaxed">
+                  Cena od <strong className="text-[var(--amber)] text-sm font-semibold">240 €</strong> / noc <span className="line-through opacity-60 text-xs">300 €</span> za celý súkromný objekt s wellnessom.
+                  Zľava sa započíta automaticky pri výbere novembrových dní v kalendári.
+                </p>
+              </div>
               <p className="price-offer-note">{c.weeklyNote}</p>
               <p>{c.childNote}</p>
+              <a
+                href="#rezervacia"
+                onClick={e => {
+                  e.preventDefault();
+                  void import("@/lib/smooth-scroll").then(m => m.scrollTo("#rezervacia"));
+                }}
+                className="mt-3 inline-flex items-center gap-2 text-xs font-mono tracking-widest uppercase text-[var(--amber)] hover:text-white transition-colors group"
+              >
+                <span>Vybrať termín v kalendári nižšie</span>
+                <span className="transform group-hover:translate-y-0.5 transition-transform" aria-hidden="true">↓</span>
+              </a>
             </div>
           </div>
         </div>

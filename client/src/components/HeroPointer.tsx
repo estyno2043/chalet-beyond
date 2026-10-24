@@ -68,6 +68,7 @@ export function HeroPointer({
         if (!frame) frame = requestAnimationFrame(tick);
       };
       const hide = () => {
+        if (!placed && cursor.dataset.visible === "false") return;
         placed = false;
         cursor.dataset.visible = "false";
         cursor.dataset.active = "false";

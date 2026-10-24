@@ -25,4 +25,19 @@ export type DatePromotion = {
   | { adultRateByGuests: Partial<Record<number, number>>; percentOff?: never }
 );
 
-export const ACTIVE_PROMOTIONS: readonly DatePromotion[] = [];
+export const ACTIVE_PROMOTIONS: readonly DatePromotion[] = [
+  {
+    id: "november-2026",
+    label: "Novembrová akcia −20 %",
+    from: "2026-11-01",
+    through: "2026-11-30",
+    percentOff: 20,
+  },
+  {
+    id: "november-2027",
+    label: "Novembrová akcia −20 %",
+    from: "2027-11-01",
+    through: "2027-11-30",
+    percentOff: 20,
+  },
+];

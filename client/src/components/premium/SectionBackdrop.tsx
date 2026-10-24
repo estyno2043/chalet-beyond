@@ -20,7 +20,7 @@ export function SectionBackdrop({
       <Photo
         id={photoId}
         alt=""
-        sizes="100vw"
+        sizes="(min-width: 1024px) 1024px, 640px"
         className="section-backdrop__photo"
       />
       {children}
